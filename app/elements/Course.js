@@ -16,7 +16,7 @@ export default function Course({ navigation, course }) {
         const isFavorite = favoriteCourses.some(favoriteCourse => favoriteCourse.title === course.title);
         setHeartIcon(isFavorite ? 'heart' : 'heart-outline');
 
-    }, [favoriteCourses]);
+    }, [favoriteCourses, course.title]);
 
     const handleFavoritePress = () => {
         if (heartIcon === 'heart-outline') {
