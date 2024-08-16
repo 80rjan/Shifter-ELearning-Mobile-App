@@ -13,6 +13,7 @@ export default function Courses({title, allCourses, navigation}) {
         <View style={styles.coursesWrapper}>
             <Text style={[styles.heading, {color: '#202020'}]}>{title}</Text>
             <ScrollView vertical showsVerticalScrollIndicator={false} style={styles.scrollView}>
+                {allCourses.length===0 && <Text style={styles.errorText}>No courses to show</Text>}
                 {allCourses.map((course, index) => {
                     return <Course
                                    key={index}
@@ -39,4 +40,9 @@ const styles=StyleSheet.create({
         fontFamily: 'GothicA1-700',
         fontSize: 28,
     },
+    errorText: {
+        fontFamily: 'GothicA1-500',
+        fontSize: 20,
+        alignSelf: 'center',
+    }
 })

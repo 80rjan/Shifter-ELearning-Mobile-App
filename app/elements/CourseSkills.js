@@ -3,7 +3,7 @@ import React from "react";
 
 export default function CourseSkills({course}) {
     return (
-        <View style={styles.wrapper}>
+        <View style={styles.container}>
             <Text style={[styles.title, {color: '#202020'}]}>Skills You'll Gain</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
                 {course.skills.map((skill, index) => (
@@ -21,9 +21,9 @@ const styles=StyleSheet.create({
         fontFamily: 'GothicA1-500',
         fontSize: 25,
     },
-    wrapper: {
+    container: {
         gap: 20,
-        marginBottom: 40,
+        marginBottom: 50,
     },
     scrollView: {
         gap: 5,
@@ -37,6 +37,6 @@ const styles=StyleSheet.create({
     },
     text: {
         fontFamily: 'GothicA1-400',
-        fontSize: 18,
+        fontSize: 16,
     }
 })

@@ -21,8 +21,10 @@ export default function Course({ navigation, course }) {
     const handleFavoritePress = () => {
         if (heartIcon === 'heart-outline') {
             addFavorites(course);
+            // navigation.navigate('Wishlist');
         } else {
             removeFavorites(course);
+            // navigation.navigate('Home');
         }
     };
 

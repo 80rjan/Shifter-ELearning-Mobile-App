@@ -6,22 +6,22 @@ import React from "react";
 export default function CourseModules({ course }) {
 
     return (
-        <View style={styles.wrapper}>
-        <Text style={[styles.title, {color: '#202020'}]}>Module Breakdown</Text>
-        <View style={styles.modulesWrapper}>
-            {course.modules.map((module, index) => (
-                <View key={index} style={styles.module}>
-                    <Text style={[styles.text, {color: '#202020'}]}>{module}</Text>
-                </View>
-            ))}
-        </View>
+        <View style={styles.container}>
+            <Text style={[styles.title, {color: '#202020'}]}>Module Breakdown</Text>
+            <View style={styles.modulesWrapper}>
+                {course.modules.map((module, index) => (
+                    <View key={index} style={styles.module}>
+                        <Text style={[styles.text, {color: '#202020'}]}>{module}</Text>
+                    </View>
+                ))}
+            </View>
         </View>
     )
 }
 
 const styles=StyleSheet.create({
-    wrapper: {
-        gap: 20,
+    container: {
+        gap: 10,    //because of the vertical padding on each text item
         marginBottom: 20,
     },
     title: {

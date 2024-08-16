@@ -1,30 +1,66 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Animated } from 'react-native';
 import CourseOutcomes from "../elements/CourseOutcomes";
 import CourseSkills from "../elements/CourseSkills";
 import CourseDescription from "../elements/CourseDescription";
 import CourseModules from "../elements/CourseModules";
-import {usePerson} from "../PersonInformationContext";
+import { usePerson } from "../PersonInformationContext";
 
-export default function CourseDetails({ route }) {
+export default function CourseDetails({ route, navigation }) {
     const { course } = route.params;
     const { addCourse } = usePerson();
 
+    // Ref for scroll position
+    const scrollY = useRef(new Animated.Value(0)).current;
+
+    const handlePress = () => {
+        addCourse(course);
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Learn' }],
+        });
+    };
+
+    // Handle closing of CourseDetails
+    const handleScroll = Animated.event(
+        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        {
+            useNativeDriver: false,
+            listener: (event) => {
+                if (event.nativeEvent.contentOffset.y <= -150) {
+                    navigation.popToTop();
+                }
+            }
+        }
+    );
+
+    // const handleScroll = (event) => {
+    //     const yOffset = event.nativeEvent.contentOffset.y;
+    //     if (yOffset === -150) {
+    //         navigation.popToTop();
+    //     }
+    // }
+
     return (
         <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+            <ScrollView
+                contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
+                onScroll={handleScroll}
+                scrollEventThrottle={16} // Adjust the throttle value for performance
+            >
                 <View style={styles.imageWrapper}>
                     <Image source={course.image} style={styles.image} />
                 </View>
                 <View style={styles.content}>
-                    <Text style={[styles.title, {color: '202020'}]}>{course.title}</Text>
+                    <Text style={styles.title}>{course.title}</Text>
                     <CourseDescription course={course} />
-                    <CourseOutcomes course={course}/>
+                    <CourseOutcomes course={course} />
                     <CourseSkills course={course} />
                     <CourseModules course={course} />
                 </View>
             </ScrollView>
-            <TouchableOpacity style={styles.buyButton} onPress={() => { addCourse(course) }}>
+            <TouchableOpacity style={styles.buyButton} onPress={handlePress}>
                 <Text style={styles.buyButtonText}>Start Your Journey</Text>
             </TouchableOpacity>
         </View>
@@ -57,7 +93,6 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     content: {
-        flex: 1,
         paddingHorizontal: 20,
     },
     title: {

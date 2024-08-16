@@ -43,7 +43,7 @@ export default function CourseDescription({ course }) {
 
 const styles=StyleSheet.create({
     container: {
-        marginBottom: 40,
+        marginBottom: 50,
     },
     description: {
         fontFamily: 'GothicA1-400',
@@ -51,7 +51,7 @@ const styles=StyleSheet.create({
         marginBottom: 40,
     },
     contentWrapper: {
-        gap: 10,
+        gap: 15,
     },
     content: {
         flexDirection: 'row',

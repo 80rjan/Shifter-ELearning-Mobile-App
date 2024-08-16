@@ -2,6 +2,9 @@ import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import {CardStyleInterpolators, createStackNavigator} from '@react-navigation/stack';
 import CourseDetails from "./CourseDetails";
+import Home from './Home';
+import Wishlist from "./Wishlist";
+import Learn from "./Learn";
 
 const Stack = createStackNavigator();
 

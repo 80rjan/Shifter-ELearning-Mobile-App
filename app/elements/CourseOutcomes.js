@@ -5,7 +5,7 @@ import React from "react";
 
 export default function CourseOutcomes({course}) {
     return (
-        <View style={styles.wrapper}>
+        <View style={styles.container}>
             <Text style={[styles.title, {color: '#202020'}]}>Course Highlights</Text>
             <View style={styles.outcomesWrapper}>
                 {course.outcomes.map((learn, index) => (
@@ -24,12 +24,12 @@ const styles=StyleSheet.create({
         fontFamily: 'GothicA1-500',
         fontSize: 25,
     },
-    wrapper: {
+    container: {
         gap: 20,
-        marginBottom: 40,
+        marginBottom: 50,
     },
     outcomesWrapper: {
-        gap: 5,
+        gap: 8,
     },
     item: {
         flexDirection: 'row',

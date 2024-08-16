@@ -44,7 +44,8 @@ const allCoursesDetails = [
             ''
         ],
         skills: [
-            ''
+            'Marketing',
+            'Strategy'
         ],
         modules: [
             ''
@@ -65,7 +66,8 @@ const allCoursesDetails = [
             ''
         ],
         skills: [
-            ''
+            'Leadership',
+            'Management',
         ],
         modules: [
             ''
@@ -86,7 +88,9 @@ const allCoursesDetails = [
             ''
         ],
         skills: [
-            ''
+            'Sales',
+            'Soft Skills',
+            'Negotiation',
         ],
         modules: [
             ''
@@ -107,7 +111,7 @@ const allCoursesDetails = [
             ''
         ],
         skills: [
-            ''
+            'Marketing',
         ],
         modules: [
             ''
