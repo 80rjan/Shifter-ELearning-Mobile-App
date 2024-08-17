@@ -3,16 +3,20 @@ import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native
 export default function Topics({ handleFilter, selectedSkill }) {
 
     const topics = ['Sales', 'Marketing', 'Management', 'Onboarding', 'Leadership', 'Strategy'];
+    const colors = ['#00b5f0', '#006ef0', '#00f0d3'];
 
     return (
         <View style={styles.topicsWrapper}>
-            <Text style={[styles.heading, {color: '#202020'}]}>Learning Paths</Text>
+            <Text style={[styles.heading, {color: '#202020'}]}>Filter By Skill</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
                 {topics.map((topic, index) => (
                     <TouchableOpacity
                         key={index}
                         style={[
                             styles.scrollElement,
+                            {   backgroundColor: colors[index % colors.length],
+                                opacity: 0.8,
+                            },
                             selectedSkill === topic ? styles.selected : null
                         ]}
                         onPress={() => handleFilter(topic)}
@@ -42,7 +46,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 5,
-        backgroundColor: '#00b5f0',
+        // backgroundColor: '#00b5f0',
         marginRight: 10,
     },
     selected: {

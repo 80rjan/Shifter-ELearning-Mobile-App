@@ -18,7 +18,7 @@ export default function Wishlist({navigation}) {
         <SafeAreaView style={styles.container}>
             <Header headerName='Wishlist' />
             <View style={styles.content} >
-                <Courses title={'Your Favorites'} allCourses={filteredFavoriteCourses} navigation={navigation}/>
+                <Courses title={'Favorites'} allCourses={filteredFavoriteCourses} navigation={navigation}/>
             </View>
         </SafeAreaView>
     )

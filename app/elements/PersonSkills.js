@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         borderRadius: 5,
         backgroundColor: '#00b5f0',
-        marginRight: 40, // Space between items in the same row
+        marginRight: 30, // Space between items in the same row
     },
     skill: {
         color: 'white',
