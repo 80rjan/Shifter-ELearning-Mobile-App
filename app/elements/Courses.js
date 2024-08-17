@@ -1,5 +1,5 @@
 
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Platform} from 'react-native';
 import Course from "./Course";
 import { NavigationContainer } from '@react-navigation/native';
 import {createStackNavigator} from "@react-navigation/stack";
@@ -32,6 +32,12 @@ const styles=StyleSheet.create({
         paddingHorizontal: 20,
         flexDirection: 'column',
         gap: 20,
+
+        ...Platform.select({
+            android: {
+                gap: 10,
+            }
+        })
     },
     scrollView: {
         paddingHorizontal: 5,
@@ -39,6 +45,12 @@ const styles=StyleSheet.create({
     heading: {
         fontFamily: 'GothicA1-700',
         fontSize: 28,
+
+        ...Platform.select({
+            android: {
+                fontSize: 24,
+            }
+        })
     },
     errorText: {
         fontFamily: 'GothicA1-500',

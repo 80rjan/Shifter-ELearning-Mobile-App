@@ -1,6 +1,6 @@
 // Course.js
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity, Platform} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { usePerson } from '../PersonInformationContext';
 
@@ -43,7 +43,7 @@ export default function Course({ navigation, course }) {
                     <View style={styles.priceFavorite}>
                         <Text style={[styles.price, { color: '#202020' }]}>{course.price}$</Text>
                         <TouchableOpacity onPress={handleFavoritePress}>
-                            <Ionicons name={heartIcon} color={'#00b5f0'} size={25} />
+                            <Ionicons name={heartIcon} color={'#00b5f0'} size={Platform.OS==='android' ? 20 : 25} />
                         </TouchableOpacity>
                     </View>
                 )}
@@ -71,20 +71,46 @@ const styles = StyleSheet.create({
         shadowOffset: { width: -2, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 2,
-        elevation: 5, // For Android
+
+        ...Platform.select({
+            android: {
+                gap: 10,
+                paddingVertical: 10,
+                elevation: 2,
+            }
+        })
     },
     contentWrapper: {
         flex: 1,
         alignItems: 'flex-start',
         gap: 8,
+
+        ...Platform.select({
+            android: {
+                gap: 5,
+            }
+        })
     },
     priceFavorite: {
         flexDirection: 'row',
+        alignItems: 'center',
         gap: 10,
+
+        ...Platform.select({
+            android: {
+                gap: 8,
+            }
+        })
     },
     title: {
         fontFamily: 'GothicA1-600',
         fontSize: 20,
+
+        ...Platform.select({
+            android: {
+                fontSize: 18,
+            }
+        })
     },
     topicDuration: {
         fontFamily: 'Roboto-300',
@@ -93,6 +119,12 @@ const styles = StyleSheet.create({
     price: {
         fontFamily: 'Roboto-500',
         fontSize: 18,
+
+        ...Platform.select({
+            android: {
+                fontSize: 16,
+            }
+        })
     },
     imageWrapper: {
         borderRadius: 3,

@@ -1,5 +1,5 @@
 
-import {View, Text, StyleSheet} from "react-native";
+import {Platform, View, Text, StyleSheet} from "react-native";
 
 export default function Header({headerName}) {
 
@@ -19,16 +19,35 @@ const styles=StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 40,
+
+        ...Platform.select({
+            android: {
+                paddingTop: 30,
+                marginBottom: 10,
+            }
+        })
     },
     heading: {
         fontFamily: 'GothicA1-800',
         fontSize: 33,
         color: '#202020',
         paddingRight: 0,
+
+        ...Platform.select({
+            android: {
+                fontSize: 28,
+            }
+        })
     },
     logo: {
         fontFamily: 'GothicA1-900',
         fontSize: 30,
         color: '#00b5f0',
+        ...Platform.select({
+            android: {
+                fontSize: 25,
+            }
+        })
+
     }
 })

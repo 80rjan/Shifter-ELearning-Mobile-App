@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image, Alert, Platform} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 import { usePerson } from '../PersonInformationContext';
@@ -63,24 +63,61 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+
+        ...Platform.select({
+            android: {
+                marginTop: 10,
+            }
+        })
+
     },
     textWrapper: {
         gap: 8,
+
+        ...Platform.select({
+            android: {
+                gap: 0,
+            }
+        })
     },
     title: {
         fontFamily: 'GothicA1-700',
         fontSize: 20,
+
+        ...Platform.select({
+            android: {
+                fontSize: 18,
+            }
+        })
     },
     text: {
         fontFamily: 'GothicA1-400',
         fontSize: 16,
+
+        ...Platform.select({
+            android: {
+                fontSize: 14,
+            }
+        })
     },
     imageWrapper: {
-        width: 100, // Fixed width for better consistency
-        height: 100, // Fixed height for better consistency
+        // height: 'auto',
+        // aspectRatio: 1,
+
+        height: 100,
+        width: 100,
+        // padding: 20,
+
+        ...Platform.select({
+            android: {
+                height: 90,
+                width: 90,
+            }
+        }),
+
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 50, // Circular shape
+        borderRadius: 9999,
         backgroundColor: '#eee',
         overflow: 'hidden',
         borderWidth: 1,

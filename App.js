@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import {Platform, StyleSheet, Text} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -54,10 +54,29 @@ export default function App() {
                                 iconName = focused ? 'person' : 'person-outline';
                             }
 
-                            return <Ionicons name={iconName} size={size} color={color} />;
+                            return <Ionicons name={iconName} size={25} color={color} />;
                         },
                         tabBarActiveTintColor: '#00b5f0',
                         tabBarInactiveTintColor: '#888',
+                        tabBarStyle: {
+                            height: 85,
+
+                            ...Platform.select({
+                                android: {
+                                    height: 60,
+                                    paddingBottom: 5,
+                                }
+                            })
+                        },
+                        tabBarLabel: ({ focused, color }) => (
+                            <Text style={{
+                                fontSize: 14, // Change font size as needed
+                                fontWeight: focused ? 'bold' : 'normal',
+                                color: color,
+                            }}>
+                                {route.name}
+                            </Text>
+                        ),
                     })}
                 >
                     <Tab.Screen name="Courses">

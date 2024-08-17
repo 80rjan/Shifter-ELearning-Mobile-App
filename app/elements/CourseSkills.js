@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, View} from "react-native";
+import {Platform, ScrollView, StyleSheet, Text, View} from "react-native";
 import React from "react";
 
 export default function CourseSkills({course}) {
@@ -20,10 +20,23 @@ const styles=StyleSheet.create({
     title: {
         fontFamily: 'GothicA1-500',
         fontSize: 25,
+
+        ...Platform.select({
+            android: {
+                fontSize: 23,
+            }
+        })
     },
     container: {
         gap: 20,
         marginBottom: 50,
+
+        ...Platform.select({
+            android: {
+                marginBottom: 30,
+                gap: 10,
+            }
+        })
     },
     scrollView: {
         gap: 5,
@@ -34,9 +47,22 @@ const styles=StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#eee',
         marginRight: 10,
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 5,
+                paddingHorizontal: 10,
+            }
+        })
     },
     text: {
         fontFamily: 'GothicA1-400',
         fontSize: 16,
+
+        ...Platform.select({
+            android: {
+                fontSize: 14,
+            }
+        })
     }
 })

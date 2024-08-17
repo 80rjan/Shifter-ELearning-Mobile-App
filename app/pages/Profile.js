@@ -1,5 +1,5 @@
 
-import {View, Text, StyleSheet, SafeAreaView} from "react-native";
+import {View, Text, StyleSheet, SafeAreaView, Platform} from "react-native";
 import Header from "../elements/Header";
 import {usePerson} from "../PersonInformationContext";
 import PersonInfo from "../elements/PersonInfo";
@@ -28,5 +28,12 @@ const styles = StyleSheet.create({
     },
     content: {
         gap: 30,
+
+        ...Platform.select({
+            android: {
+                gap: 20,
+            }
+        })
+
     }
 })

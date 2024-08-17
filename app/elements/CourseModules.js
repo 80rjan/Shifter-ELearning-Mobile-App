@@ -1,5 +1,5 @@
 
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Platform} from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import React from "react";
 
@@ -23,10 +23,23 @@ const styles=StyleSheet.create({
     container: {
         gap: 10,    //because of the vertical padding on each text item
         marginBottom: 20,
+
+        ...Platform.select({
+            android: {
+                marginBottom: 10,
+                gap: 5,
+            }
+        })
     },
     title: {
         fontFamily: 'GothicA1-500',
         fontSize: 25,
+
+        ...Platform.select({
+            android: {
+                fontSize: 23,
+            }
+        })
     },
     modulesWrapper: {
         paddingHorizontal: 10,
@@ -39,5 +52,12 @@ const styles=StyleSheet.create({
         fontFamily: 'GothicA1-400',
         fontSize: 18,
         paddingVertical: 10,
+
+        ...Platform.select({
+            android: {
+                fontSize: 16,
+                paddingVertical: 5,
+            }
+        })
     }
 })

@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform} from 'react-native';
 
 export default function Topics({ handleFilter, selectedSkill }) {
 
@@ -16,6 +16,12 @@ export default function Topics({ handleFilter, selectedSkill }) {
                             styles.scrollElement,
                             {   backgroundColor: colors[index % colors.length],
                                 opacity: 0.8,
+
+                                ...Platform.select({
+                                    android: {
+                                        opacity: 1.0,
+                                    }
+                                })
                             },
                             selectedSkill === topic ? styles.selected : null
                         ]}
@@ -34,10 +40,22 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         flexDirection: 'column',
         gap: 20,
+
+        ...Platform.select({
+            android: {
+                gap: 10,
+            }
+        })
     },
     heading: {
         fontFamily: 'GothicA1-700',
         fontSize: 28,
+
+        ...Platform.select({
+            android: {
+                fontSize: 24,
+            }
+        })
     },
     scrollView: {
         flexDirection: 'row',
@@ -47,6 +65,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         borderRadius: 5,
         marginRight: 10,
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 8,
+                paddingHorizontal: 12,
+            }
+        })
+
     },
     selected: {
         backgroundColor: '#005f80', // Darker color for selected topic
@@ -57,5 +83,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto-500',
         color: 'white',
         fontSize: 16,
+
+        ...Platform.select({
+            android: {
+                fontSize: 14,
+            }
+        })
     }
 });

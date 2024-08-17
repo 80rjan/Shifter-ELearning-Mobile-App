@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from "react-native";
+import {Platform, StyleSheet, Text, View} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import React from "react";
 
@@ -23,13 +23,32 @@ const styles=StyleSheet.create({
     title: {
         fontFamily: 'GothicA1-500',
         fontSize: 25,
+
+        ...Platform.select({
+            android: {
+                fontSize: 23,
+            }
+        })
     },
     container: {
         gap: 20,
         marginBottom: 50,
+
+        ...Platform.select({
+            android: {
+                marginBottom: 30,
+                gap: 10,
+            }
+        })
     },
     outcomesWrapper: {
         gap: 8,
+
+        ...Platform.select({
+            android: {
+                gap: 5,
+            }
+        })
     },
     item: {
         flexDirection: 'row',
@@ -40,5 +59,11 @@ const styles=StyleSheet.create({
         fontFamily: 'GothicA1-400',
         fontSize: 18,
         flexShrink: 1,
+
+        ...Platform.select({
+            android: {
+                fontSize: 16,
+            }
+        })
     }
 })

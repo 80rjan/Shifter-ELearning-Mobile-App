@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Animated, Alert } from 'react-native';
+import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Animated, Alert, Platform} from 'react-native';
 import CourseOutcomes from "../elements/CourseOutcomes";
 import CourseSkills from "../elements/CourseSkills";
 import CourseDescription from "../elements/CourseDescription";
@@ -110,7 +110,13 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.5,
         shadowRadius: 3,
-        elevation: 15,
+
+        ...Platform.select({
+            android: {
+                height: 150,
+                marginBottom: 5,
+            }
+        })
     },
     image: {
         width: '100%',
@@ -124,6 +130,13 @@ const styles = StyleSheet.create({
         fontSize: 28,
         textTransform: 'capitalize',
         marginBottom: 20,
+
+        ...Platform.select({
+            android: {
+                fontSize: 25,
+                marginBottom: 10,
+            }
+        })
     },
     buyButton: {
         position: 'absolute',
@@ -140,10 +153,24 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 5,
         elevation: 10,
+
+        ...Platform.select({
+            android: {
+                width: '70%',
+                paddingVertical: 8,
+
+            }
+        })
     },
     buyButtonText: {
         fontFamily: 'GothicA1-600',
         color: '#fff',
         fontSize: 25,
+
+        ...Platform.select({
+            android: {
+                fontSize: 23,
+            }
+        })
     },
 });

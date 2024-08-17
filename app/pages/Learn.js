@@ -30,7 +30,7 @@ export default function Learn({ navigation }) {
             <Header headerName='Learn' />
             <View style={styles.content}>
                 <Topics courses={filteredCourses} handleFilter={handleFilter} selectedSkill={selectedSkill} />
-                <Courses title={'Learning Dashboard'} allCourses={filteredCourses} navigation={navigation} />
+                <Courses title={'Learning Dashboard'} allCourses={filteredCourses} navigation={navigation} skillFiltering={selectedSkill} />
             </View>
         </SafeAreaView>
     );

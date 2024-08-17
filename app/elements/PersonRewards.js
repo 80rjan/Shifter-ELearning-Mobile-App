@@ -1,5 +1,5 @@
 
-import {View, Text, SafeAreaView, StyleSheet} from "react-native";
+import {View, Text, SafeAreaView, StyleSheet, Platform} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import React from "react";
 
@@ -31,13 +31,30 @@ const styles=StyleSheet.create({
     container: {
         paddingHorizontal: 20,
         gap: 20,
+
+        ...Platform.select({
+            android: {
+                gap: 10,
+            }
+        })
     },
     header: {
         fontFamily: 'GothicA1-700',
         fontSize: 28,
+
+        ...Platform.select({
+            android: {
+                fontSize: 25,
+            }
+        })
     },
     content: {
         gap: 10,
+        ...Platform.select({
+            android: {
+                gap: 5,
+            }
+        })
     },
     reward: {
         flexDirection: 'row',
@@ -47,5 +64,11 @@ const styles=StyleSheet.create({
     rewardText: {
         fontFamily: 'GothicA1-400',
         fontSize: 18,
+
+        ...Platform.select({
+            android: {
+                fontSize: 16,
+            }
+        })
     }
 })

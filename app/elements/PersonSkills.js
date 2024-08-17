@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Platform} from 'react-native';
 
 export default function PersonSkills({ person }) {
     // Split skills into two rows
@@ -38,10 +38,22 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
         gap: 20,
+
+        ...Platform.select({
+            android: {
+                gap: 10,
+            }
+        })
     },
     header: {
         fontFamily: 'GothicA1-700',
         fontSize: 28,
+
+        ...Platform.select({
+            android: {
+                fontSize: 25,
+            }
+        })
     },
     content: {
         flexDirection: 'column',
@@ -60,11 +72,24 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         borderRadius: 5,
         backgroundColor: '#00b5f0',
-        marginRight: 30, // Space between items in the same row
+        marginRight: 30, // Space between items in the same
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 5,
+                paddingHorizontal: 10,
+            }
+        })
     },
     skill: {
         color: 'white',
         fontFamily: 'GothicA1-400',
         fontSize: 16,
+
+        ...Platform.select({
+            android: {
+                fontSize: 14,
+            }
+        })
     },
 });
