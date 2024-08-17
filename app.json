@@ -24,7 +24,8 @@
       "favicon": "./assets/HomeIcon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "expo-asset"
     ],
     "extra": {
       "eas": {

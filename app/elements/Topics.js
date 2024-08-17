@@ -46,11 +46,12 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 5,
-        // backgroundColor: '#00b5f0',
         marginRight: 10,
     },
     selected: {
         backgroundColor: '#005f80', // Darker color for selected topic
+        opacity: 0.3,
+        transform: [{ scale: 0.9 }],
     },
     topics: {
         fontFamily: 'Roboto-500',

@@ -35,7 +35,7 @@ export default function Home({navigation}) {
             <Header headerName='Courses' />
             <View style={styles.content}>
                 <Topics courses={filteredCourses} handleFilter={handleFilter} selectedSkill={selectedSkill} />
-                <Courses title={'Explore '} allCourses={filteredCourses} navigation={navigation}/>
+                <Courses title={'Explore '} allCourses={filteredCourses} navigation={navigation} skillFiltering={selectedSkill}/>
             </View>
         </SafeAreaView>
     );

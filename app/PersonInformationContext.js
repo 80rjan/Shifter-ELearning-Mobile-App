@@ -1,11 +1,11 @@
 import React, { createContext, useState, useContext } from 'react';
-import allCoursesDetails from "./AllCoursesDetails";
 
 const PersonInformationContext = createContext();
 
 export function PersonProvider({ children }) {
     const [coursesBought, setCoursesBought] = useState([]);
     const [coursesFavorite, setCoursesFavorite] = useState([]);
+    const [profilePicture, setProfilePicture] = useState(null); // Add profile picture state
 
     function addCourse(courseToAdd) {
         const courseAlreadyBought = coursesBought.some(boughtCourse => boughtCourse.title === courseToAdd.title);
@@ -29,6 +29,10 @@ export function PersonProvider({ children }) {
         );
     }
 
+    function updateProfilePicture(uri) {
+        setProfilePicture(uri); // Update profile picture in context
+    }
+
     const pointsAchieved = coursesBought.reduce((sum, course) => sum + (course.points || 0), 0);
 
     const allSkills = coursesBought.flatMap(course => course.skills || []);
@@ -39,6 +43,7 @@ export function PersonProvider({ children }) {
         name: 'Borjan Gjorgjievski',
         job: 'Software Engineer',
         email: 'borjangjorgjievski1@gmail.com',
+        profilePicture, // Add profile picture to the person object
         coursesBought,
         coursesFavorite,
         coursesLength: coursesBought.length,
@@ -48,7 +53,7 @@ export function PersonProvider({ children }) {
     };
 
     return (
-        <PersonInformationContext.Provider value={{ person, addCourse, addFavorites, removeFavorites }}>
+        <PersonInformationContext.Provider value={{ person, addCourse, addFavorites, removeFavorites, updateProfilePicture }}>
             {children}
         </PersonInformationContext.Provider>
     );

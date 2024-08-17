@@ -1,16 +1,20 @@
-import React, { useRef } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Animated } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Animated, Alert } from 'react-native';
 import CourseOutcomes from "../elements/CourseOutcomes";
 import CourseSkills from "../elements/CourseSkills";
 import CourseDescription from "../elements/CourseDescription";
 import CourseModules from "../elements/CourseModules";
 import { usePerson } from "../PersonInformationContext";
+import * as FileSystem from 'expo-file-system';
+import { Asset } from 'expo-asset';
+import * as Sharing from 'expo-sharing'; // Import Sharing module
 
 export default function CourseDetails({ route, navigation }) {
     const { course } = route.params;
-    const { addCourse } = usePerson();
+    const { person, addCourse } = usePerson();
+    const isBought = person.coursesBought.some(courseBought => courseBought.title === course.title);
+    const [downloadedUri, setDownloadedUri] = useState(null);
 
-    // Ref for scroll position
     const scrollY = useRef(new Animated.Value(0)).current;
 
     const handlePress = () => {
@@ -21,7 +25,33 @@ export default function CourseDetails({ route, navigation }) {
         });
     };
 
-    // Handle closing of CourseDetails
+    const handleDownload = async () => {
+        if (isBought) {
+            try {
+                // Load the PDF asset
+                const asset = Asset.fromModule(require('../../assets/CourseBuyPdfTest.pdf'));
+                await asset.downloadAsync();
+
+                // Define file URI in the document directory
+                const fileUri = `${FileSystem.documentDirectory}CourseBuyPdfTest.pdf`;
+
+                // Copy the file from assets to the document directory
+                await FileSystem.copyAsync({
+                    from: asset.localUri,
+                    to: fileUri,
+                });
+
+                // Set the URI and share the file so the user can save it
+                setDownloadedUri(fileUri);
+                await Sharing.shareAsync(fileUri);
+            } catch (error) {
+                Alert.alert('Download Error', 'An error occurred while downloading the file.');
+            }
+        } else {
+            Alert.alert('Action Required', 'You need to purchase the course before downloading.');
+        }
+    };
+
     const handleScroll = Animated.event(
         [{ nativeEvent: { contentOffset: { y: scrollY } } }],
         {
@@ -34,20 +64,13 @@ export default function CourseDetails({ route, navigation }) {
         }
     );
 
-    // const handleScroll = (event) => {
-    //     const yOffset = event.nativeEvent.contentOffset.y;
-    //     if (yOffset === -150) {
-    //         navigation.popToTop();
-    //     }
-    // }
-
     return (
         <View style={styles.container}>
             <ScrollView
                 contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
                 onScroll={handleScroll}
-                scrollEventThrottle={16} // Adjust the throttle value for performance
+                scrollEventThrottle={16}
             >
                 <View style={styles.imageWrapper}>
                     <Image source={course.image} style={styles.image} />
@@ -60,8 +83,13 @@ export default function CourseDetails({ route, navigation }) {
                     <CourseModules course={course} />
                 </View>
             </ScrollView>
-            <TouchableOpacity style={styles.buyButton} onPress={handlePress}>
-                <Text style={styles.buyButtonText}>Start Your Journey</Text>
+            <TouchableOpacity
+                style={styles.buyButton}
+                onPress={isBought ? handleDownload : handlePress}
+            >
+                <Text style={styles.buyButtonText}>
+                    {isBought ? 'Download Course' : 'Start Your Journey'}
+                </Text>
             </TouchableOpacity>
         </View>
     );
@@ -73,20 +101,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     scrollContent: {
-        paddingBottom: 80, // Ensure ScrollView content doesn't overlap with the button
+        paddingBottom: 80,
     },
     imageWrapper: {
         height: 180,
         marginBottom: 15,
-
-        // Shadow for iOS
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.5,
         shadowRadius: 3,
-
-        // Elevation for Android
-        elevation: 15, // Significantly increase elevation
+        elevation: 15,
     },
     image: {
         width: '100%',
@@ -111,20 +135,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5,
         alignSelf: 'center',
-
-        // Shadow for iOS
         shadowColor: '#000',
         shadowOffset: { width: -5, height: 8 },
         shadowOpacity: 0.3,
         shadowRadius: 5,
-
-        // Elevation for Android
-        elevation: 10, // Significantly increase elevation
+        elevation: 10,
     },
     buyButtonText: {
         fontFamily: 'GothicA1-600',
         color: '#fff',
         fontSize: 25,
-
     },
 });
