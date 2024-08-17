@@ -2,9 +2,10 @@
 import {View, Text, SafeAreaView, StyleSheet, Platform} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import React from "react";
+import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 
 export default function PersonRewards({ person }) {
-    const iconSize = 25;
+    const iconSize = 28;
 
     return (
         <View style={styles.container}>
@@ -40,11 +41,11 @@ const styles=StyleSheet.create({
     },
     header: {
         fontFamily: 'GothicA1-700',
-        fontSize: 28,
+        fontSize: 24,
 
         ...Platform.select({
             android: {
-                fontSize: 25,
+                fontSize: 22,
             }
         })
     },

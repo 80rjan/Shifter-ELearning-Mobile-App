@@ -11,6 +11,7 @@ export default function PersonSkills({ person }) {
             <Text style={[styles.header, { color: '#202020' }]}>Skills Gained</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
                 <View style={styles.content}>
+                    {person.skills.length===0 && <Text style={{fontFamily: 'GothicA1-400', fontSize: 20,}} >No skills acquired</Text> }
                     {/* First Row */}
                     <View style={styles.row}>
                         {firstRowSkills.map((skill, index) => (
@@ -47,11 +48,11 @@ const styles = StyleSheet.create({
     },
     header: {
         fontFamily: 'GothicA1-700',
-        fontSize: 28,
+        fontSize: 23,
 
         ...Platform.select({
             android: {
-                fontSize: 25,
+                fontSize: 22,
             }
         })
     },
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     },
     skill: {
         color: 'white',
-        fontFamily: 'GothicA1-400',
+        fontFamily: 'GothicA1-500',
         fontSize: 16,
 
         ...Platform.select({

@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform} from 're
 export default function Topics({ handleFilter, selectedSkill }) {
 
     const topics = ['Sales', 'Marketing', 'Management', 'Onboarding', 'Leadership', 'Strategy'];
-    const colors = ['#00b5f0', '#006ef0', '#00f0d3'];
+    const colors = ['#006039', '#00b5f0', '#0068F0', '#2C8FB0'];
 
     return (
         <View style={styles.topicsWrapper}>
@@ -15,8 +15,6 @@ export default function Topics({ handleFilter, selectedSkill }) {
                         style={[
                             styles.scrollElement,
                             {   backgroundColor: colors[index % colors.length],
-                                opacity: 0.8,
-
                                 ...Platform.select({
                                     android: {
                                         opacity: 1.0,
@@ -49,11 +47,11 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontFamily: 'GothicA1-700',
-        fontSize: 28,
+        fontSize: 24,
 
         ...Platform.select({
             android: {
-                fontSize: 24,
+                fontSize: 22,
             }
         })
     },
@@ -82,11 +80,11 @@ const styles = StyleSheet.create({
     topics: {
         fontFamily: 'Roboto-500',
         color: 'white',
-        fontSize: 16,
+        fontSize: 14,
 
         ...Platform.select({
             android: {
-                fontSize: 14,
+                fontSize: 12,
             }
         })
     }

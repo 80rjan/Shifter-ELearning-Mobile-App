@@ -44,17 +44,17 @@ const styles=StyleSheet.create({
     },
     heading: {
         fontFamily: 'GothicA1-700',
-        fontSize: 28,
+        fontSize: 24,
 
         ...Platform.select({
             android: {
-                fontSize: 24,
+                fontSize: 22,
             }
         })
     },
     errorText: {
         fontFamily: 'GothicA1-500',
-        fontSize: 20,
+        fontSize: 22,
         alignSelf: 'center',
     }
 })

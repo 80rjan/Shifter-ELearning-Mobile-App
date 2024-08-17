@@ -21,18 +21,19 @@ export default function CourseOutcomes({course}) {
 
 const styles=StyleSheet.create({
     title: {
-        fontFamily: 'GothicA1-500',
-        fontSize: 25,
+        fontFamily: 'GothicA1-600',
+        fontSize: 24,
+        paddingBottom: 1,
 
         ...Platform.select({
             android: {
-                fontSize: 23,
+                fontSize: 22,
             }
         })
     },
     container: {
         gap: 20,
-        marginBottom: 50,
+        marginBottom: 40,
 
         ...Platform.select({
             android: {

@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     contentWrapper: {
         flex: 1,
         alignItems: 'flex-start',
-        gap: 8,
+        gap: 5,
 
         ...Platform.select({
             android: {
@@ -104,11 +104,11 @@ const styles = StyleSheet.create({
     },
     title: {
         fontFamily: 'GothicA1-600',
-        fontSize: 20,
+        fontSize: 18,
 
         ...Platform.select({
             android: {
-                fontSize: 18,
+                fontSize: 16,
             }
         })
     },
@@ -117,12 +117,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     price: {
-        fontFamily: 'Roboto-500',
-        fontSize: 18,
+        fontFamily: 'Roboto-400',
+        fontSize: 16,
 
         ...Platform.select({
             android: {
-                fontSize: 16,
+                fontSize: 14,
             }
         })
     },

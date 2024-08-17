@@ -32,12 +32,12 @@ const styles=StyleSheet.create({
         })
     },
     title: {
-        fontFamily: 'GothicA1-500',
-        fontSize: 25,
+        fontFamily: 'GothicA1-600',
+        fontSize: 24,
 
         ...Platform.select({
             android: {
-                fontSize: 23,
+                fontSize: 22,
             }
         })
     },
@@ -55,7 +55,7 @@ const styles=StyleSheet.create({
 
         ...Platform.select({
             android: {
-                fontSize: 16,
+                fontSize: 14,
                 paddingVertical: 5,
             }
         })

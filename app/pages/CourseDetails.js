@@ -126,14 +126,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     title: {
-        fontFamily: 'GothicA1-700',
-        fontSize: 28,
+        fontFamily: 'GothicA1-800',
+        fontSize: 24,
         textTransform: 'capitalize',
-        marginBottom: 20,
+        marginBottom: 15,
 
         ...Platform.select({
             android: {
-                fontSize: 25,
+                fontSize: 22,
                 marginBottom: 10,
             }
         })
@@ -141,35 +141,28 @@ const styles = StyleSheet.create({
     buyButton: {
         position: 'absolute',
         bottom: 10,
-        width: '70%',
+        width: '80%',
         backgroundColor: '#00b5f0',
         paddingVertical: 15,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
         alignSelf: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: -5, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 5,
-        elevation: 10,
 
         ...Platform.select({
             android: {
-                width: '70%',
                 paddingVertical: 8,
-
             }
         })
     },
     buyButtonText: {
-        fontFamily: 'GothicA1-600',
+        fontFamily: 'GothicA1-700',
         color: '#fff',
-        fontSize: 25,
+        fontSize: 20,
 
         ...Platform.select({
             android: {
-                fontSize: 23,
+                fontSize: 20,
             }
         })
     },

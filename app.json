@@ -2,6 +2,7 @@
   "expo": {
     "name": "ShifterApp1.0",
     "slug": "shifterapp_1-0",
+    "owner": "shifterapp_devicetesting",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/HomeIcon.png",

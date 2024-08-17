@@ -29,23 +29,23 @@ const styles=StyleSheet.create({
     },
     heading: {
         fontFamily: 'GothicA1-800',
-        fontSize: 33,
+        fontSize: 28,
         color: '#202020',
         paddingRight: 0,
 
         ...Platform.select({
             android: {
-                fontSize: 28,
+                fontSize: 26,
             }
         })
     },
     logo: {
         fontFamily: 'GothicA1-900',
-        fontSize: 30,
+        fontSize: 26,
         color: '#00b5f0',
         ...Platform.select({
             android: {
-                fontSize: 25,
+                fontSize: 24,
             }
         })
 
