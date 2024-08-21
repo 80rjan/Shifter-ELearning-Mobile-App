@@ -1,17 +1,18 @@
+// Header.js
+import React from 'react';
+import { View, Text, StyleSheet, Platform } from 'react-native';
+import ShifterLogo from "../../assets/ShifterLogo";
 
-import {Platform, View, Text, StyleSheet} from "react-native";
-
-export default function Header({headerName}) {
-
+export default function Header({ headerName }) {
     return (
         <View style={styles.headerWrapper}>
             <Text style={styles.heading}>{headerName}</Text>
-            <Text style={styles.logo}>Shifter Logo</Text>
+            <ShifterLogo />
         </View>
-    )
+    );
 }
 
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
     headerWrapper: {
         paddingTop: 10,
         paddingHorizontal: 20,
@@ -19,7 +20,6 @@ const styles=StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 40,
-
         ...Platform.select({
             android: {
                 paddingTop: 30,
@@ -32,22 +32,10 @@ const styles=StyleSheet.create({
         fontSize: 28,
         color: '#202020',
         paddingRight: 0,
-
         ...Platform.select({
             android: {
                 fontSize: 26,
             }
         })
     },
-    logo: {
-        fontFamily: 'GothicA1-900',
-        fontSize: 26,
-        color: '#00b5f0',
-        ...Platform.select({
-            android: {
-                fontSize: 24,
-            }
-        })
-
-    }
-})
+});

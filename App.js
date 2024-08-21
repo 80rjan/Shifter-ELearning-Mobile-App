@@ -1,5 +1,5 @@
-import React from 'react';
-import {Platform, StyleSheet, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Platform, StyleSheet, Text, View, ActivityIndicator} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -12,6 +12,7 @@ import Wishlist from "./app/pages/Wishlist";
 import Learn from "./app/pages/Learn";
 import Profile from "./app/pages/Profile";
 import CourseDetails from "./app/pages/CourseDetails";
+import LoadingScreen from "./app/pages/LoadingScreen";
 
 import {PersonProvider} from "./app/PersonInformationContext";
 
@@ -21,10 +22,19 @@ const Stack = createStackNavigator();
 
 
 export default function App() {
+    const [isLoading, setIsLoading] = useState(true);
     const fontsLoaded=useFonts()
 
-    if (!fontsLoaded) {
-        return (<Text >Loading Fonts...</Text>);
+    useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 2000);
+    }, []);
+
+    if (!fontsLoaded || isLoading) {
+        return (
+            <LoadingScreen />
+        );
     }
 
     return (

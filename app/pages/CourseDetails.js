@@ -57,7 +57,7 @@ export default function CourseDetails({ route, navigation }) {
         {
             useNativeDriver: false,
             listener: (event) => {
-                if (event.nativeEvent.contentOffset.y <= -150) {
+                if (event.nativeEvent.contentOffset.y <= -50) {
                     navigation.popToTop();
                 }
             }

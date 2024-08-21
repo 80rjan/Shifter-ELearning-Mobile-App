@@ -12,7 +12,7 @@ export default function CourseDescription({ course }) {
             <View style={styles.contentWrapper}>
                 <View style={styles.content}>
                     <View style={styles.iconWrapper} >
-                        <Ionicons name={'globe-outline'} color={'#202020'} size={iconSize} />
+                        <Ionicons name={'globe-outline'} color={'#777'} size={iconSize} />
                     </View>
                     <View style={styles.textWrapper} >
                         <Text style={[styles.textTitle, {color: '#202020'}]}>Languages:</Text>
@@ -21,7 +21,7 @@ export default function CourseDescription({ course }) {
                 </View>
                 <View style={styles.content}>
                     <View style={styles.iconWrapper} >
-                        <Ionicons name={'bar-chart-outline'} color={'#202020'} size={iconSize} />
+                        <Ionicons name={'layers-outline'} color={'#777'} size={iconSize} />
                     </View>
                     <View style={styles.textWrapper} >
                         <Text style={[styles.textTitle, {color: '#202020'}]}>Level:</Text>
@@ -30,7 +30,7 @@ export default function CourseDescription({ course }) {
                 </View>
                 <View style={styles.content}>
                     <View style={styles.iconWrapper} >
-                        <Ionicons name={'time-outline'} color={'#202020'} size={iconSize} />
+                        <Ionicons name={'timer-outline'} color={'#777'} size={iconSize} />
                     </View>
                     <View style={styles.textWrapper} >
                         <Text style={[styles.textTitle, {color: '#202020'}]}>Duration:</Text>

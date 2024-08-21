@@ -2,27 +2,29 @@
   "expo": {
     "name": "ShifterApp1.0",
     "slug": "shifterapp_1-0",
-    "owner": "shifterapp_devicetesting",
+    "owner": "80rjan",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/HomeIcon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/HomeIcon.png",
+      "image": "./assets/Shifter.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shifter.borjan"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/HomeIcon.png",
+        "foregroundImage": "./assets/Shifter-MiniLogo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.shifter.borjan"
     },
     "web": {
-      "favicon": "./assets/HomeIcon.png"
+      "favicon": "./assets/Shifter-MiniLogo.png"
     },
     "plugins": [
       "expo-font",
