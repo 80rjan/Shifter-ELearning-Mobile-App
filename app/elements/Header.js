@@ -7,7 +7,9 @@ export default function Header({ headerName }) {
     return (
         <View style={styles.headerWrapper}>
             <Text style={styles.heading}>{headerName}</Text>
-            <ShifterLogo />
+            {Platform.OS==='ios' ?
+                <ShifterLogo width='150' height='50'/> :
+                <ShifterLogo width='100' height='30'/> }
         </View>
     );
 }

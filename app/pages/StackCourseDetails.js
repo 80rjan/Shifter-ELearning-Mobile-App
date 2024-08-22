@@ -1,11 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, Image, Platform} from 'react-native';
 import {CardStyleInterpolators, createStackNavigator} from '@react-navigation/stack';
 import CourseDetails from "./CourseDetails";
 import Home from './Home';
 import Wishlist from "./Wishlist";
 import Learn from "./Learn";
 import ShifterMiniLogo from "../../assets/Shifter Mini Logo";
+import {Easing} from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -13,6 +14,23 @@ export default function StackCourseDetails({ Component }) {
     return (
         <Stack.Navigator
             screenOptions={{
+                transitionSpec: {
+                    open: {
+                        animation: 'timing',
+                        config: {
+                            duration: 500,
+                            easing: Easing.inOut(Easing.ease),
+                            delay: 100,
+                        },
+                    },
+                    close: {
+                        animation: 'timing',
+                        config: {
+                            duration: 300,
+                            easing: Easing.in(Easing.ease),
+                        },
+                    },
+                },
                 cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
                 gestureDirection: 'vertical',
                 cardStyle: styles.card,
@@ -34,11 +52,9 @@ export default function StackCourseDetails({ Component }) {
                     // ),
                     headerLeft: () => (
                         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.goBackWrapper}>
-                            {/*<Image*/}
-                            {/*    source={require('./../../assets/Shifter-MiniLogo.png')}*/}
-                            {/*    style={styles.headerImage}*/}
-                            {/*/>*/}
-                            <ShifterMiniLogo />
+                            {Platform.OS==='ios' ?
+                                <ShifterMiniLogo width='70' height='35' /> :
+                                <ShifterMiniLogo width='70' height='34.6' /> }
                         </TouchableOpacity>
                     )
                 })}

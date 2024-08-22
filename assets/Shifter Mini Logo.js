@@ -1,8 +1,8 @@
 import React from 'react';
 import Svg, { Polyline, Mask, G, Filter, FeColorMatrix, Image, Defs } from 'react-native-svg';
 
-const ShifterMiniLogo = () => (
-    <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 34.613" width={70} height={34.613}>
+const ShifterMiniLogo = ({ width, height}) => (
+    <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 34.613" width={width} height={height}>
         <G>
             <Polyline points="0 17.268 17.118 34.613 17.12 25.177 32.133 25.177 32.133 9.442 17.122 9.444 17.124 0 0 17.268" fill="#00b5f0"/>
             <G opacity={0.1}>
