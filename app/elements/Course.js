@@ -5,15 +5,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { usePerson } from '../PersonInformationContext';
 
 export default function Course({ navigation, course }) {
-    const { person, addFavorites, removeFavorites } = usePerson();
+    const { user, addFavorites, removeFavorites } = usePerson();
     const [heartIcon, setHeartIcon] = useState('heart-outline');
-    const favoriteCourses = person.coursesFavorite;
-    const boughtCourses = person.coursesBought;
+    const favoriteCourses = user.coursesFavorite;
+    const boughtCourses = user.coursesBought;
 
-    const isBought = boughtCourses.some(boughtCourses => boughtCourses.title === course.title);
+    const isBought = boughtCourses === undefined ? false : boughtCourses.some(boughtCourses => boughtCourses.title === course.title);
 
     useEffect(() => {
-        const isFavorite = favoriteCourses.some(favoriteCourse => favoriteCourse.title === course.title);
+        const isFavorite = favoriteCourses === undefined ? false : favoriteCourses.some(favoriteCourse => favoriteCourse.title === course.title);
         setHeartIcon(isFavorite ? 'heart' : 'heart-outline');
 
     }, [favoriteCourses, course.title]);
@@ -21,10 +21,8 @@ export default function Course({ navigation, course }) {
     const handleFavoritePress = () => {
         if (heartIcon === 'heart-outline') {
             addFavorites(course);
-            // navigation.navigate('Wishlist');
         } else {
             removeFavorites(course);
-            // navigation.navigate('Home');
         }
     };
 
@@ -43,7 +41,7 @@ export default function Course({ navigation, course }) {
                     <View style={styles.priceFavorite}>
                         <Text style={[styles.price, { color: '#202020' }]}>{course.price}$</Text>
                         <TouchableOpacity onPress={handleFavoritePress}>
-                            <Ionicons name={heartIcon} color={'#00b5f0'} size={Platform.OS==='android' ? 20 : 25} />
+                            <Ionicons name={heartIcon} color={'#00b5f0'} size={Platform.OS==='android' ? 25 : 28} />
                         </TouchableOpacity>
                     </View>
                 )}
@@ -118,11 +116,11 @@ const styles = StyleSheet.create({
     },
     price: {
         fontFamily: 'Roboto-400',
-        fontSize: 16,
+        fontSize: 18,
 
         ...Platform.select({
             android: {
-                fontSize: 14,
+                fontSize: 16,
             }
         })
     },

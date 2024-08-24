@@ -11,8 +11,8 @@ import * as Sharing from 'expo-sharing'; // Import Sharing module
 
 export default function CourseDetails({ route, navigation }) {
     const { course } = route.params;
-    const { person, addCourse } = usePerson();
-    const isBought = person.coursesBought.some(courseBought => courseBought.title === course.title);
+    const { user, addCourse } = usePerson();
+    const isBought = user.coursesBought.some(courseBought => courseBought.title === course.title);
     const [downloadedUri, setDownloadedUri] = useState(null);
 
     const scrollY = useRef(new Animated.Value(0)).current;

@@ -1,7 +1,6 @@
-// Import statements
 import React, { useEffect, useState } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -14,10 +13,10 @@ import Home from "./app/pages/Home";
 import Wishlist from "./app/pages/Wishlist";
 import Learn from "./app/pages/Learn";
 import Profile from "./app/pages/Profile";
-import Signup from "./app/pages/SignUp";
-import Login from "./app/pages/LogIn";
 import LoadingScreen from "./app/pages/LoadingScreen";
-import { PersonProvider } from "./app/PersonInformationContext";
+import {PersonProvider, usePerson} from "./app/PersonInformationContext";
+import SignupLogin from "./app/pages/SignupLogin";
+import UserInfo from "./app/pages/UserInfo";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -78,50 +77,58 @@ function TabNavigator() {
     );
 }
 
-function AuthStack() {
-    const navigation = useNavigation(); // Get navigation object
-
-    const navigateToHome = () => {
-        navigation.navigate('Courses'); // Navigate to Courses screen
-    };
-
+function AuthStack({ changeUserDetails, setHasAccount }) {
     return (
-        <Stack.Navigator
-            screenOptions={() => ({
-                headerShown: false,
-            })}
-        >
-            <Stack.Screen name="SignUp">
-                {(props) => <Signup {...props} navigateToHome={navigateToHome} />}
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Login">
+                {(props) => (
+                    <SignupLogin
+                        {...props}
+                        onLogIn={() => setHasAccount(true)}
+                    />
+                )}
             </Stack.Screen>
-            <Stack.Screen name="LogIn">
-                {(props) => <Login {...props} navigateToHome={navigateToHome} />}
+            <Stack.Screen name="UserInfo">
+                {(props) => (
+                    <UserInfo
+                        {...props}
+                        changeUserDetails={changeUserDetails}
+                        onUserInfoComplete={() => setHasAccount(true)}
+                    />
+                )}
             </Stack.Screen>
         </Stack.Navigator>
     );
 }
 
+
+
 function AppNavigator() {
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
-        });
-
-        return () => unsubscribe();
-    }, []);
+    const { user, changeUserDetails } = usePerson();
+    const [hasAccount, setHasAccount] = useState(false); // Track if user is signing up
 
     return (
-        <Stack.Navigator>
-            {user ? (
-                <Stack.Screen name="Main" component={TabNavigator} options={{ headerShown: false }} />
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            {!hasAccount ? (
+                <Stack.Screen name="Auth">
+                    {(props) => (
+                        <AuthStack
+                            {...props}
+                            changeUserDetails={changeUserDetails}
+                            user={user}
+                            setHasAccount={setHasAccount} // Pass the flag to AuthStack
+                        />
+                    )}
+                </Stack.Screen>
             ) : (
-                <Stack.Screen name="Auth" component={AuthStack} options={{ headerShown: false }} />
+                // If user is logged in and has completed UserInfo
+                <Stack.Screen name="Main" component={TabNavigator} />
             )}
         </Stack.Navigator>
     );
 }
+
+
 
 export default function App() {
     const [isLoading, setIsLoading] = useState(true);

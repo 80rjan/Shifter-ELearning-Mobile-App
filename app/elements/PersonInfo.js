@@ -9,7 +9,6 @@ export default function PersonInfo({ person }) {
     const [imageUri, setImageUri] = useState(person.profilePicture || null);
 
     useEffect(() => {
-        // Request permission to access media library
         (async () => {
             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
             if (status !== 'granted') {
@@ -30,7 +29,7 @@ export default function PersonInfo({ person }) {
             if (!result.canceled) {
                 const uri = result.assets[0].uri;
                 setImageUri(uri);
-                updateProfilePicture(uri); // Update profile picture in context
+                updateProfilePicture(uri); // Update profile picture in context and Firestore
             } else {
                 Alert.alert('Cancelled', 'You did not select any image.');
             }
@@ -43,7 +42,7 @@ export default function PersonInfo({ person }) {
         <View style={styles.container}>
             <View style={styles.textWrapper}>
                 <Text style={[styles.title, { color: '#202020' }]}>{person.name}</Text>
-                <Text style={[styles.text, { color: '#202020' }]}>{person.job}</Text>
+                <Text style={[styles.text, { color: '#202020' }]}>{person.jobTitle}, {person.company}</Text>
                 <Text style={[styles.text, { color: '#202020' }]}>{person.email}</Text>
             </View>
             <TouchableOpacity style={styles.imageWrapper} onPress={handleChooseImage}>

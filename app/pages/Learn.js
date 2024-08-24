@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import { usePerson } from '../PersonInformationContext'; // Import the context hook
 import Header from "../elements/Header";
@@ -6,24 +6,35 @@ import Topics from "../elements/Topics";
 import Courses from "../elements/Courses";
 
 export default function Learn({ navigation }) {
-    const { person } = usePerson(); // Use the context hook to get person data
-    const yourCourses = person.coursesBought; // Get bought courses from context
-
-    const [filteredCourses, setFilteredCourses] = useState(yourCourses);
+    const { user, loading, error } = usePerson(); // Use the context hook to get person data
+    const [filteredCourses, setFilteredCourses] = useState(user.coursesBought);
     const [selectedSkill, setSelectedSkill] = useState(null);
+
+    useEffect(() => {
+        setFilteredCourses(user.coursesBought);
+    }, [user.coursesBought])
+
 
     const handleFilter = (skill) => {
         if (selectedSkill === skill) {
             // If the skill is already selected, clear the filter
-            setFilteredCourses(yourCourses);
+            setFilteredCourses(user.coursesBought);
             setSelectedSkill(null);
         } else {
             // Filter courses based on the selected skill
-            const filtered = yourCourses.filter(course => course.skills.includes(skill));
+            const filtered = user.coursesBought.filter(course => course.skills.includes(skill));
             setFilteredCourses(filtered);
             setSelectedSkill(skill);
         }
     };
+
+    if (loading) {
+        return <Text>Loading...</Text>; // You can replace this with a more sophisticated loading indicator
+    }
+
+    if (error) {
+        return <Text>Error loading data</Text>; // Display an error message if needed
+    }
 
     return (
         <SafeAreaView style={styles.container}>

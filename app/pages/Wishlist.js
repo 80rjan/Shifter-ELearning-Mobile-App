@@ -6,12 +6,11 @@ import Header from "../elements/Header";
 import allCoursesDetails from "../AllCoursesDetails";
 
 export default function Wishlist({navigation}) {
-    const {person} = usePerson();
-    const favoriteCourses = person.coursesFavorite;
-    const coursesBought = person.coursesBought;
+    const { user } = usePerson();
+    const favoriteCourses = user.coursesFavorite || [];
 
     const filteredFavoriteCourses = favoriteCourses.filter(favoriteCourse =>
-        !coursesBought.some(boughtCourse => boughtCourse.title === favoriteCourse.title)
+        !user.coursesBought.some(boughtCourse => boughtCourse.title === favoriteCourse.title)
     );
 
     return (

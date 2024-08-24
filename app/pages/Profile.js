@@ -7,15 +7,15 @@ import PersonRewards from "../elements/PersonRewards";
 import PersonSkills from "../elements/PersonSkills";
 
 export default function Profile() {
-    const {person} = usePerson();
+    const { user } = usePerson();
 
     return (
         <SafeAreaView style={styles.container}>
             <Header headerName='Profile' />
             <View style={styles.content}>
-                <PersonInfo person={person}/>
-                <PersonRewards person={person}/>
-                <PersonSkills person={person}/>
+                <PersonInfo person={user}/>
+                <PersonRewards person={user}/>
+                <PersonSkills person={user}/>
             </View>
         </SafeAreaView>
     )

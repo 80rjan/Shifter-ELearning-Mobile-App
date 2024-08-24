@@ -13,11 +13,11 @@ export default function PersonRewards({ person }) {
             <View style={styles.content}>
                 <View style={styles.reward}>
                     <Ionicons name={'book-outline'} color={'#00b5f0'} size={iconSize} />
-                    <Text style={styles.rewardText}>Courses Acquired: {person.coursesLength}</Text>
+                    <Text style={styles.rewardText}>Courses Acquired: {person.coursesBought.length}</Text>
                 </View>
                 <View style={styles.reward}>
                     <Ionicons name={'layers-outline'} color={'#00b5f0'} size={iconSize} />
-                    <Text style={styles.rewardText}>Skills Gained: {person.skillsLength}</Text>
+                    <Text style={styles.rewardText}>Skills Gained: {person.skills.length}</Text>
                 </View>
                 <View style={styles.reward}>
                     <Ionicons name={'podium-outline'} color={'#00b5f0'} size={iconSize} />

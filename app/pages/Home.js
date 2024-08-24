@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Navbar from "../elements/Navbar";
 import Header from "../elements/Header";
 import Topics from "../elements/Topics";
@@ -8,11 +8,15 @@ import {usePerson} from "../PersonInformationContext";
 import allCoursesDetails from "../AllCoursesDetails";
 
 export default function Home({navigation}) {
-    const { person } = usePerson();
-    const coursesBought = person.coursesBought;
+    const { user } = usePerson();
     const courses = allCoursesDetails.filter(course =>
-        !coursesBought.some(boughtCourse => boughtCourse.title === course.title)
+        !user.coursesBought.some(boughtCourse => boughtCourse.title === course.title)
     );
+
+    useEffect(() => {
+        console.log('User data in Home component:', user);
+    }, [user]);
+
 
     const [filteredCourses, setFilteredCourses] = useState(courses);
     const [selectedSkill, setSelectedSkill] = useState(null);

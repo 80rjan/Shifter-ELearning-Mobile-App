@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, ScrollView, Platform} from 'react-native';
 
 export default function PersonSkills({ person }) {
+
     // Split skills into two rows
     const firstRowSkills = person.skills.slice(0, Math.ceil(person.skills.length / 2));
     const secondRowSkills = person.skills.slice(Math.ceil(person.skills.length / 2));
