@@ -17,7 +17,7 @@ import { db } from '../../firebaseConfig';
 import {getAuth} from "firebase/auth";
 
 
-export default function UserInfo({ navigateToHome, user, onUserInfoComplete }) {
+export default function UserInfo({ onUserInfoComplete }) {
     const [name, setName] = useState('');
     const [jobTitle, setJobTitle] = useState('');
     const [company, setCompany] = useState('');
@@ -59,7 +59,7 @@ export default function UserInfo({ navigateToHome, user, onUserInfoComplete }) {
 
     return (
         <SafeAreaView style={styles.safeView}>
-            <View
+            <KeyboardAvoidingView
                 style={styles.container}
                 // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
@@ -70,7 +70,6 @@ export default function UserInfo({ navigateToHome, user, onUserInfoComplete }) {
                     style={styles.content}
                     keyboardShouldPersistTaps="handled"
                     contentContainerStyle={styles.scrollViewContent}
-
                 >
                     <Text style={styles.title}>Enter Your Details</Text>
                     <View style={styles.inputWrapper}>
@@ -106,7 +105,7 @@ export default function UserInfo({ navigateToHome, user, onUserInfoComplete }) {
                         </TouchableOpacity>
                     </View>
                 </KeyboardAwareScrollView>
-            </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
@@ -123,13 +122,11 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     content: {
-        paddingTop: '20%',
         flex: 1,
         paddingHorizontal: 20,
     },
     scrollViewContent: {
         flexGrow: 1,
-        justifyContent: 'center',
     },
     title: {
         fontFamily: 'GothicA1-400',

@@ -7,13 +7,15 @@ import CourseModules from "../elements/CourseModules";
 import { usePerson } from "../PersonInformationContext";
 import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
-import * as Sharing from 'expo-sharing'; // Import Sharing module
+import * as Sharing from 'expo-sharing';
+import {auth} from "../../firebaseConfig";
 
 export default function CourseDetails({ route, navigation }) {
     const { course } = route.params;
     const { user, addCourse } = usePerson();
     const isBought = user.coursesBought.some(courseBought => courseBought.title === course.title);
     const [downloadedUri, setDownloadedUri] = useState(null);
+    const isAnonymous = auth.currentUser?.isAnonymous;
 
     const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -84,11 +86,12 @@ export default function CourseDetails({ route, navigation }) {
                 </View>
             </ScrollView>
             <TouchableOpacity
-                style={styles.buyButton}
+                style={[styles.buyButton, isAnonymous && styles.buttonDisabled]}
                 onPress={isBought ? handleDownload : handlePress}
+                disabled={isAnonymous}
             >
                 <Text style={styles.buyButtonText}>
-                    {isBought ? 'Download Course' : 'Start Your Journey'}
+                    {isAnonymous ? 'Log In or Sign Up to continue' : (isBought ? 'Download Course' : 'Start Your Journey') }
                 </Text>
             </TouchableOpacity>
         </View>
@@ -154,6 +157,9 @@ const styles = StyleSheet.create({
                 paddingVertical: 8,
             }
         })
+    },
+    buttonDisabled: {
+        backgroundColor: '#777',
     },
     buyButtonText: {
         fontFamily: 'GothicA1-700',

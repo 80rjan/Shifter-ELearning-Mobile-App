@@ -7,16 +7,14 @@ import { usePerson } from '../PersonInformationContext';
 export default function Course({ navigation, course }) {
     const { user, addFavorites, removeFavorites } = usePerson();
     const [heartIcon, setHeartIcon] = useState('heart-outline');
-    const favoriteCourses = user.coursesFavorite;
-    const boughtCourses = user.coursesBought;
 
-    const isBought = boughtCourses === undefined ? false : boughtCourses.some(boughtCourses => boughtCourses.title === course.title);
+    const isBought = user.coursesBought.some(boughtCourses => boughtCourses.title === course.title);
 
     useEffect(() => {
-        const isFavorite = favoriteCourses === undefined ? false : favoriteCourses.some(favoriteCourse => favoriteCourse.title === course.title);
+        const isFavorite = user.coursesFavorite.some(favoriteCourse => favoriteCourse.title === course.title);
         setHeartIcon(isFavorite ? 'heart' : 'heart-outline');
 
-    }, [favoriteCourses, course.title]);
+    }, [user.coursesFavorite, course.title]);
 
     const handleFavoritePress = () => {
         if (heartIcon === 'heart-outline') {

@@ -3,8 +3,10 @@ import {View, Text, StyleSheet, TouchableOpacity, Image, Alert, Platform} from '
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 import { usePerson } from '../PersonInformationContext';
+import {auth} from "../../firebaseConfig";
 
 export default function PersonInfo({ person }) {
+    const isAnonymous = auth.currentUser?.isAnonymous;
     const { updateProfilePicture } = usePerson();
     const [imageUri, setImageUri] = useState(person.profilePicture || null);
 
@@ -42,7 +44,7 @@ export default function PersonInfo({ person }) {
         <View style={styles.container}>
             <View style={styles.textWrapper}>
                 <Text style={[styles.title, { color: '#202020' }]}>{person.name}</Text>
-                <Text style={[styles.text, { color: '#202020' }]}>{person.jobTitle}, {person.company}</Text>
+                {!isAnonymous && <Text style={[styles.text, { color: '#202020' }]}>{person.jobTitle}, {person.company}</Text>}
                 <Text style={[styles.text, { color: '#202020' }]}>{person.email}</Text>
             </View>
             <TouchableOpacity style={styles.imageWrapper} onPress={handleChooseImage}>

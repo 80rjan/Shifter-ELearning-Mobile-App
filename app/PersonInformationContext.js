@@ -7,10 +7,10 @@ const PersonInformationContext = createContext();
 
 export function PersonProvider({ children }) {
     const defaultUserState = {
-        name: '',
+        name: 'Guest',
         jobTitle: '',
         company: '',
-        email: '',
+        email: 'guest@example.com',
         coursesBought: [],
         coursesFavorite: [],
         profilePicture: null,
@@ -18,6 +18,7 @@ export function PersonProvider({ children }) {
         skills: []
     };
     const [user, setUser] = useState(defaultUserState);
+    const [hasAccount, setHasAccount] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
@@ -26,15 +27,15 @@ export function PersonProvider({ children }) {
             const userDoc = await getDoc(doc(db, 'users', userId));
             if (userDoc.exists()) {
                 const userData = userDoc.data();
-                setUser(userData); // Ensure this sets the complete user data
-            } else {
-                console.log('No such document! Setting default user data.');
-                await setDoc(doc(db, 'users', userId), defaultUserState); // Set default user state
-                setUser(defaultUserState); // Update local state
+                setUser(userData);
+            }
+            else {
+                setUser(defaultUserState);
             }
         } catch (err) {
             console.error('Error fetching user data from Firestore: ', err);
             setError('Failed to load user data.');
+            setUser(defaultUserState);
         } finally {
             setLoading(false);
         }
@@ -136,6 +137,8 @@ export function PersonProvider({ children }) {
     }
 
     async function updateUserInFirestore(updates) {
+        if (user.name==='Guest') return;
+
         try {
             const auth = getAuth();
             const userId = auth.currentUser?.uid;
@@ -158,6 +161,8 @@ export function PersonProvider({ children }) {
                 removeFavorites,
                 addCourse,
                 updateProfilePicture,
+                hasAccount,
+                setHasAccount,
             }}
         >
             {children}

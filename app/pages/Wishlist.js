@@ -7,8 +7,7 @@ import allCoursesDetails from "../AllCoursesDetails";
 
 export default function Wishlist({navigation}) {
     const { user } = usePerson();
-    const favoriteCourses = user.coursesFavorite || [];
-
+    const favoriteCourses = user.coursesFavorite;
     const filteredFavoriteCourses = favoriteCourses.filter(favoriteCourse =>
         !user.coursesBought.some(boughtCourse => boughtCourse.title === favoriteCourse.title)
     );

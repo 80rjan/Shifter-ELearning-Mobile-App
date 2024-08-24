@@ -22,6 +22,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function TabNavigator() {
+    const { setHasAccount }= usePerson();
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -72,19 +73,24 @@ function TabNavigator() {
             <Tab.Screen name="Learn">
                 {() => <StackCourseDetails Component={Learn} />}
             </Tab.Screen>
-            <Tab.Screen name="Profile" component={Profile} />
+            <Tab.Screen name="Profile">
+                {(props) => <Profile {...props} onLogout={() => setHasAccount(false)} />}
+            </Tab.Screen>
         </Tab.Navigator>
     );
 }
 
-function AuthStack({ changeUserDetails, setHasAccount }) {
+function AuthStack() {
+    const { setHasAccount }= usePerson();
+
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login">
+            <Stack.Screen name="LoginSignup">
                 {(props) => (
                     <SignupLogin
                         {...props}
                         onLogIn={() => setHasAccount(true)}
+                        onGuestEntry={() => setHasAccount(true)}
                     />
                 )}
             </Stack.Screen>
@@ -92,7 +98,6 @@ function AuthStack({ changeUserDetails, setHasAccount }) {
                 {(props) => (
                     <UserInfo
                         {...props}
-                        changeUserDetails={changeUserDetails}
                         onUserInfoComplete={() => setHasAccount(true)}
                     />
                 )}
@@ -104,29 +109,29 @@ function AuthStack({ changeUserDetails, setHasAccount }) {
 
 
 function AppNavigator() {
-    const { user, changeUserDetails } = usePerson();
-    const [hasAccount, setHasAccount] = useState(false); // Track if user is signing up
+    const { user, changeUserDetails, hasAccount, setHasAccount } = usePerson();
+
+    useEffect(() => {
+        const checkUserStatus = () => {
+            if (auth.currentUser?.isAnonymous) {
+                setHasAccount(true); // Set the flag to true for guest users
+            }
+        };
+
+        checkUserStatus();
+    }, []);
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             {!hasAccount ? (
-                <Stack.Screen name="Auth">
-                    {(props) => (
-                        <AuthStack
-                            {...props}
-                            changeUserDetails={changeUserDetails}
-                            user={user}
-                            setHasAccount={setHasAccount} // Pass the flag to AuthStack
-                        />
-                    )}
-                </Stack.Screen>
+                <Stack.Screen name="Auth" component={AuthStack} />
             ) : (
-                // If user is logged in and has completed UserInfo
-                <Stack.Screen name="Main" component={TabNavigator} />
+                <Stack.Screen name="Main" component={TabNavigator}/>
             )}
         </Stack.Navigator>
     );
 }
+
 
 
 

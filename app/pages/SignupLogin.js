@@ -1,15 +1,15 @@
 
 import React, { useState } from 'react';
 import {View, TextInput, Text, StyleSheet, SafeAreaView, TouchableOpacity, Alert, ScrollView} from 'react-native';
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signInAnonymously} from 'firebase/auth';
 import {auth, db} from '../../firebaseConfig';
 import ShifterLogo from "../../assets/ShifterLogo";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {usePerson} from "../PersonInformationContext";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 
-export default function SignupLogin({ navigation, navigateAsGuest, onLogIn }) {
-    const [signup, setSignup] = useState(true);
+export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
+    const [signup, setSignup] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -59,10 +59,20 @@ export default function SignupLogin({ navigation, navigateAsGuest, onLogIn }) {
     };
 
 
+    const handleGuestEntry = async () => {
+        try {
+            const userCredential = await signInAnonymously(auth);
+            const user = userCredential.user;
 
-    const handleGuestEntry = () => {
-        navigateAsGuest();
+            console.log('Guest signed in:', user.uid);
+
+            onGuestEntry();
+        } catch (error) {
+            console.error('Error with anonymous sign-in:', error);
+            setError('Failed to enter as guest.');
+        }
     };
+
 
     return (
         <SafeAreaView style={styles.safeView}>
