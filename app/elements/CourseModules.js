@@ -2,16 +2,27 @@
 import {View, Text, StyleSheet, Platform} from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import React from "react";
+import {usePerson} from "../PersonInformationContext";
 
 export default function CourseModules({ course }) {
+    const { lightTheme, textLightBackground, textDarkBackground} = usePerson();
 
     return (
         <View style={styles.container}>
-            <Text style={[styles.title, {color: '#202020'}]}>Module Breakdown</Text>
+            <Text style={[
+                styles.title,
+                {color: lightTheme ? textLightBackground : textDarkBackground}
+            ]}>Module Breakdown</Text>
             <View style={styles.modulesWrapper}>
                 {course.modules.map((module, index) => (
-                    <View key={index} style={styles.module}>
-                        <Text style={[styles.text, {color: '#202020'}]}>{module}</Text>
+                    <View key={index} style={[
+                        styles.module,
+                        {borderBottomColor: lightTheme ? 'rgba(51,51,51,0.5)' : 'rgba(221,221,221,0.5)' }
+                    ]}>
+                        <Text style={[
+                            styles.text,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                        ]}>{module}</Text>
                     </View>
                 ))}
             </View>
@@ -45,7 +56,6 @@ const styles=StyleSheet.create({
         paddingHorizontal: 10,
     },
     module: {
-        borderBottomColor: 'rgba(0,181,240,0.5)',
         borderBottomWidth: 1,
     },
     text: {

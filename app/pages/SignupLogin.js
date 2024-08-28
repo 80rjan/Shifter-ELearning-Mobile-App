@@ -1,7 +1,19 @@
 
 import React, { useState } from 'react';
-import {View, TextInput, Text, StyleSheet, SafeAreaView, TouchableOpacity, Alert, ScrollView} from 'react-native';
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signInAnonymously} from 'firebase/auth';
+import {
+    View,
+    TextInput,
+    Text,
+    StyleSheet,
+    SafeAreaView,
+    TouchableOpacity,
+    Alert,
+    ScrollView,
+    Button,
+    KeyboardAvoidingView,
+    Platform
+} from 'react-native';
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signInAnonymously, sendPasswordResetEmail, sendEmailVerification} from 'firebase/auth';
 import {auth, db} from '../../firebaseConfig';
 import ShifterLogo from "../../assets/ShifterLogo";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
@@ -12,22 +24,34 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
     const [signup, setSignup] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { fetchUserData, changeUserDetails, defaultUserState } = usePerson();
+    const [emailFocus, setEmailFocus] = useState(false);
+    const [passwordFocus, setPasswordFocus] = useState(false);
+    const [confirmPasswordFocus, setConfirmPasswordFocus] = useState(false);
+
+    const { fetchUserData, changeUserDetails, defaultUserState, lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground } = usePerson();
 
     const handleSignup = async () => {
         setLoading(true);
         setError('');
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-            changeUserDetails({ email: user.email });
-            navigation.navigate('UserInfo');
-        } catch (err) {
-            setError(err.message);
-        } finally {
+        if (password===passwordConfirm) {
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                // changeUserDetails({ email: user.email });
+
+
+                navigation.navigate('UserInfo');
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        } else {
+            setError('Passwords need to be the same');
             setLoading(false);
         }
     };
@@ -59,6 +83,20 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
     };
 
 
+    const handleResetPassword = async () => {
+        if (email) {
+            try {
+                await sendPasswordResetEmail(auth, email);
+                Alert.alert('Success','Email sent! Check your mail inbox to reset your password');
+            } catch (error) {
+                setError(error.message);
+            }
+        } else {
+            setError('Please enter you email address in the field so we can send you an email for resetting your password');
+        }
+    }
+
+
     const handleGuestEntry = async () => {
         try {
             const userCredential = await signInAnonymously(auth);
@@ -75,42 +113,122 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
 
 
     return (
-        <SafeAreaView style={styles.safeView}>
-            <View style={styles.container}>
+        <SafeAreaView style={[
+            styles.safeView,
+            {backgroundColor: lightTheme ? lightBackground : darkBackground}
+        ]}>
+            <KeyboardAvoidingView
+                style={styles.container}
+                // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
                 <View style={styles.logo}>
-                    <ShifterLogo width='250' height='125' />
+                    <ShifterLogo width='250' height='125' color={!lightTheme ?  lightBackground : darkBackground} />
                 </View>
                 <KeyboardAwareScrollView
                     style={styles.content}
                     keyboardShouldPersistTaps="handled"
                     contentContainerStyle={styles.scrollViewContent}
                 >
-                    <Text style={styles.title}>{signup ? 'Sign Up' : 'Log In'}</Text>
+                    <Text style={[
+                        styles.title,
+                        {color: lightTheme ? textLightBackground : textDarkBackground}
+                    ]}>{signup ? 'Sign Up' : 'Log In'}</Text>
                     <View style={styles.inputWrapper}>
-                        <Text style={styles.inputText}>Email</Text>
+                        <Text style={[
+                            styles.inputText,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                        ]}>Email</Text>
                         <TextInput
                             placeholder="Enter your email"
                             value={email}
                             onChangeText={setEmail}
                             keyboardType="email-address"
                             autoCapitalize="none"
-                            style={styles.input}
+                            style={[
+                                styles.input,
+                                {color: lightTheme ? textLightBackground : textDarkBackground},
+                                {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                                emailFocus && styles.inputFocus
+                            ]}
+                            onFocus={() => setEmailFocus(true) }
+                            onBlur={() => setEmailFocus(false)}
                         />
                     </View>
                     <View style={styles.inputWrapper}>
-                        <Text style={styles.inputText}>Password</Text>
-                        <TextInput
-                            placeholder="Enter your password"
-                            value={password}
-                            onChangeText={setPassword}
-                            secureTextEntry
-                            autoCapitalize="none"
-                            style={styles.input}
-                        />
+                        <Text style={[
+                            styles.inputText,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                        ]}>Password</Text>
+                        {signup ?
+                            <TextInput
+                                placeholder="Enter your password"
+                                value={password}
+                                onChangeText={setPassword}
+                                secureTextEntry
+                                autoCapitalize="none"
+                                style={[
+                                    styles.input,
+                                    {color: lightTheme ? textLightBackground : textDarkBackground},
+                                    {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                                    passwordFocus && styles.inputFocus
+                                ]}
+                                onFocus={() => setPasswordFocus(true) }
+                                onBlur={() => setPasswordFocus(false)}
+                            /> :
+                            <View style={styles.resetPassButtonWrapper} >
+                                <TextInput
+                                    placeholder="Enter your password"
+                                    value={password}
+                                    onChangeText={setPassword}
+                                    secureTextEntry
+                                    autoCapitalize="none"
+                                    style={[
+                                        styles.input,
+                                        {color: lightTheme ? textLightBackground : textDarkBackground},
+                                        {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                                        passwordFocus && styles.inputFocus
+                                    ]}
+                                    onFocus={() => setPasswordFocus(true) }
+                                    onBlur={() => setPasswordFocus(false)}
+                                />
+                                <TouchableOpacity style={styles.resetPassButton} onPress={handleResetPassword}>
+                                    <Text style={[
+                                        styles.resetPassButtonText,
+                                        {color: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                                    ]}>Forgot password?</Text>
+                                </TouchableOpacity>
+                            </View>
+                        }
                     </View>
+                    {signup &&
+                        <View style={styles.inputWrapper}>
+                            <Text style={[
+                                styles.inputText,
+                                {color: lightTheme ? textLightBackground : textDarkBackground}
+                            ]}>Confirm Password</Text>
+                            <TextInput
+                                placeholder="Confirm password"
+                                value={passwordConfirm}
+                                onChangeText={setPasswordConfirm}
+                                secureTextEntry
+                                autoCapitalize="none"
+                                style={[
+                                    styles.input,
+                                    {color: lightTheme ? textLightBackground : textDarkBackground},
+                                    {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                                    confirmPasswordFocus && styles.inputFocus
+                                ]}
+                                onFocus={() => setConfirmPasswordFocus(true) }
+                                onBlur={() => setConfirmPasswordFocus(false)}
+                            />
+                        </View>
+                    }
                     <View style={styles.buttonWrapper}>
                         {error ? <Text style={styles.error}>{error}</Text> : null}
-                        <TouchableOpacity style={styles.button} onPress={signup ? handleSignup : handleLogin} disabled={loading}>
+                        <TouchableOpacity style={[
+                            styles.button,
+                            {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
+                        ]} onPress={signup ? handleSignup : handleLogin} disabled={loading}>
                             <Text style={styles.buttonText}>
                                 {loading ?
                                     (signup ? 'Signing Up...' : 'Logging in') :
@@ -121,26 +239,30 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
                             style={styles.navButton}
                             onPress={() => {
                                 setSignup(!signup);
-                                setPassword('');
                                 setEmail('');
+                                setPassword('');
+                                setPasswordConfirm('');
                                 setError('');
                             }}
                         >
-                            <Text style={styles.navButtonText}>
+                            <Text style={[
+                                styles.navButtonText,
+                                {color: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                            ]}>
                                 {signup ?
                                     'Already have an account? Log in' :
                                     'Don\'t have an account? Sign Up'}
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.enterGuest}
-                            onPress={handleGuestEntry}
-                        >
-                            <Text style={styles.enterGuestText}>Skip? Enter as guest</Text>
-                        </TouchableOpacity>
                     </View>
                 </KeyboardAwareScrollView>
-            </View>
+                <TouchableOpacity
+                    style={styles.enterGuest}
+                    onPress={handleGuestEntry}
+                >
+                    <Text style={styles.enterGuestText}>Skip? Enter as guest</Text>
+                </TouchableOpacity>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
@@ -174,11 +296,10 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     inputWrapper: {
-        gap: 10,
+        gap: 15,
         marginBottom: 30,
     },
     input: {
-        borderColor: '#00b5f0',
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
@@ -186,7 +307,20 @@ const styles = StyleSheet.create({
         fontFamily: 'GothicA1-400',
         fontSize: 16,
     },
+    inputFocus: {
+        borderWidth: 3,
+    },
     inputText: {
+        fontFamily: 'GothicA1-400',
+        fontSize: 16,
+    },
+    resetPassButtonWrapper: {
+        gap: 10,
+    },
+    resetPassButton: {
+
+    },
+    resetPassButtonText: {
         fontFamily: 'GothicA1-400',
         fontSize: 16,
     },
@@ -195,7 +329,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     button: {
-        backgroundColor: '#00b5f0',
         borderRadius: 5,
         alignItems: 'center',
         paddingVertical: 10,
@@ -212,7 +345,6 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     navButtonText: {
-        color: '#00b5f0',
         fontSize: 16,
     },
     enterGuest: {
@@ -220,8 +352,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5,
         alignSelf: 'center',
-        // position: 'absolute',
-        // bottom: 0,
+        position: 'absolute',
+        bottom: 10,
     },
     enterGuestText: {
         color: '#666',

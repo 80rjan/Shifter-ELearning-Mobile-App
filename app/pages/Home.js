@@ -1,14 +1,17 @@
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import {useEffect, useState} from "react";
-import Navbar from "../elements/Navbar";
 import Header from "../elements/Header";
 import Topics from "../elements/Topics";
 import Courses from "../elements/Courses";
 import {usePerson} from "../PersonInformationContext";
 import allCoursesDetails from "../AllCoursesDetails";
+import {useTheme} from "@react-navigation/native";
+
+
 
 export default function Home({navigation}) {
-    const { user } = usePerson();
+    const { user, lightTheme, lightBackground, darkBackground } = usePerson();
+
     const courses = allCoursesDetails.filter(course =>
         !user.coursesBought.some(boughtCourse => boughtCourse.title === course.title)
     );
@@ -35,11 +38,14 @@ export default function Home({navigation}) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[
+            styles.container,
+            { backgroundColor: lightTheme ? lightBackground : darkBackground },
+        ]}>
             <Header headerName='Courses' />
             <View style={styles.content}>
                 <Topics courses={filteredCourses} handleFilter={handleFilter} selectedSkill={selectedSkill} />
-                <Courses title={'Explore '} allCourses={filteredCourses} navigation={navigation} skillFiltering={selectedSkill}/>
+                <Courses title={'Discover'} allCourses={filteredCourses} navigation={navigation} skillFiltering={selectedSkill}/>
             </View>
         </SafeAreaView>
     );
@@ -48,7 +54,6 @@ export default function Home({navigation}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f8f8f8',
     },
     content: {
         flex: 1,

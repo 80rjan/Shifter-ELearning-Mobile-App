@@ -1,21 +1,28 @@
 
 import {View, Text, StyleSheet, ScrollView, Platform} from 'react-native';
 import Course from "./Course";
-import { NavigationContainer } from '@react-navigation/native';
+import {NavigationContainer, useTheme} from '@react-navigation/native';
 import {createStackNavigator} from "@react-navigation/stack";
 import CourseDetails from "../pages/CourseDetails";
 import {usePerson} from "../PersonInformationContext";
+import {auth} from "../../firebaseConfig";
 
 const Stack = createStackNavigator();
 
 export default function Courses({title, allCourses, navigation, skillFiltering}) {
-    const { user } = usePerson();
+    const { lightTheme, textLightBackgorund, textDarkBackground } = usePerson();
 
     return (
         <View style={styles.coursesWrapper}>
-            <Text style={[styles.heading, {color: '#202020'}]}>{title}</Text>
+            <Text style={[
+                styles.heading,
+                {color: lightTheme ? textLightBackgorund : textDarkBackground},
+            ]}>{title}</Text>
             <ScrollView vertical showsVerticalScrollIndicator={false} style={styles.scrollView}>
-                {allCourses.length===0 && <Text style={styles.errorText}>{user.name==='Guest' ? 'Log In or Sign Up to purchase courses' : `No courses to show ${skillFiltering && `with this skill: ${skillFiltering}`}`}</Text>}
+                {allCourses.length===0 && <Text style={[
+                    styles.errorText,
+                    {color: lightTheme ? textLightBackgorund : textDarkBackground},
+                ]}>No courses to show {skillFiltering && `with this skill: ${skillFiltering}`}</Text>}
                 {allCourses.map((course, index) => {
                     return <Course
                                    key={index}
@@ -32,7 +39,6 @@ const styles=StyleSheet.create({
     coursesWrapper: {
         flex: 1,
         paddingHorizontal: 20,
-        flexDirection: 'column',
         gap: 20,
 
         ...Platform.select({
@@ -42,7 +48,6 @@ const styles=StyleSheet.create({
         })
     },
     scrollView: {
-        paddingHorizontal: 5,
     },
     heading: {
         fontFamily: 'GothicA1-700',

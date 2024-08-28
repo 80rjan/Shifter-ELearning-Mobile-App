@@ -1,34 +1,53 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Platform, TouchableOpacity } from 'react-native';
+import {View, Text, StyleSheet, SafeAreaView, Platform, TouchableOpacity, Alert} from 'react-native';
 import Header from '../elements/Header';
 import { usePerson } from '../PersonInformationContext';
 import PersonInfo from '../elements/PersonInfo';
 import PersonRewards from '../elements/PersonRewards';
 import PersonSkills from '../elements/PersonSkills';
-import { getAuth, signOut } from 'firebase/auth';
-import { auth } from '../../firebaseConfig'; // Adjust path as needed
+import { getAuth, signOut, deleteUser } from 'firebase/auth';
+import { auth } from '../../firebaseConfig';
 
 export default function Profile({ onLogout }) {
-    const { user } = usePerson();
+    const { user, lightTheme, lightBackground, darkBackground } = usePerson();
+    const isAnonymous = auth.currentUser?.isAnonymous;
+
+    const showAlert = () => {
+        Alert.alert(
+            'Are you sure you want to logout?',
+            '',
+            [
+                { text: 'Yes', style: 'destructive', onPress: handleLogout },
+                { text: 'No', style: 'default' },
+            ]
+        );
+    };
 
     const handleLogout = async () => {
         try {
-            await signOut(auth);
-            onLogout(); // Call the prop function to update `hasAccount` state in App.js
+            if (isAnonymous) {
+                await deleteUser(auth.currentUser);
+            } else {
+                await signOut(auth);
+            }
+            onLogout(); // Call the prop function to update `hasAccount` state in App.js and navigate
         } catch (error) {
             console.error('Error signing out: ', error);
         }
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[
+            styles.container,
+            {backgroundColor: lightTheme ? lightBackground : darkBackground}
+        ]}>
             <Header headerName='Profile' />
             <View style={styles.content}>
                 <PersonInfo person={user} />
                 <PersonRewards person={user} />
                 <PersonSkills person={user} />
             </View>
-            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <TouchableOpacity style={styles.logoutButton} onPress={showAlert}>
                 <Text style={styles.logoutText}>Log Out</Text>
             </TouchableOpacity>
         </SafeAreaView>
@@ -38,7 +57,6 @@ export default function Profile({ onLogout }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f8f8f8',
     },
     content: {
         gap: 30,

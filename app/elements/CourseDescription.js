@@ -2,39 +2,71 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, ScrollView, Platform} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {usePerson} from "../PersonInformationContext";
 
 export default function CourseDescription({ course }) {
     const iconSize = 28;
+    const { lightTheme, textLightBackground, textDarkBackground} = usePerson();
 
     return (
         <View style={styles.container}>
-            <Text style={styles.description}>{course.description}</Text>
+            <Text style={[
+                styles.description,
+                {color: lightTheme ? textLightBackground : textDarkBackground}
+            ]}>{course.description}</Text>
             <View style={styles.contentWrapper}>
                 <View style={styles.content}>
-                    <View style={styles.iconWrapper} >
-                        <Ionicons name={'globe-outline'} color={'#777'} size={iconSize} />
+                    <View style={[
+                        styles.iconWrapper,
+                        {backgroundColor: lightTheme ? '#ddd' : '#333'}
+                    ]} >
+                        <Ionicons name={'globe-outline'} color={lightTheme ? '#777' : '#888'} size={iconSize} />
                     </View>
                     <View style={styles.textWrapper} >
-                        <Text style={[styles.textTitle, {color: '#202020'}]}>Languages:</Text>
-                        <Text style={[styles.text, {color: '#202020'}]}>{course.languages}</Text>
+                        <Text style={[
+                            styles.textTitle,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                        ]}>Languages:</Text>
+                        <Text style={[
+                            styles.text,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                        ]}>{course.languages}</Text>
                     </View>
                 </View>
                 <View style={styles.content}>
-                    <View style={styles.iconWrapper} >
-                        <Ionicons name={'layers-outline'} color={'#777'} size={iconSize} />
+                    <View style={[
+                        styles.iconWrapper,
+                        {backgroundColor: lightTheme ? '#ddd' : '#333'}
+                    ]} >
+                        <Ionicons name={'layers-outline'} color={lightTheme ? '#777' : '#888'} size={iconSize} />
                     </View>
                     <View style={styles.textWrapper} >
-                        <Text style={[styles.textTitle, {color: '#202020'}]}>Level:</Text>
-                        <Text style={[styles.text, {color: '#202020'}]}>{course.level}</Text>
+                        <Text style={[
+                            styles.textTitle,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                        ]}>Level:</Text>
+                        <Text style={[
+                            styles.text,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                        ]}>{course.level}</Text>
                     </View>
                 </View>
                 <View style={styles.content}>
-                    <View style={styles.iconWrapper} >
-                        <Ionicons name={'timer-outline'} color={'#777'} size={iconSize} />
+                    <View style={[
+                        styles.iconWrapper,
+                        {backgroundColor: lightTheme ? '#ddd' : '#333'}
+                    ]} >
+                        <Ionicons name={'timer-outline'} color={lightTheme ? '#777' : '#888'} size={iconSize} />
                     </View>
                     <View style={styles.textWrapper} >
-                        <Text style={[styles.textTitle, {color: '#202020'}]}>Duration:</Text>
-                        <Text style={[styles.text, {color: '#202020'}]}>{course.timeDuration}</Text>
+                        <Text style={[
+                            styles.textTitle,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                            ]}>Duration:</Text>
+                        <Text style={[
+                            styles.text,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                            ]}>{course.timeDuration}</Text>
                     </View>
                 </View>
             </View>
@@ -81,7 +113,6 @@ const styles=StyleSheet.create({
     iconWrapper: {
         padding: 8,
         borderRadius: 1000,
-        backgroundColor: '#f0f0f0',
     },
     textWrapper: {
         gap: 3,

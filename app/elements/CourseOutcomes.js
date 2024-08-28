@@ -1,17 +1,26 @@
 import {Platform, StyleSheet, Text, View} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import React from "react";
+import {usePerson} from "../PersonInformationContext";
 
 
 export default function CourseOutcomes({course}) {
+    const {lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground} = usePerson();
+
     return (
         <View style={styles.container}>
-            <Text style={[styles.title, {color: '#202020'}]}>Course Highlights</Text>
+            <Text style={[
+                styles.title,
+                {color: lightTheme ? textLightBackground : textDarkBackground},
+            ]}>Course Highlights</Text>
             <View style={styles.outcomesWrapper}>
                 {course.outcomes.map((learn, index) => (
                     <View key={index} style={styles.item}>
-                        <Ionicons name={'ribbon-outline'} color={'#00b5f0'} size={25} />
-                        <Text style={[styles.text, {color: '#202020'}]}>{learn}</Text>
+                        <Ionicons name={'ribbon'} color={lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'} size={25} />
+                        <Text style={[
+                            styles.text,
+                            {color: lightTheme ? textLightBackground : textDarkBackground},
+                        ]}>{learn}</Text>
                     </View>
                 ))}
             </View>
@@ -43,7 +52,7 @@ const styles=StyleSheet.create({
         })
     },
     outcomesWrapper: {
-        gap: 8,
+        gap: 10,
 
         ...Platform.select({
             android: {

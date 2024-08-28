@@ -1,13 +1,20 @@
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform} from 'react-native';
+import {usePerson} from "../PersonInformationContext";
 
 export default function Topics({ handleFilter, selectedSkill }) {
+    const { lightTheme, textLightBackground, textDarkBackground } = usePerson();
 
     const topics = ['Sales', 'Marketing', 'Management', 'Onboarding', 'Leadership', 'Strategy'];
-    const colors = ['#006039', '#00b5f0', '#0068F0', '#2C8FB0'];
+    const colors = lightTheme ?
+        ['#006039', '#00b5f0', '#0068F0', '#2C8FB0'] :
+        ['rgba(0,96,57,0.7)', 'rgba(0,181,240,0.7)', 'rgba(0,104,240,0.7)', 'rgba(44,143,176,0.7)'];
 
     return (
         <View style={styles.topicsWrapper}>
-            <Text style={[styles.heading, {color: '#202020'}]}>Filter By Skill</Text>
+            <Text style={[
+                styles.heading,
+                {color: lightTheme ? textLightBackground : textDarkBackground }
+            ]}>Explore Your Interests</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
                 {topics.map((topic, index) => (
                     <TouchableOpacity
@@ -73,7 +80,7 @@ const styles = StyleSheet.create({
 
     },
     selected: {
-        backgroundColor: '#005f80', // Darker color for selected topic
+        backgroundColor: '#777', // Darker color for selected topic
         opacity: 0.3,
         transform: [{ scale: 0.9 }],
     },

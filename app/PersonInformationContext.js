@@ -1,9 +1,11 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import { db } from '../firebaseConfig';
+import {auth, db} from '../firebaseConfig';
+import {Alert, useColorScheme} from "react-native";
 
 const PersonInformationContext = createContext();
+const isAnonymous = auth.currentUser?.isAnonymous;
 
 export function PersonProvider({ children }) {
     const defaultUserState = {
@@ -17,10 +19,22 @@ export function PersonProvider({ children }) {
         points: 0,
         skills: []
     };
+    const deviceTheme = useColorScheme();
+
     const [user, setUser] = useState(defaultUserState);
     const [hasAccount, setHasAccount] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [lightTheme, setLightTheme] = useState(deviceTheme==='light');
+    const lightBackground = '#eee';
+    const textLightBackground = '#202020';
+    const darkBackground = '#222';
+    const textDarkBackground = '#f8f8f8';
+
+    useEffect(() => {
+        setLightTheme(deviceTheme === 'light');
+    }, [deviceTheme]);
+
 
     async function fetchUserData(userId) {
         try {
@@ -35,6 +49,8 @@ export function PersonProvider({ children }) {
         } catch (err) {
             console.error('Error fetching user data from Firestore: ', err);
             setError('Failed to load user data.');
+            //Remove alert when publishing
+            Alert.alert('Error', `Error fetching user data from Firestore: ${err.message}`);
             setUser(defaultUserState);
         } finally {
             setLoading(false);
@@ -70,6 +86,8 @@ export function PersonProvider({ children }) {
             }
         } catch (error) {
             console.error('Error saving user data to Firestore: ', error);
+            //Remove alert when publishing
+            Alert.alert('Error', `Error saving user data from Firestore: ${error}`);
         }
     }
 
@@ -137,7 +155,7 @@ export function PersonProvider({ children }) {
     }
 
     async function updateUserInFirestore(updates) {
-        if (user.name==='Guest') return;
+        if (isAnonymous) return;
 
         try {
             const auth = getAuth();
@@ -156,6 +174,12 @@ export function PersonProvider({ children }) {
                 user,
                 loading,
                 error,
+                lightTheme,
+                setLightTheme,
+                lightBackground,
+                textLightBackground,
+                darkBackground,
+                textDarkBackground,
                 changeUserDetails,
                 addFavorites,
                 removeFavorites,

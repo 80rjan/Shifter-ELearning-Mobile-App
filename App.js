@@ -14,6 +14,7 @@ import Wishlist from "./app/pages/Wishlist";
 import Learn from "./app/pages/Learn";
 import Profile from "./app/pages/Profile";
 import LoadingScreen from "./app/pages/LoadingScreen";
+import ShifterLogo from "./assets/ShifterLogo";
 import {PersonProvider, usePerson} from "./app/PersonInformationContext";
 import SignupLogin from "./app/pages/SignupLogin";
 import UserInfo from "./app/pages/UserInfo";
@@ -22,7 +23,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function TabNavigator() {
-    const { setHasAccount }= usePerson();
+    const { user, setHasAccount, lightTheme, lightBackground, darkBackground }= usePerson();
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -46,12 +47,22 @@ function TabNavigator() {
                 tabBarInactiveTintColor: '#888',
                 tabBarStyle: {
                     height: 85,
+                    backgroundColor: lightTheme ? lightBackground : darkBackground,
+                    borderTopWidth: 0,
+                    shadowOffset: {width: 0, height: -1},
+                    shadowColor: 'black',
+                    shadowRadius: 1,
+                    shadowOpacity: 0.3,
                     ...Platform.select({
                         android: {
                             height: 60,
                             paddingBottom: 5,
                         },
                     }),
+                },
+                tabBarBadgeStyle: {
+                    backgroundColor: '#00b5f0',
+                    color: 'white',
                 },
                 tabBarLabel: ({ focused, color }) => (
                     <Text style={{
@@ -67,7 +78,7 @@ function TabNavigator() {
             <Tab.Screen name="Courses">
                 {() => <StackCourseDetails Component={Home} />}
             </Tab.Screen>
-            <Tab.Screen name="Wishlist">
+            <Tab.Screen name="Wishlist" options={{tabBarBadge: user.coursesFavorite.length>0 ? user.coursesFavorite.length : null}}>
                 {() => <StackCourseDetails Component={Wishlist} />}
             </Tab.Screen>
             <Tab.Screen name="Learn">
@@ -109,7 +120,7 @@ function AuthStack() {
 
 
 function AppNavigator() {
-    const { user, changeUserDetails, hasAccount, setHasAccount } = usePerson();
+    const { user, hasAccount, setHasAccount } = usePerson();
 
     useEffect(() => {
         const checkUserStatus = () => {

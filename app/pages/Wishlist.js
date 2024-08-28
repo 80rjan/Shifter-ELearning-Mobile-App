@@ -6,14 +6,17 @@ import Header from "../elements/Header";
 import allCoursesDetails from "../AllCoursesDetails";
 
 export default function Wishlist({navigation}) {
-    const { user } = usePerson();
+    const { user, lightTheme, lightBackground, darkBackground } = usePerson();
     const favoriteCourses = user.coursesFavorite;
     const filteredFavoriteCourses = favoriteCourses.filter(favoriteCourse =>
         !user.coursesBought.some(boughtCourse => boughtCourse.title === favoriteCourse.title)
     );
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[
+            styles.container,
+            { backgroundColor: lightTheme ? lightBackground : darkBackground },
+        ]}>
             <Header headerName='Wishlist' />
             <View style={styles.content} >
                 <Courses title={'Favorites'} allCourses={filteredFavoriteCourses} navigation={navigation}/>
@@ -28,7 +31,6 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: '#f8f8f8',
     },
     content: {
         flex: 1,

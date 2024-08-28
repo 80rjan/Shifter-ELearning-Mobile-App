@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { usePerson } from '../PersonInformationContext';
 
 export default function Course({ navigation, course }) {
-    const { user, addFavorites, removeFavorites } = usePerson();
+    const { user, addFavorites, removeFavorites, lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground } = usePerson();
     const [heartIcon, setHeartIcon] = useState('heart-outline');
 
     const isBought = user.coursesBought.some(boughtCourses => boughtCourses.title === course.title);
@@ -26,20 +26,24 @@ export default function Course({ navigation, course }) {
 
     return (
         <TouchableOpacity
-            style={styles.courseWrapper}
+            style={[
+                styles.courseWrapper,
+                { backgroundColor: lightTheme ? '#f5f5f5' : '#333' },
+                !lightTheme ? { borderWidth: 2, borderColor: '#444', } : null
+            ]}
             onPress={() => navigation.navigate('CourseDetails', { course })}
         >
             <View style={styles.contentWrapper}>
-                <Text style={[styles.title, { color: '#202020' }]}>{course.title}</Text>
+                <Text style={[styles.title, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.title}</Text>
                 <View>
-                    <Text style={[styles.topicDuration, { color: '#202020' }]}>{course.topic}</Text>
-                    <Text style={[styles.topicDuration, { color: '#202020' }]}>{course.duration}</Text>
+                    <Text style={[styles.topicDuration, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.topic}</Text>
+                    <Text style={[styles.topicDuration, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.duration}</Text>
                 </View>
                 {!isBought && (
                     <View style={styles.priceFavorite}>
-                        <Text style={[styles.price, { color: '#202020' }]}>{course.price}$</Text>
+                        <Text style={[styles.price, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.price}$</Text>
                         <TouchableOpacity onPress={handleFavoritePress}>
-                            <Ionicons name={heartIcon} color={'#00b5f0'} size={Platform.OS==='android' ? 25 : 28} />
+                            <Ionicons name={heartIcon} color={lightTheme ? '#00b5f0' : '#00b5f0'} size={Platform.OS==='android' ? 25 : 28} />
                         </TouchableOpacity>
                     </View>
                 )}
@@ -57,10 +61,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 25,
         justifyContent: 'space-between',
-        backgroundColor: 'white',
         borderRadius: 8,
         paddingVertical: 15,
         paddingHorizontal: 20,
+        marginHorizontal: 5,
         marginBottom: 15,
         maxWidth: '100%',
         shadowColor: 'black',

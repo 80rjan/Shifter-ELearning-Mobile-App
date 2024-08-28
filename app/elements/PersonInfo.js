@@ -7,7 +7,7 @@ import {auth} from "../../firebaseConfig";
 
 export default function PersonInfo({ person }) {
     const isAnonymous = auth.currentUser?.isAnonymous;
-    const { updateProfilePicture } = usePerson();
+    const { updateProfilePicture, lightTheme, textLightBackground, textDarkBackground } = usePerson();
     const [imageUri, setImageUri] = useState(person.profilePicture || null);
 
     useEffect(() => {
@@ -43,15 +43,27 @@ export default function PersonInfo({ person }) {
     return (
         <View style={styles.container}>
             <View style={styles.textWrapper}>
-                <Text style={[styles.title, { color: '#202020' }]}>{person.name}</Text>
-                {!isAnonymous && <Text style={[styles.text, { color: '#202020' }]}>{person.jobTitle}, {person.company}</Text>}
-                <Text style={[styles.text, { color: '#202020' }]}>{person.email}</Text>
+                <Text style={[
+                    styles.title,
+                    { color: lightTheme ? textLightBackground : textDarkBackground }
+                ]}>{person.name}</Text>
+                {!isAnonymous && <Text style={[
+                    styles.text,
+                    { color: lightTheme ? textLightBackground : textDarkBackground }
+                ]}>{person.jobTitle}, {person.company}</Text>}
+                <Text style={[
+                    styles.text,
+                    { color: lightTheme ? textLightBackground : textDarkBackground }
+                ]}>{person.email}</Text>
             </View>
-            <TouchableOpacity style={styles.imageWrapper} onPress={handleChooseImage}>
+            <TouchableOpacity style={[
+                styles.imageWrapper,
+                { backgroundColor: lightTheme ? '#ddd' : '#333' }
+            ]} onPress={handleChooseImage}>
                 {imageUri ? (
                     <Image source={{ uri: imageUri }} style={styles.image} />
                 ) : (
-                    <Ionicons name={'person-outline'} color={'#bbb'} size={50} />
+                    <Ionicons name={'person-outline'} color={lightTheme ? '#999' : '#aaa'} size={50} />
                 )}
             </TouchableOpacity>
         </View>
@@ -119,10 +131,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 9999,
-        backgroundColor: '#eee',
         overflow: 'hidden',
-        borderWidth: 1,
-        borderColor: '#ddd',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,

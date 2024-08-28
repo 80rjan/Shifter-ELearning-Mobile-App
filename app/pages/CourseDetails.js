@@ -9,10 +9,11 @@ import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
 import * as Sharing from 'expo-sharing';
 import {auth} from "../../firebaseConfig";
+import {deleteUser} from "firebase/auth";
 
 export default function CourseDetails({ route, navigation }) {
     const { course } = route.params;
-    const { user, addCourse } = usePerson();
+    const { user, addCourse, setHasAccount, lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground } = usePerson();
     const isBought = user.coursesBought.some(courseBought => courseBought.title === course.title);
     const [downloadedUri, setDownloadedUri] = useState(null);
     const isAnonymous = auth.currentUser?.isAnonymous;
@@ -54,6 +55,22 @@ export default function CourseDetails({ route, navigation }) {
         }
     };
 
+    const showAlert = () => {
+        Alert.alert(
+            'Are you sure you want to continue?',
+            'You will be redirected to a page to sign up or log in. Your progress as a guest will be lost',
+            [
+                { text: 'No', style: 'destructive' },
+                { text: 'Yes', style: 'default', onPress: handleLogOutGuest },
+            ]
+        );
+    };
+
+    const handleLogOutGuest = async () => {
+        await deleteUser(auth.currentUser);
+        setHasAccount(false);
+    }
+
     const handleScroll = Animated.event(
         [{ nativeEvent: { contentOffset: { y: scrollY } } }],
         {
@@ -67,7 +84,10 @@ export default function CourseDetails({ route, navigation }) {
     );
 
     return (
-        <View style={styles.container}>
+        <View style={[
+            styles.container,
+            {backgroundColor: lightTheme ? lightBackground : darkBackground}
+        ]}>
             <ScrollView
                 contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
@@ -78,22 +98,33 @@ export default function CourseDetails({ route, navigation }) {
                     <Image source={course.image} style={styles.image} />
                 </View>
                 <View style={styles.content}>
-                    <Text style={styles.title}>{course.title}</Text>
+                    <Text style={[
+                        styles.title,
+                        {color: lightTheme ? textLightBackground : textDarkBackground}
+                    ]}>{course.title}</Text>
                     <CourseDescription course={course} />
                     <CourseOutcomes course={course} />
                     <CourseSkills course={course} />
                     <CourseModules course={course} />
                 </View>
             </ScrollView>
-            <TouchableOpacity
-                style={[styles.buyButton, isAnonymous && styles.buttonDisabled]}
-                onPress={isBought ? handleDownload : handlePress}
-                disabled={isAnonymous}
-            >
-                <Text style={styles.buyButtonText}>
-                    {isAnonymous ? 'Log In or Sign Up to continue' : (isBought ? 'Download Course' : 'Start Your Journey') }
-                </Text>
-            </TouchableOpacity>
+            <View style={[
+                styles.buttonWrapper,
+                {backgroundColor: lightTheme ? lightBackground : darkBackground}
+            ]} >
+                <TouchableOpacity
+                    style={[
+                        styles.buyButton,
+                        {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                        isAnonymous && styles.buttonDisabled
+                    ]}
+                    onPress={isAnonymous ? showAlert : (isBought ? handleDownload : handlePress)}
+                >
+                    <Text style={styles.buyButtonText}>
+                        {isAnonymous ? 'Log In or Sign Up to purchase' : (isBought ? 'Download Course' : 'Start Your Journey') }
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -101,7 +132,6 @@ export default function CourseDetails({ route, navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
     },
     scrollContent: {
         paddingBottom: 80,
@@ -141,11 +171,14 @@ const styles = StyleSheet.create({
             }
         })
     },
-    buyButton: {
+    buttonWrapper: {
         position: 'absolute',
-        bottom: 10,
-        width: '80%',
-        backgroundColor: '#00b5f0',
+        bottom: 0,
+        paddingBottom: 10,
+        width: '100%',
+    },
+    buyButton: {
+        width: '95%',
         paddingVertical: 15,
         justifyContent: 'center',
         alignItems: 'center',

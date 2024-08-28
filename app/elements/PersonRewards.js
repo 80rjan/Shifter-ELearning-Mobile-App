@@ -1,27 +1,46 @@
 
 import {View, Text, SafeAreaView, StyleSheet, Platform} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import React from "react";
+import React, {useState} from "react";
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
+import {usePerson} from "../PersonInformationContext";
 
 export default function PersonRewards({ person }) {
     const iconSize = 28;
+    const { lightTheme, textLightBackground, textDarkBackground } = usePerson();
+    // let iconColor = lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)';
+    let iconColor = '#00b5f0';
 
     return (
         <View style={styles.container}>
-            <Text style={[styles.header, {color: '#202020'}]}>Rewards</Text>
+            <Text style={[
+                styles.header,
+                {color: lightTheme ? textLightBackground : textDarkBackground}
+            ]}>Rewards</Text>
             <View style={styles.content}>
                 <View style={styles.reward}>
-                    <Ionicons name={'book-outline'} color={'#00b5f0'} size={iconSize} />
-                    <Text style={styles.rewardText}>Courses Acquired: {person.coursesBought.length}</Text>
+                    <Ionicons name={'book-outline'} color={iconColor} size={iconSize} />
+                    <Text style={[
+                        styles.rewardText,
+                        {color: lightTheme ? textLightBackground : textDarkBackground}
+                    ]}>Courses Acquired: {person.coursesBought.length}</Text>
+                </View>
+                <View style={[
+                    styles.reward,
+                    {color: lightTheme ? textLightBackground : textDarkBackground}
+                ]}>
+                    <Ionicons name={'layers-outline'} color={iconColor} size={iconSize} />
+                    <Text style={[
+                        styles.rewardText,
+                        {color: lightTheme ? textLightBackground : textDarkBackground}
+                    ]}>Skills Gained: {person.skills.length}</Text>
                 </View>
                 <View style={styles.reward}>
-                    <Ionicons name={'layers-outline'} color={'#00b5f0'} size={iconSize} />
-                    <Text style={styles.rewardText}>Skills Gained: {person.skills.length}</Text>
-                </View>
-                <View style={styles.reward}>
-                    <Ionicons name={'podium-outline'} color={'#00b5f0'} size={iconSize} />
-                    <Text style={styles.rewardText}>Points: {person.points}</Text>
+                    <Ionicons name={'podium-outline'} color={iconColor} size={iconSize} />
+                    <Text style={[
+                        styles.rewardText,
+                        {color: lightTheme ? textLightBackground : textDarkBackground}
+                    ]}>Points: {person.points}</Text>
                 </View>
             </View>
         </View>

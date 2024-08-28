@@ -4,11 +4,14 @@ import { usePerson } from '../PersonInformationContext'; // Import the context h
 import Header from "../elements/Header";
 import Topics from "../elements/Topics";
 import Courses from "../elements/Courses";
+import LoadingScreen from "./LoadingScreen";
+import {auth} from "../../firebaseConfig";
 
 export default function Learn({ navigation }) {
-    const { user, loading, error } = usePerson(); // Use the context hook to get person data
+    const { user, loading, error, lightTheme, lightBackground, darkBackground } = usePerson(); // Use the context hook to get person data
     const [filteredCourses, setFilteredCourses] = useState(user.coursesBought);
     const [selectedSkill, setSelectedSkill] = useState(null);
+    const isAnonymous = auth.currentUser?.isAnonymous;
 
     useEffect(() => {
         setFilteredCourses(user.coursesBought);
@@ -29,15 +32,35 @@ export default function Learn({ navigation }) {
     };
 
     if (loading) {
-        return <Text>Loading...</Text>; // You can replace this with a more sophisticated loading indicator
+        return <LoadingScreen />
     }
 
     if (error) {
         return <Text>Error loading data</Text>; // Display an error message if needed
     }
 
+    if (isAnonymous) {
+        return (
+            <SafeAreaView style={[
+                styles.container,
+                { backgroundColor: lightTheme ? lightBackground : darkBackground },
+            ]} >
+                <Header headerName='Learn' />
+                <Text style={{
+                    fontFamily: 'GothicA1-600',
+                    fontSize: 20,
+                    color: '#00b5f0',
+                    alignSelf: 'center',
+                }} >Sign Up or Log In to purchase courses</Text>
+            </SafeAreaView>
+        )
+    }
+
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[
+            styles.container,
+            { backgroundColor: lightTheme ? lightBackground : darkBackground },
+        ]} >
             <Header headerName='Learn' />
             <View style={styles.content}>
                 <Topics courses={filteredCourses} handleFilter={handleFilter} selectedSkill={selectedSkill} />
@@ -50,7 +73,6 @@ export default function Learn({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f8f8f8',
     },
     content: {
         flex: 1,

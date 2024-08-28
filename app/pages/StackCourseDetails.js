@@ -7,10 +7,13 @@ import Wishlist from "./Wishlist";
 import Learn from "./Learn";
 import ShifterMiniLogo from "../../assets/Shifter Mini Logo";
 import {Easing} from "react-native";
+import {usePerson} from "../PersonInformationContext";
 
 const Stack = createStackNavigator();
 
 export default function StackCourseDetails({ Component }) {
+    const {lightTheme, lightBackground, darkBackground} = usePerson();
+
     return (
         <Stack.Navigator
             screenOptions={{
@@ -47,13 +50,14 @@ export default function StackCourseDetails({ Component }) {
                 options={({ navigation }) => ({
                     headerTitle: '',
                     headerRight: '',
-                    // headerRight: () => (
-                    //     <Text style={styles.headerLogo}>Shifter Logo</Text>
-                    // ),
+                    headerStyle: {
+                        backgroundColor: lightTheme ? lightBackground : darkBackground,
+                        borderBottomWidth: 0,
+                    },
                     headerLeft: () => (
                         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.goBackWrapper}>
                             {Platform.OS==='ios' ?
-                                <ShifterMiniLogo width='70' height='35' /> :
+                                <ShifterMiniLogo width='80' height='40' /> :
                                 <ShifterMiniLogo width='70' height='34.6' /> }
                         </TouchableOpacity>
                     )

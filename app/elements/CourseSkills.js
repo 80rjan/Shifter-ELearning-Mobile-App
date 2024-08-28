@@ -1,14 +1,26 @@
 import {Platform, ScrollView, StyleSheet, Text, View} from "react-native";
 import React from "react";
+import {usePerson} from "../PersonInformationContext";
 
 export default function CourseSkills({course}) {
+    const { lightTheme, textLightBackground, textDarkBackground} = usePerson();
+
     return (
         <View style={styles.container}>
-            <Text style={[styles.title, {color: '#202020'}]}>Skills Acquired</Text>
+            <Text style={[
+                styles.title,
+                {color: lightTheme ? textLightBackground : textDarkBackground}
+            ]}>Skills Acquired</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
                 {course.skills.map((skill, index) => (
-                    <View style={styles.skill} key={index}>
-                        <Text style={[styles.text, {color: '#202020'}]} >{skill}</Text>
+                    <View style={[
+                        styles.skill,
+                        {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
+                    ]} key={index}>
+                        <Text style={[
+                            styles.text,
+                            {color: textDarkBackground}
+                        ]} >{skill}</Text>
                     </View>
                 ))}
             </ScrollView>
@@ -45,7 +57,6 @@ const styles=StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 12,
         borderRadius: 5,
-        backgroundColor: '#eee',
         marginRight: 10,
 
         ...Platform.select({
@@ -56,7 +67,7 @@ const styles=StyleSheet.create({
         })
     },
     text: {
-        fontFamily: 'GothicA1-400',
+        fontFamily: 'GothicA1-500',
         fontSize: 16,
 
         ...Platform.select({
