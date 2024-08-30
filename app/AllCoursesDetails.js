@@ -5,12 +5,12 @@ const allCoursesDetails = [
         topic: 'Onboarding',
         duration: '7 modules, 3 hours total',
         price: 20,
-        image: require('../assets/Onboarding.jpg'),
+        image: require('../assets/personalized onboarding process.jpg'),
         description: 'Onboarding fundemental\'s: how to effectively incorporate new employee\'s into your company',
         languages: 'English, Macedonian',
         level: 'Intermediate',
         timeDuration: '3 hours',
-        outcomes: [
+        highlights: [
             'What is onboarding',
             'What are the benefits of onboarding',
             'How to effectively incorporate it in your business',
@@ -19,8 +19,6 @@ const allCoursesDetails = [
         skills: [
             'Onboarding',
             'Management',
-            'Leadership',
-            'Human Resources'
         ],
         modules: [
             'What is onboarding',
@@ -35,12 +33,12 @@ const allCoursesDetails = [
         topic: 'Marketing',
         duration: '6 modules, 2.5 hours total',
         price: 17,
-        image: require('../assets/Marketing.jpg'),
+        image: require('../assets/the go-to marketing strategy.jpg'),
         description: 'Marketing strategy: discover the power\'s of marketing and use them to boost growth in your business',
         languages: 'English, Macedonian',
         level: 'Intermediate',
         timeDuration: '3 hours',
-        outcomes: [
+        highlights: [
             ''
         ],
         skills: [
@@ -57,12 +55,12 @@ const allCoursesDetails = [
         topic: 'Leadership',
         duration: '11 modules, 5 hours total',
         price: 25,
-        image: require('../assets/Leadership.jpg'),
+        image: require('../assets/leadership & management.jpg'),
         description: 'Leadership: the basics for being a good leader',
         languages: 'English, Macedonian',
         level: 'Intermediate',
         timeDuration: '3 hours',
-        outcomes: [
+        highlights: [
             ''
         ],
         skills: [
@@ -79,17 +77,16 @@ const allCoursesDetails = [
         topic: 'Sales',
         duration: '4 modules, 3 hours total',
         price: 25,
-        image: require('../assets/Sales.jpg'),
+        image: require('../assets/negotiation skills for more sales.jpg'),
         description: 'Negotiation skills: how to win every deal',
         languages: 'English, Macedonian',
         level: 'Intermediate',
         timeDuration: '3 hours',
-        outcomes: [
+        highlights: [
             ''
         ],
         skills: [
             'Sales',
-            'Soft Skills',
             'Negotiation',
         ],
         modules: [
@@ -102,12 +99,12 @@ const allCoursesDetails = [
         topic: 'Marketing',
         duration: '5 modules, 2 hours total',
         price: 15,
-        image: require('../assets/MarketingFlywheel.jpg'),
+        image: require('../assets/marketing as a flywheel.jpg'),
         description: 'Flywheel: a new perspective that will boost your marketing results',
         languages: 'English, Macedonian',
         level: 'Intermediate',
         timeDuration: '3 hours',
-        outcomes: [
+        highlights: [
             ''
         ],
         skills: [

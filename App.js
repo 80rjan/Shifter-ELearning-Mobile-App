@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import {Platform, StyleSheet, Text, useColorScheme, View} from 'react-native';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -149,6 +149,7 @@ function AppNavigator() {
 export default function App() {
     const [isLoading, setIsLoading] = useState(true);
     const fontsLoaded = useFonts();
+    const isLightTheme = useColorScheme();
 
     useEffect(() => {
         if (fontsLoaded) {
@@ -158,7 +159,7 @@ export default function App() {
         }
     }, [fontsLoaded]);
 
-    if (isLoading) return <LoadingScreen />;
+    if (isLoading) return <LoadingScreen isLightTheme={isLightTheme==='light'} />;
 
     return (
         <PersonProvider>

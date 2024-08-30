@@ -7,6 +7,7 @@ import {usePerson} from "../PersonInformationContext";
 export default function CourseOutcomes({course}) {
     const {lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground} = usePerson();
 
+    console.log('Course: ', course);
     return (
         <View style={styles.container}>
             <Text style={[
@@ -14,7 +15,7 @@ export default function CourseOutcomes({course}) {
                 {color: lightTheme ? textLightBackground : textDarkBackground},
             ]}>Course Highlights</Text>
             <View style={styles.outcomesWrapper}>
-                {course.outcomes.map((learn, index) => (
+                {course.highlights.map((learn, index) => (
                     <View key={index} style={styles.item}>
                         <Ionicons name={'ribbon'} color={lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'} size={25} />
                         <Text style={[

@@ -8,14 +8,17 @@ import { usePerson } from "../PersonInformationContext";
 import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
 import * as Sharing from 'expo-sharing';
-import {auth} from "../../firebaseConfig";
+import {auth, storage} from "../../firebaseConfig";
 import {deleteUser} from "firebase/auth";
+import {ref, getDownloadURL} from "firebase/storage";
+import LoadingScreen from "./LoadingScreen";
 
 export default function CourseDetails({ route, navigation }) {
     const { course } = route.params;
     const { user, addCourse, setHasAccount, lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground } = usePerson();
     const isBought = user.coursesBought.some(courseBought => courseBought.title === course.title);
     const [downloadedUri, setDownloadedUri] = useState(null);
+    const [loading, setLoading] = useState(false);
     const isAnonymous = auth.currentUser?.isAnonymous;
 
     const scrollY = useRef(new Animated.Value(0)).current;
@@ -29,29 +32,34 @@ export default function CourseDetails({ route, navigation }) {
     };
 
     const handleDownload = async () => {
+        setLoading(true);
         if (isBought) {
             try {
-                // Load the PDF asset
-                const asset = Asset.fromModule(require('../../assets/CourseBuyPdfTest.pdf'));
-                await asset.downloadAsync();
+                // Reference to your file in Firebase Storage
+                const fileRef = ref(storage, 'CourseBuyPdfTest.pdf');
+
+                // Get the download URL
+                const downloadURL = await getDownloadURL(fileRef);
 
                 // Define file URI in the document directory
                 const fileUri = `${FileSystem.documentDirectory}CourseBuyPdfTest.pdf`;
 
-                // Copy the file from assets to the document directory
-                await FileSystem.copyAsync({
-                    from: asset.localUri,
-                    to: fileUri,
-                });
+                // Download the file from the URL to the document directory
+                const { uri } = await FileSystem.downloadAsync(downloadURL, fileUri);
 
                 // Set the URI and share the file so the user can save it
-                setDownloadedUri(fileUri);
-                await Sharing.shareAsync(fileUri);
+                setDownloadedUri(uri);
+                await Sharing.shareAsync(uri);
             } catch (error) {
+                console.error("Download Error:", error.message);
                 Alert.alert('Download Error', 'An error occurred while downloading the file.');
+            }
+            finally {
+                setLoading(false);
             }
         } else {
             Alert.alert('Action Required', 'You need to purchase the course before downloading.');
+            setLoading(false);
         }
     };
 
@@ -84,48 +92,50 @@ export default function CourseDetails({ route, navigation }) {
     );
 
     return (
-        <View style={[
-            styles.container,
-            {backgroundColor: lightTheme ? lightBackground : darkBackground}
-        ]}>
-            <ScrollView
-                contentContainerStyle={styles.scrollContent}
-                showsVerticalScrollIndicator={false}
-                onScroll={handleScroll}
-                scrollEventThrottle={16}
-            >
-                <View style={styles.imageWrapper}>
-                    <Image source={course.image} style={styles.image} />
-                </View>
-                <View style={styles.content}>
-                    <Text style={[
-                        styles.title,
-                        {color: lightTheme ? textLightBackground : textDarkBackground}
-                    ]}>{course.title}</Text>
-                    <CourseDescription course={course} />
-                    <CourseOutcomes course={course} />
-                    <CourseSkills course={course} />
-                    <CourseModules course={course} />
-                </View>
-            </ScrollView>
+        loading ?
+            <LoadingScreen isLightTheme={lightTheme} /> :
             <View style={[
-                styles.buttonWrapper,
+                styles.container,
                 {backgroundColor: lightTheme ? lightBackground : darkBackground}
-            ]} >
-                <TouchableOpacity
-                    style={[
-                        styles.buyButton,
-                        {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                        isAnonymous && styles.buttonDisabled
-                    ]}
-                    onPress={isAnonymous ? showAlert : (isBought ? handleDownload : handlePress)}
+            ]}>
+                <ScrollView
+                    contentContainerStyle={styles.scrollContent}
+                    showsVerticalScrollIndicator={false}
+                    onScroll={handleScroll}
+                    scrollEventThrottle={16}
                 >
-                    <Text style={styles.buyButtonText}>
-                        {isAnonymous ? 'Log In or Sign Up to purchase' : (isBought ? 'Download Course' : 'Start Your Journey') }
-                    </Text>
-                </TouchableOpacity>
+                    <View style={styles.imageWrapper}>
+                        <Image source={course.image} style={styles.image}/>
+                    </View>
+                    <View style={styles.content}>
+                        <Text style={[
+                            styles.title,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                        ]}>{course.title}</Text>
+                        <CourseDescription course={course} />
+                        <CourseOutcomes course={course} />
+                        <CourseSkills course={course} />
+                        <CourseModules course={course} />
+                    </View>
+                </ScrollView>
+                <View style={[
+                    styles.buttonWrapper,
+                    {backgroundColor: lightTheme ? lightBackground : darkBackground}
+                ]} >
+                    <TouchableOpacity
+                        style={[
+                            styles.buyButton,
+                            {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                            isAnonymous && styles.buttonDisabled
+                        ]}
+                        onPress={isAnonymous ? showAlert : (isBought ? handleDownload : handlePress)}
+                    >
+                        <Text style={styles.buyButtonText}>
+                            {isAnonymous ? 'Log In or Sign Up to purchase' : (isBought ? 'Download Course' : 'Start Your Journey') }
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
     );
 }
 

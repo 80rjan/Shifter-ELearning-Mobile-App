@@ -8,6 +8,8 @@ export default function CourseDescription({ course }) {
     const iconSize = 28;
     const { lightTheme, textLightBackground, textDarkBackground} = usePerson();
 
+
+    console.log(course.languages, course.level, course.timeDuration);
     return (
         <View style={styles.container}>
             <Text style={[

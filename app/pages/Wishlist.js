@@ -3,7 +3,6 @@ import {View, Text, StyleSheet, SafeAreaView} from "react-native";
 import Courses from "../elements/Courses";
 import {usePerson} from "../PersonInformationContext";
 import Header from "../elements/Header";
-import allCoursesDetails from "../AllCoursesDetails";
 
 export default function Wishlist({navigation}) {
     const { user, lightTheme, lightBackground, darkBackground } = usePerson();

@@ -32,7 +32,7 @@ export default function Learn({ navigation }) {
     };
 
     if (loading) {
-        return <LoadingScreen />
+        return <LoadingScreen isLightTheme={lightTheme}/>
     }
 
     if (error) {
@@ -63,7 +63,7 @@ export default function Learn({ navigation }) {
         ]} >
             <Header headerName='Learn' />
             <View style={styles.content}>
-                <Topics courses={filteredCourses} handleFilter={handleFilter} selectedSkill={selectedSkill} />
+                {/*<Topics courses={user.coursesBought} handleFilter={handleFilter} selectedSkill={selectedSkill} />*/}
                 <Courses title={'Learning Dashboard'} allCourses={filteredCourses} navigation={navigation} skillFiltering={selectedSkill} />
             </View>
         </SafeAreaView>

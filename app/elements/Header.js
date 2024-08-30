@@ -19,25 +19,31 @@ export default function Header({ headerName }) {
             {Platform.OS === 'ios' ?
                 <ShifterLogo width='150' height='50' color={!lightTheme ?  lightBackground : darkBackground} /> :
                 <ShifterLogo width='130' height='40' color={!lightTheme ?  lightBackground : darkBackground} />}
-
             <TouchableOpacity onPress={toggleTheme}>
-                <View style={[
-                    styles.switchTrack,
-                    { backgroundColor: lightTheme ? '#bbb' : 'rgba(0,181,240,0.7)' },
-                    {flexDirection: lightTheme ? 'row' : 'row-reverse'}
-                ]}>
-                    <View style={[
-                        styles.switchThumb,
-                        { alignItems: lightTheme ? 'flex-start' : 'flex-end' }
-                    ]}>
-                        <Ionicons
-                            name={lightTheme ? 'sunny' : 'moon'}
-                            size={25}
-                            color={lightTheme ? 'black' : 'black'}
-                        />
-                    </View>
-                </View>
+                <Ionicons
+                    name={!lightTheme ? 'sunny' : 'moon'}
+                    size={25}
+                    color={lightTheme ? 'black' : 'white'}
+                />
             </TouchableOpacity>
+            {/*<TouchableOpacity onPress={toggleTheme}>*/}
+            {/*    <View style={[*/}
+            {/*        styles.switchTrack,*/}
+            {/*        { backgroundColor: lightTheme ? '#bbb' : 'rgba(0,181,240,0.7)' },*/}
+            {/*        {flexDirection: lightTheme ? 'row' : 'row-reverse'}*/}
+            {/*    ]}>*/}
+            {/*        <View style={[*/}
+            {/*            styles.switchThumb,*/}
+            {/*            { alignItems: lightTheme ? 'flex-start' : 'flex-end' }*/}
+            {/*        ]}>*/}
+            {/*            <Ionicons*/}
+            {/*                name={lightTheme ? 'sunny' : 'moon'}*/}
+            {/*                size={25}*/}
+            {/*                color={lightTheme ? 'black' : 'black'}*/}
+            {/*            />*/}
+            {/*        </View>*/}
+            {/*    </View>*/}
+            {/*</TouchableOpacity>*/}
         </View>
     );
 }

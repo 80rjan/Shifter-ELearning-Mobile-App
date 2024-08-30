@@ -5,7 +5,6 @@ import Topics from "../elements/Topics";
 import Courses from "../elements/Courses";
 import {usePerson} from "../PersonInformationContext";
 import allCoursesDetails from "../AllCoursesDetails";
-import {useTheme} from "@react-navigation/native";
 
 
 
@@ -16,9 +15,9 @@ export default function Home({navigation}) {
         !user.coursesBought.some(boughtCourse => boughtCourse.title === course.title)
     );
 
-    useEffect(() => {
-        console.log('User data in Home component:', user);
-    }, [user]);
+    // useEffect(() => {
+    //     console.log('User data in Home component:', user);
+    // }, [user]);
 
 
     const [filteredCourses, setFilteredCourses] = useState(courses);
@@ -44,7 +43,7 @@ export default function Home({navigation}) {
         ]}>
             <Header headerName='Courses' />
             <View style={styles.content}>
-                <Topics courses={filteredCourses} handleFilter={handleFilter} selectedSkill={selectedSkill} />
+                <Topics courses={courses} handleFilter={handleFilter} selectedSkill={selectedSkill} />
                 <Courses title={'Discover'} allCourses={filteredCourses} navigation={navigation} skillFiltering={selectedSkill}/>
             </View>
         </SafeAreaView>

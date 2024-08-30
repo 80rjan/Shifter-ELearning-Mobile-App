@@ -1,19 +1,21 @@
-// Course.js
-import React, { useEffect, useState } from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity, Platform} from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Platform } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { usePerson } from '../PersonInformationContext';
 
 export default function Course({ navigation, course }) {
-    const { user, addFavorites, removeFavorites, lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground } = usePerson();
-    const [heartIcon, setHeartIcon] = useState('heart-outline');
+    const { user, addFavorites, removeFavorites, lightTheme, textLightBackground, textDarkBackground } = usePerson();
+    const [heartIcon, setHeartIcon] = React.useState('heart-outline');
 
     const isBought = user.coursesBought.some(boughtCourses => boughtCourses.title === course.title);
 
-    useEffect(() => {
+    function capitalize(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    React.useEffect(() => {
         const isFavorite = user.coursesFavorite.some(favoriteCourse => favoriteCourse.title === course.title);
         setHeartIcon(isFavorite ? 'heart' : 'heart-outline');
-
     }, [user.coursesFavorite, course.title]);
 
     const handleFavoritePress = () => {
@@ -24,17 +26,19 @@ export default function Course({ navigation, course }) {
         }
     };
 
+    console.log('Image: ', course.image);
+
     return (
         <TouchableOpacity
             style={[
                 styles.courseWrapper,
                 { backgroundColor: lightTheme ? '#f5f5f5' : '#333' },
-                !lightTheme ? { borderWidth: 2, borderColor: '#444', } : null
+                !lightTheme ? { borderWidth: 2, borderColor: '#444' } : null
             ]}
             onPress={() => navigation.navigate('CourseDetails', { course })}
         >
             <View style={styles.contentWrapper}>
-                <Text style={[styles.title, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.title}</Text>
+                <Text style={[styles.title, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{capitalize(course.title)}</Text>
                 <View>
                     <Text style={[styles.topicDuration, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.topic}</Text>
                     <Text style={[styles.topicDuration, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.duration}</Text>
@@ -43,13 +47,16 @@ export default function Course({ navigation, course }) {
                     <View style={styles.priceFavorite}>
                         <Text style={[styles.price, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.price}$</Text>
                         <TouchableOpacity onPress={handleFavoritePress}>
-                            <Ionicons name={heartIcon} color={lightTheme ? '#00b5f0' : '#00b5f0'} size={Platform.OS==='android' ? 25 : 28} />
+                            <Ionicons name={heartIcon} color={lightTheme ? '#00b5f0' : '#00b5f0'} size={Platform.OS === 'android' ? 25 : 28} />
                         </TouchableOpacity>
                     </View>
                 )}
             </View>
             <View style={styles.imageWrapper}>
-                <Image style={styles.image} source={course.image} />
+                <Image
+                    style={styles.image}
+                    source={course.image}
+                />
             </View>
         </TouchableOpacity>
     );
@@ -59,7 +66,7 @@ const styles = StyleSheet.create({
     courseWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 25,
+        gap: 20,
         justifyContent: 'space-between',
         borderRadius: 8,
         paddingVertical: 15,
@@ -133,9 +140,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 2,
         elevation: 5, // For Android
+        width: '30%', // Adjust width and height as needed
+        aspectRatio: 1,
     },
     image: {
+        width: '100%', // Adjust width and height as needed
+        height: '100%',
         borderRadius: 3,
-        transform: [{ scale: 1.1 }],
     }
 });

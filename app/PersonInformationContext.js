@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import {auth, db} from '../firebaseConfig';
 import {Alert, useColorScheme} from "react-native";
@@ -20,7 +20,6 @@ export function PersonProvider({ children }) {
         skills: []
     };
     const deviceTheme = useColorScheme();
-
     const [user, setUser] = useState(defaultUserState);
     const [hasAccount, setHasAccount] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -35,6 +34,25 @@ export function PersonProvider({ children }) {
         setLightTheme(deviceTheme === 'light');
     }, [deviceTheme]);
 
+    // const fetchCourses = async () => {
+    //     try {
+    //         // Reference to your 'courses' collection
+    //         const coursesCollection = collection(db, 'courses');
+    //         // Get all documents from the collection
+    //         const courseSnapshot = await getDocs(coursesCollection);
+    //         // Map through the documents and extract the data
+    //         const coursesList = courseSnapshot.docs.map(doc => ({
+    //             id: doc.id,  // Include document ID if needed
+    //             ...doc.data()  // Spread the document data
+    //         }));
+    //         // Update the state with the fetched courses
+    //         setAllCourses(coursesList);
+    //         console.log('All courses: ',allCourses);
+    //     } catch (error) {
+    //         console.error('Error fetching courses:', error);
+    //     }
+    // };
+    // fetchCourses();
 
     async function fetchUserData(userId) {
         try {
@@ -180,6 +198,7 @@ export function PersonProvider({ children }) {
                 textLightBackground,
                 darkBackground,
                 textDarkBackground,
+                fetchUserData,
                 changeUserDetails,
                 addFavorites,
                 removeFavorites,

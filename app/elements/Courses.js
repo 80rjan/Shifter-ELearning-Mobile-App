@@ -10,18 +10,18 @@ import {auth} from "../../firebaseConfig";
 const Stack = createStackNavigator();
 
 export default function Courses({title, allCourses, navigation, skillFiltering}) {
-    const { lightTheme, textLightBackgorund, textDarkBackground } = usePerson();
+    const { lightTheme, textLightBackground, textDarkBackground } = usePerson();
 
     return (
         <View style={styles.coursesWrapper}>
             <Text style={[
                 styles.heading,
-                {color: lightTheme ? textLightBackgorund : textDarkBackground},
+                {color: lightTheme ? textLightBackground : textDarkBackground},
             ]}>{title}</Text>
             <ScrollView vertical showsVerticalScrollIndicator={false} style={styles.scrollView}>
                 {allCourses.length===0 && <Text style={[
                     styles.errorText,
-                    {color: lightTheme ? textLightBackgorund : textDarkBackground},
+                    {color: lightTheme ? textLightBackground : textDarkBackground},
                 ]}>No courses to show {skillFiltering && `with this skill: ${skillFiltering}`}</Text>}
                 {allCourses.map((course, index) => {
                     return <Course

@@ -1,10 +1,15 @@
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform} from 'react-native';
 import {usePerson} from "../PersonInformationContext";
 
-export default function Topics({ handleFilter, selectedSkill }) {
+export default function Topics({ courses, handleFilter, selectedSkill }) {
     const { lightTheme, textLightBackground, textDarkBackground } = usePerson();
+    const allSkills = courses.reduce((allSkills, course) => {
+        return allSkills.concat(course.skills);
+    }, []);
 
-    const topics = ['Sales', 'Marketing', 'Management', 'Onboarding', 'Leadership', 'Strategy'];
+
+    // const topics = ['Sales', 'Marketing', 'Management', 'Onboarding', 'Leadership', 'Strategy'];
+    const topics = [...new Set(allSkills)];
     const colors = lightTheme ?
         ['#006039', '#00b5f0', '#0068F0', '#2C8FB0'] :
         ['rgba(0,96,57,0.7)', 'rgba(0,181,240,0.7)', 'rgba(0,104,240,0.7)', 'rgba(44,143,176,0.7)'];

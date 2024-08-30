@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { usePerson } from '../PersonInformationContext';
 import {auth} from "../../firebaseConfig";
 
-export default function PersonInfo({ person }) {
+export default function PersonInfo({ person, isChangingInfo, setIsChangingInfo }) {
     const isAnonymous = auth.currentUser?.isAnonymous;
     const { updateProfilePicture, lightTheme, textLightBackground, textDarkBackground } = usePerson();
     const [imageUri, setImageUri] = useState(person.profilePicture || null);
@@ -55,6 +55,15 @@ export default function PersonInfo({ person }) {
                     styles.text,
                     { color: lightTheme ? textLightBackground : textDarkBackground }
                 ]}>{person.email}</Text>
+
+                {!isChangingInfo && !isAnonymous ?<TouchableOpacity onPress={() => setIsChangingInfo(true)}>
+                    <Text style={[
+                        styles.text,
+                        { color: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)' }
+                    ]} >
+                        Change Information?
+                    </Text>
+                </TouchableOpacity> : null }
             </View>
             <TouchableOpacity style={[
                 styles.imageWrapper,
@@ -114,12 +123,8 @@ const styles = StyleSheet.create({
         })
     },
     imageWrapper: {
-        // height: 'auto',
-        // aspectRatio: 1,
-
         height: 100,
         width: 100,
-        // padding: 20,
 
         ...Platform.select({
             android: {
