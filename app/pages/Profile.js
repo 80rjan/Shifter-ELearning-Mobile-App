@@ -8,9 +8,10 @@ import PersonSkills from '../elements/PersonSkills';
 import { getAuth, signOut, deleteUser } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
 import PersonChangeInfo from "../elements/PersonChangeInfo";
+import LoadingScreen from "./LoadingScreen";
 
 export default function Profile({ onLogout }) {
-    const { user, lightTheme, lightBackground, darkBackground } = usePerson();
+    const { user, loading, setLoading, lightTheme, lightBackground, darkBackground } = usePerson();
     const isAnonymous = auth.currentUser?.isAnonymous;
     const [isChangingInfo, setIsChangingInfo] = useState(false);
 
@@ -27,6 +28,7 @@ export default function Profile({ onLogout }) {
 
     const handleLogout = async () => {
         try {
+            setLoading(true);
             if (isAnonymous) {
                 await deleteUser(auth.currentUser);
             } else {
@@ -36,7 +38,12 @@ export default function Profile({ onLogout }) {
         } catch (error) {
             console.error('Error signing out: ', error);
         }
+        finally {
+            setLoading(true);
+        }
     };
+
+    // if (loading) return <LoadingScreen isLightTheme={lightTheme} />
 
     return (
         <SafeAreaView style={[
@@ -55,8 +62,14 @@ export default function Profile({ onLogout }) {
                         <PersonRewards person={user} />
                         <PersonSkills person={user} />
                     </View>
-                    <TouchableOpacity style={styles.logoutButton} onPress={showAlert}>
-                        <Text style={styles.logoutText}>Log Out</Text>
+                    <TouchableOpacity style={[
+                        styles.logoutButton,
+                        {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
+                    ]} onPress={showAlert}>
+                        <Text style={[
+                            styles.logoutText,
+                            {color: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
+                        ]}>Log Out</Text>
                     </TouchableOpacity>
                 </>
             }
@@ -82,7 +95,6 @@ const styles = StyleSheet.create({
         bottom: 10,
         alignSelf: 'center',
 
-        borderColor: '#00b5f0',
         borderWidth: 2,
         borderRadius: 5,
         width: '50%',
@@ -91,7 +103,6 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     logoutText: {
-        color: '#00b5f0',
         fontFamily: 'GothicA1-800',
         fontSize: 16,
         paddingBottom: 1,

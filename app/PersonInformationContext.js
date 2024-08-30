@@ -191,6 +191,7 @@ export function PersonProvider({ children }) {
             value={{
                 user,
                 loading,
+                setLoading,
                 error,
                 lightTheme,
                 setLightTheme,

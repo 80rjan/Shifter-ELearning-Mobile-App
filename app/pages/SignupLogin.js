@@ -44,6 +44,8 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
                 const user = userCredential.user;
                 // changeUserDetails({ email: user.email });
 
+                await sendEmailVerification(user);
+                alert('Verification email sent. Please check your inbox!');
 
                 navigation.navigate('UserInfo');
             } catch (err) {

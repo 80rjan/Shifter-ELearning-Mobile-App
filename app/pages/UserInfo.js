@@ -7,18 +7,21 @@ import {
     SafeAreaView,
     TouchableOpacity,
     KeyboardAvoidingView,
-    Platform
+    Platform,
+    Alert
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ShifterLogo from "../../assets/ShifterLogo";
 import { usePerson } from "../PersonInformationContext";
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../../firebaseConfig';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
-export default function UserInfo({ onUserInfoComplete }) {
+export default function UserInfo({ navigation, onUserInfoComplete }) {
     const [name, setName] = useState('');
     const [jobTitle, setJobTitle] = useState('');
     const [company, setCompany] = useState('');
+    const [isVerified, setIsVerified] = useState(auth.currentUser.emailVerified);
     const coursesBought = [];
     const coursesFavorite = [];
     const skills = [];
@@ -31,7 +34,6 @@ export default function UserInfo({ onUserInfoComplete }) {
     const [companyFocus, setCompanyFocus] = useState(false);
 
     const { changeUserDetails, lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground } = usePerson();
-
 
     const handleSubmit = async () => {
         if (name && jobTitle && company) {
@@ -60,6 +62,79 @@ export default function UserInfo({ onUserInfoComplete }) {
         }
     };
 
+    const handleCheckEmailVerification = async () => {
+        try {
+            const user = auth.currentUser;
+            if (user) {
+                await user.reload(); // Refresh user data
+                if (user.emailVerified) {
+                    Alert.alert('Email Verified', 'Your email address is verified.');
+                    setIsVerified(true);
+                } else {
+                    Alert.alert('Email Not Verified', 'Your email address is not verified yet. Please check your inbox for the verification email.');
+                }
+            } else {
+                Alert.alert('Error', 'No user is currently logged in.');
+            }
+        } catch (error) {
+            console.error('Error checking email verification: ', error);
+            Alert.alert('Error', 'Failed to check email verification status.');
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        try {
+            const userId = auth.currentUser?.uid;
+            if (userId) {
+                // Delete Firebase Auth user
+                await auth.currentUser.delete();
+                Alert.alert('Progress Lost', 'Your progress for creating an account was lost');
+                navigation.navigate('LoginSignup');
+            }
+        } catch (error) {
+            console.error('Error deleting account: ', error);
+            Alert.alert('Error', 'Failed to delete account.');
+        }
+    };
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('beforeRemove', () => {
+            handleDeleteAccount();
+        })
+    }, [navigation]);
+
+    if (!isVerified) return (
+        <SafeAreaView style={[
+            styles.safeView,
+            {
+                backgroundColor: lightTheme ? lightBackground : darkBackground,
+            },
+        ]}>
+            <View style={styles.logo}>
+                <ShifterLogo width='250' height='125' color={!lightTheme ? lightBackground : darkBackground}/>
+            </View>
+            <View style={{flex: 1, justifyContent: 'center', width: '100%', alignItems: 'center'}} >
+                <TouchableOpacity style={[
+                    {
+                        backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)',
+                        paddingVertical: 15,
+                        width: '70%',
+                        borderRadius: 5,
+                    }
+                ]} onPress={handleCheckEmailVerification}>
+                    <Text style={{
+                        fontFamily: 'GothicA1-600',
+                        fontSize: 18,
+                        color: 'white',
+                        alignSelf: 'center',
+                    }} >
+                        Check Email Verification
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
+    )
+
     return (
         <SafeAreaView style={[
             styles.safeView,
@@ -69,86 +144,86 @@ export default function UserInfo({ onUserInfoComplete }) {
                 style={styles.container}
             >
                 <View style={styles.logo}>
-                    <ShifterLogo width='250' height='125' color={!lightTheme ?  lightBackground : darkBackground}/>
+                    <ShifterLogo width='250' height='125' color={!lightTheme ? lightBackground : darkBackground}/>
                 </View>
-                    <KeyboardAwareScrollView
-                        style={styles.content}
-                        keyboardShouldPersistTaps="handled"
-                        contentContainerStyle={styles.scrollViewContent}
-                    >
+                <KeyboardAwareScrollView
+                    style={styles.content}
+                    keyboardShouldPersistTaps="handled"
+                    contentContainerStyle={styles.scrollViewContent}
+                >
+                    <Text style={[
+                        styles.title,
+                        {color: lightTheme ? textLightBackground : textDarkBackground}
+                    ]}>Enter Your Details</Text>
+                    <View style={styles.inputWrapper}>
                         <Text style={[
-                            styles.title,
+                            styles.inputText,
                             {color: lightTheme ? textLightBackground : textDarkBackground}
-                        ]}>Enter Your Details</Text>
-                        <View style={styles.inputWrapper}>
-                            <Text style={[
-                                styles.inputText,
-                                {color: lightTheme ? textLightBackground : textDarkBackground}
-                            ]}>Name</Text>
-                            <TextInput
-                                placeholder="Enter your name"
-                                value={name}
-                                onChangeText={setName}
-                                style={[
-                                    styles.input,
-                                    {color: lightTheme ? textLightBackground : textDarkBackground},
-                                    {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                                    nameFocus && styles.inputFocus
-                                ]}
-                                autoCapitalize={"words"}
-                                onFocus={() => setNameFocus(true) }
-                                onBlur={() => setNameFocus(false)}
-                            />
-                        </View>
-                        <View style={styles.inputWrapper}>
-                            <Text style={[
-                                styles.inputText,
-                                {color: lightTheme ? textLightBackground : textDarkBackground}
-                            ]}>Job Title</Text>
-                            <TextInput
-                                placeholder="Enter your job title"
-                                value={jobTitle}
-                                onChangeText={setJobTitle}
-                                style={[
-                                    styles.input,
-                                    {color: lightTheme ? textLightBackground : textDarkBackground},
-                                    {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                                    jobTitleFocus && styles.inputFocus
-                                ]}
-                                autoCapitalize={"words"}
-                                onFocus={() => setJobTitleFocus(true) }
-                                onBlur={() => setJobTitleFocus(false)}
-                            />
-                        </View>
-                        <View style={styles.inputWrapper}>
-                            <Text style={[
-                                styles.inputText,
-                                {color: lightTheme ? textLightBackground : textDarkBackground}
-                            ]}>Company</Text>
-                            <TextInput
-                                placeholder="Enter your company"
-                                value={company}
-                                onChangeText={setCompany}
-                                style={[
-                                    styles.input,
-                                    {color: lightTheme ? textLightBackground : textDarkBackground},
-                                    {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                                    companyFocus && styles.inputFocus
-                                ]}
-                                autoCapitalize={"words"}
-                                onFocus={() => setCompanyFocus(true) }
-                                onBlur={() => setCompanyFocus(false)}
-                            />
-                        </View>
-                        <View style={styles.buttonWrapper}>
-                            <TouchableOpacity style={[
-                                styles.button,
-                                {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
-                            ]} onPress={handleSubmit}>
-                                <Text style={styles.buttonText}>Continue</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </KeyboardAwareScrollView>
+                        ]}>Name</Text>
+                        <TextInput
+                            placeholder="Enter your name"
+                            value={name}
+                            onChangeText={setName}
+                            style={[
+                                styles.input,
+                                {color: lightTheme ? textLightBackground : textDarkBackground},
+                                {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                                nameFocus && styles.inputFocus
+                            ]}
+                            autoCapitalize={"words"}
+                            onFocus={() => setNameFocus(true) }
+                            onBlur={() => setNameFocus(false)}
+                        />
+                    </View>
+                    <View style={styles.inputWrapper}>
+                        <Text style={[
+                            styles.inputText,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                        ]}>Job Title</Text>
+                        <TextInput
+                            placeholder="Enter your job title"
+                            value={jobTitle}
+                            onChangeText={setJobTitle}
+                            style={[
+                                styles.input,
+                                {color: lightTheme ? textLightBackground : textDarkBackground},
+                                {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                                jobTitleFocus && styles.inputFocus
+                            ]}
+                            autoCapitalize={"words"}
+                            onFocus={() => setJobTitleFocus(true) }
+                            onBlur={() => setJobTitleFocus(false)}
+                        />
+                    </View>
+                    <View style={styles.inputWrapper}>
+                        <Text style={[
+                            styles.inputText,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                        ]}>Company</Text>
+                        <TextInput
+                            placeholder="Enter your company"
+                            value={company}
+                            onChangeText={setCompany}
+                            style={[
+                                styles.input,
+                                {color: lightTheme ? textLightBackground : textDarkBackground},
+                                {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                                companyFocus && styles.inputFocus
+                            ]}
+                            autoCapitalize={"words"}
+                            onFocus={() => setCompanyFocus(true) }
+                            onBlur={() => setCompanyFocus(false)}
+                        />
+                    </View>
+                    <View style={styles.buttonWrapper}>
+                        <TouchableOpacity style={[
+                            styles.button,
+                            {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
+                        ]} onPress={handleSubmit}>
+                            <Text style={styles.buttonText}>Continue</Text>
+                        </TouchableOpacity>
+                    </View>
+                </KeyboardAwareScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
     );

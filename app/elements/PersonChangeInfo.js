@@ -46,17 +46,17 @@ export default function PersonChangeInfo({setIsChangingInfo}) {
                 });
 
                 // Update email in Firebase Authentication
-                if (newEmail !== currentUser.email) {
-                    await updateEmail(currentUser, newEmail);
-                    await updateDoc(doc(db, 'users', userId), {
-                        email: newEmail,
-                    })
-                }
+                // if (newEmail !== currentUser.email) {
+                //     await updateEmail(currentUser, newEmail);
+                //     await updateDoc(doc(db, 'users', userId), {
+                //         email: newEmail,
+                //     })
+                // }
 
                 // Update profile display name
-                await updateProfile(currentUser, {
-                    displayName: newName,
-                });
+                // await updateProfile(currentUser, {
+                //     displayName: newName,
+                // });
 
                 // Fetch updated user data from Firestore and update app state
                 await fetchUserData(userId);
@@ -142,23 +142,23 @@ export default function PersonChangeInfo({setIsChangingInfo}) {
                         autoCapitalize='words'
                     />
                 </View>
-                <View style={styles.inputWrapper}>
-                    <Text style={[
-                        styles.inputText,
-                        {color: lightTheme ? textLightBackground : textDarkBackground}
-                    ]}>Email</Text>
-                    <TextInput
-                        style={[
-                            styles.input,
-                            {color: lightTheme ? textLightBackground : textDarkBackground},
-                            {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                        ]}
-                        value={newEmail}
-                        onChangeText={setNewEmail}
-                        autoCapitalize='none'
-                        keyboardType='email-address'
-                    />
-                </View>
+                {/*<View style={styles.inputWrapper}>*/}
+                {/*    <Text style={[*/}
+                {/*        styles.inputText,*/}
+                {/*        {color: lightTheme ? textLightBackground : textDarkBackground}*/}
+                {/*    ]}>Email</Text>*/}
+                {/*    <TextInput*/}
+                {/*        style={[*/}
+                {/*            styles.input,*/}
+                {/*            {color: lightTheme ? textLightBackground : textDarkBackground},*/}
+                {/*            {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},*/}
+                {/*        ]}*/}
+                {/*        value={newEmail}*/}
+                {/*        onChangeText={setNewEmail}*/}
+                {/*        autoCapitalize='none'*/}
+                {/*        keyboardType='email-address'*/}
+                {/*    />*/}
+                {/*</View>*/}
             </KeyboardAwareScrollView>
             <View style={[
                 styles.buttonWrapper,

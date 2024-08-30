@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     },
     textWrapper: {
         gap: 8,
+        maxWidth: '70%',
 
         ...Platform.select({
             android: {
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
         })
     },
     title: {
+        flexWrap: 'wrap',
         fontFamily: 'GothicA1-700',
         fontSize: 20,
 
@@ -113,6 +115,7 @@ const styles = StyleSheet.create({
         })
     },
     text: {
+        flexWrap: 'wrap',
         fontFamily: 'GothicA1-400',
         fontSize: 16,
 
@@ -123,8 +126,8 @@ const styles = StyleSheet.create({
         })
     },
     imageWrapper: {
-        height: 100,
-        width: 100,
+        width: '30%',
+        aspectRatio: 1,
 
         ...Platform.select({
             android: {

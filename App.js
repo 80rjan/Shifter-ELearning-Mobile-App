@@ -91,6 +91,7 @@ function TabNavigator() {
     );
 }
 
+
 function AuthStack() {
     const { setHasAccount }= usePerson();
 
@@ -118,7 +119,6 @@ function AuthStack() {
 }
 
 
-
 function AppNavigator() {
     const { user, hasAccount, setHasAccount } = usePerson();
 
@@ -142,8 +142,6 @@ function AppNavigator() {
         </Stack.Navigator>
     );
 }
-
-
 
 
 export default function App() {

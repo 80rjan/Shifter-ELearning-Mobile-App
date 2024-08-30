@@ -15,10 +15,9 @@ import LoadingScreen from "./LoadingScreen";
 
 export default function CourseDetails({ route, navigation }) {
     const { course } = route.params;
-    const { user, addCourse, setHasAccount, lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground } = usePerson();
+    const { user, loading, setLoading, addCourse, setHasAccount, lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground } = usePerson();
     const isBought = user.coursesBought.some(courseBought => courseBought.title === course.title);
     const [downloadedUri, setDownloadedUri] = useState(null);
-    const [loading, setLoading] = useState(false);
     const isAnonymous = auth.currentUser?.isAnonymous;
 
     const scrollY = useRef(new Animated.Value(0)).current;
@@ -75,8 +74,10 @@ export default function CourseDetails({ route, navigation }) {
     };
 
     const handleLogOutGuest = async () => {
+        setLoading(true);
         await deleteUser(auth.currentUser);
         setHasAccount(false);
+        setLoading(false);
     }
 
     const handleScroll = Animated.event(
