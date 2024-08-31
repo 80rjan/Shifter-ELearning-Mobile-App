@@ -1,58 +1,74 @@
-
 import {View, Text, StyleSheet, ScrollView, Platform} from 'react-native';
 import Course from "./Course";
-import {NavigationContainer, useTheme} from '@react-navigation/native';
-import {createStackNavigator} from "@react-navigation/stack";
-import CourseDetails from "../pages/CourseDetails";
 import {usePerson} from "../PersonInformationContext";
-import {auth} from "../../firebaseConfig";
+import CoursesRecommended from "./CoursesRecommended";
 
-const Stack = createStackNavigator();
-
-export default function Courses({title, allCourses, navigation, skillFiltering}) {
+export default function Courses({title, allCourses, navigation, skillFiltering, isRecommendation, recommendedCourses}) {
     const { lightTheme, textLightBackground, textDarkBackground } = usePerson();
 
     return (
-        <View style={styles.coursesWrapper}>
+        <View style={styles.container}>
             <Text style={[
                 styles.heading,
                 {color: lightTheme ? textLightBackground : textDarkBackground},
             ]}>{title}</Text>
-            <ScrollView vertical showsVerticalScrollIndicator={false} style={styles.scrollView}>
+            <ScrollView
+                vertical
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.scrollViewContent}
+            >
+
                 {allCourses.length===0 && <Text style={[
                     styles.errorText,
                     {color: lightTheme ? textLightBackground : textDarkBackground},
                 ]}>No courses to show {skillFiltering && `with this skill: ${skillFiltering}`}</Text>}
-                {allCourses.map((course, index) => {
-                    return <Course
-                                   key={index}
-                                   navigation={navigation}
-                                   course={course}
-                    />
-                })}
+
+                <View style={styles.coursesWrapper}>
+                    {allCourses.map((course, index) => {
+                        return <Course
+                            key={index}
+                            navigation={navigation}
+                            course={course}
+                            isRecommendation={false}
+                        />
+                    })}
+                </View>
+
+                {isRecommendation && recommendedCourses.length > 0 && (
+                    <View style={styles.recommended}>
+                        <CoursesRecommended
+                            title="Check These Out"
+                            allCourses={recommendedCourses}
+                            navigation={navigation}
+                            isRecommendation={isRecommendation}
+                        />
+                    </View>
+                )}
             </ScrollView>
         </View>
     )
 }
 
 const styles=StyleSheet.create({
-    coursesWrapper: {
+    container: {
         flex: 1,
         paddingHorizontal: 20,
         gap: 20,
-
         ...Platform.select({
             android: {
                 gap: 10,
             }
         })
     },
-    scrollView: {
+    scrollViewContent: {
+        flexGrow: 1,    //for the scroll view to grow
+    },
+    coursesWrapper: {
+        flexGrow: 1,    //for the courses to grow to push the recommended courses
     },
     heading: {
         fontFamily: 'GothicA1-700',
         fontSize: 24,
-
         ...Platform.select({
             android: {
                 fontSize: 22,
@@ -63,5 +79,8 @@ const styles=StyleSheet.create({
         fontFamily: 'GothicA1-500',
         fontSize: 22,
         alignSelf: 'center',
-    }
+    },
+    recommended: {
+        marginTop: 20,
+    },
 })

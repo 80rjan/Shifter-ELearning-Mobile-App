@@ -59,7 +59,7 @@ export default function PersonInfo({ person, isChangingInfo, setIsChangingInfo }
                 {!isChangingInfo && !isAnonymous ?<TouchableOpacity onPress={() => setIsChangingInfo(true)}>
                     <Text style={[
                         styles.text,
-                        { color: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)' }
+                        { color: '#00b5f0' }
                     ]} >
                         Change Information?
                     </Text>
@@ -82,6 +82,8 @@ export default function PersonInfo({ person, isChangingInfo, setIsChangingInfo }
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
+        maxWidth: '100%',
+        gap: 40,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -96,6 +98,7 @@ const styles = StyleSheet.create({
     textWrapper: {
         gap: 8,
         maxWidth: '70%',
+        flexShrink: 1,
 
         ...Platform.select({
             android: {

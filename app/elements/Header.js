@@ -19,7 +19,12 @@ export default function Header({ headerName }) {
             {Platform.OS === 'ios' ?
                 <ShifterLogo width='150' height='50' color={!lightTheme ?  lightBackground : darkBackground} /> :
                 <ShifterLogo width='130' height='40' color={!lightTheme ?  lightBackground : darkBackground} />}
-            <TouchableOpacity onPress={toggleTheme}>
+            <TouchableOpacity
+                onPress={toggleTheme}
+                style={{
+                    padding: 10,
+                    paddingRight: 0,
+            }}>
                 <Ionicons
                     name={!lightTheme ? 'sunny' : 'moon'}
                     size={25}

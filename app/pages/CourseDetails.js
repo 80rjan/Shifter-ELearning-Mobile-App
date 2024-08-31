@@ -24,9 +24,10 @@ export default function CourseDetails({ route, navigation }) {
 
     const handlePress = () => {
         addCourse(course);
+        alert('Congratulations! You can now successfully download the course!');
         navigation.reset({
             index: 0,
-            routes: [{ name: 'Learn' }],
+            routes: [{ name: 'Education' }],
         });
     };
 
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
         paddingBottom: 80,
     },
     imageWrapper: {
-        height: 180,
+        height: 200,
         marginBottom: 15,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 3 },

@@ -25,6 +25,7 @@ export default function PersonChangeInfo({setIsChangingInfo}) {
     const [newCompany, setNewCompany] = useState(user.company);
     const [newEmail, setNewEmail] = useState(user.email);
     const [isLoading, setIsLoading] = useState(false);
+    const borderColor = '#00b5f0';
 
     const handleDiscard = () => {
         setIsChangingInfo(false);
@@ -103,7 +104,7 @@ export default function PersonChangeInfo({setIsChangingInfo}) {
                         style={[
                             styles.input,
                             {color: lightTheme ? textLightBackground : textDarkBackground},
-                            {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                            {borderColor: borderColor},
                         ]}
                         value={newName}
                         onChangeText={setNewName}
@@ -119,7 +120,7 @@ export default function PersonChangeInfo({setIsChangingInfo}) {
                         style={[
                             styles.input,
                             {color: lightTheme ? textLightBackground : textDarkBackground},
-                            {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                            {borderColor: borderColor},
                         ]}
                         value={newJobTitle}
                         onChangeText={setNewJobTitle}
@@ -135,7 +136,7 @@ export default function PersonChangeInfo({setIsChangingInfo}) {
                         style={[
                             styles.input,
                             {color: lightTheme ? textLightBackground : textDarkBackground},
-                            {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                            {borderColor: borderColor},
                         ]}
                         value={newCompany}
                         onChangeText={setNewCompany}
@@ -151,7 +152,7 @@ export default function PersonChangeInfo({setIsChangingInfo}) {
                 {/*        style={[*/}
                 {/*            styles.input,*/}
                 {/*            {color: lightTheme ? textLightBackground : textDarkBackground},*/}
-                {/*            {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},*/}
+                {/*            {borderColor: borderColor},*/}
                 {/*        ]}*/}
                 {/*        value={newEmail}*/}
                 {/*        onChangeText={setNewEmail}*/}
@@ -175,11 +176,11 @@ export default function PersonChangeInfo({setIsChangingInfo}) {
                 </TouchableOpacity>
                 <TouchableOpacity style={[
                     styles.button,
-                    {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                    {borderColor: borderColor},
                 ]} onPress={handleNewInformation}>
                     <Text style={[
                         styles.buttonText,
-                        {color: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                        {color: '#00b5f0'},
                     ]}>Save New Information</Text>
                 </TouchableOpacity>
             </View>
@@ -222,14 +223,12 @@ const styles = StyleSheet.create({
         paddingTop: 20,
     },
     button: {
-        borderColor: '#00b5f0',
         borderWidth: 2,
         borderRadius: 5,
         alignItems: 'center',
         paddingVertical: 10,
     },
     buttonText: {
-        color: '#00b5f0',
         fontFamily: 'GothicA1-800',
         fontSize: 16,
         paddingBottom: 1,

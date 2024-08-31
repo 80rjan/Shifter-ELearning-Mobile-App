@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, SafeAreaView, Platform, TouchableOpacity, Alert} from 'react-native';
 import Header from '../elements/Header';
 import { usePerson } from '../PersonInformationContext';
@@ -9,12 +9,17 @@ import { getAuth, signOut, deleteUser } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
 import PersonChangeInfo from "../elements/PersonChangeInfo";
 import LoadingScreen from "./LoadingScreen";
+import {useIsFocused} from "@react-navigation/native";
 
 export default function Profile({ onLogout }) {
     const { user, loading, setLoading, lightTheme, lightBackground, darkBackground } = usePerson();
     const isAnonymous = auth.currentUser?.isAnonymous;
     const [isChangingInfo, setIsChangingInfo] = useState(false);
+    const isActiveTab = useIsFocused();
 
+    useEffect(() => {
+        if (!isActiveTab) setIsChangingInfo(false);
+    }, [isActiveTab])
     const showAlert = () => {
         Alert.alert(
             'Are you sure you want to logout?',
@@ -64,11 +69,11 @@ export default function Profile({ onLogout }) {
                     </View>
                     <TouchableOpacity style={[
                         styles.logoutButton,
-                        {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
+                        {borderColor: '#00b5f0'}
                     ]} onPress={showAlert}>
                         <Text style={[
                             styles.logoutText,
-                            {color: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
+                            {color: '#00b5f0'}
                         ]}>Log Out</Text>
                     </TouchableOpacity>
                 </>

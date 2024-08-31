@@ -129,6 +129,7 @@ export function PersonProvider({ children }) {
     }
 
     async function addCourse(course) {
+        setLoading(true);
         // Remove from favorites if it exists
         await removeFavorites(course);
 
@@ -150,6 +151,7 @@ export function PersonProvider({ children }) {
             points: updatedPoints,
             skills: updatedSkills
         });
+        setLoading(false);
     }
 
     async function updateProfilePicture(newProfilePictureUri) {

@@ -1,0 +1,35 @@
+{
+  "courses" : [
+    {
+      "title": "Personalized onboarding process",
+      "durationMicroCourses": 4,
+      "durationHours": 3,
+      "price": 15,
+      "image": "require('../assets/employee-onboarding-cover.webp')",
+      "description": "Onboarding fundemental's: how to effectively incorporate new employee's into your company",
+      "characteristics": {
+        "accessOptions": "Lifetime access",
+        "online": ""
+      },
+      "languages": "English, Macedonian",
+      "level": "Intermediate",
+      "highlights": [
+        "What is onboarding",
+        "What are the benefits of onboarding",
+        "How to effectively incorporate it in your business",
+        "What challenges you'll need to overcome along the way"
+      ],
+      "skills": [
+        "Onboarding",
+        "Management"
+      ],
+      "modules": [
+        "What is onboarding",
+        "What are the benefits of onboarding",
+        "How to successfully incorporate onboarding",
+        "What challenges you'll face along the way"
+      ],
+      "points": 1
+    }
+  ]
+}

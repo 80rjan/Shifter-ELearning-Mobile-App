@@ -23,7 +23,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function TabNavigator() {
-    const { user, setHasAccount, lightTheme, lightBackground, darkBackground }= usePerson();
+    const { user, setHasAccount, lightTheme, lightBackground, textLightBackground, darkBackground, textDarkBackground }= usePerson();
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -31,20 +31,20 @@ function TabNavigator() {
                 tabBarIcon: ({ focused, color }) => {
                     let iconName;
 
-                    if (route.name === 'Courses') {
+                    if (route.name === 'Home') {
                         iconName = focused ? 'home' : 'home-outline';
-                    } else if (route.name === 'Wishlist') {
+                    } else if (route.name === 'Favorites') {
                         iconName = focused ? 'heart' : 'heart-outline';
-                    } else if (route.name === 'Learn') {
+                    } else if (route.name === 'Education') {
                         iconName = focused ? 'school' : 'school-outline';
                     } else if (route.name === 'Profile') {
                         iconName = focused ? 'person' : 'person-outline';
                     }
 
-                    return <Ionicons name={iconName} size={25} color={color} />;
+                    return <Ionicons name={iconName} size={24} color={color} />;
                 },
-                tabBarActiveTintColor: '#00b5f0',
-                tabBarInactiveTintColor: '#888',
+                tabBarActiveTintColor: !lightTheme ? lightBackground : darkBackground,
+                tabBarInactiveTintColor: lightTheme ? '#888' : '#777',
                 tabBarStyle: {
                     height: 85,
                     backgroundColor: lightTheme ? lightBackground : darkBackground,
@@ -66,8 +66,8 @@ function TabNavigator() {
                 },
                 tabBarLabel: ({ focused, color }) => (
                     <Text style={{
-                        fontSize: 14,
-                        fontWeight: focused ? 'bold' : 'normal',
+                        fontSize: 12,
+                        fontFamily: focused ? 'GothicA1-800' : 'GothicA1-600',
                         color: color,
                     }}>
                         {route.name}
@@ -75,13 +75,13 @@ function TabNavigator() {
                 ),
             })}
         >
-            <Tab.Screen name="Courses">
+            <Tab.Screen name="Home">
                 {() => <StackCourseDetails Component={Home} />}
             </Tab.Screen>
-            <Tab.Screen name="Wishlist" options={{tabBarBadge: user.coursesFavorite.length>0 ? user.coursesFavorite.length : null}}>
+            <Tab.Screen name="Favorites" options={{tabBarBadge: user.coursesFavorite.length>0 ? user.coursesFavorite.length : null}}>
                 {() => <StackCourseDetails Component={Wishlist} />}
             </Tab.Screen>
-            <Tab.Screen name="Learn">
+            <Tab.Screen name="Education">
                 {() => <StackCourseDetails Component={Learn} />}
             </Tab.Screen>
             <Tab.Screen name="Profile">

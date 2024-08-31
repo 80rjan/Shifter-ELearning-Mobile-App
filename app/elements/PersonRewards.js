@@ -9,7 +9,7 @@ export default function PersonRewards({ person }) {
     const iconSize = 28;
     const { lightTheme, textLightBackground, textDarkBackground } = usePerson();
     // let iconColor = lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)';
-    let iconColor = lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)';
+    let iconColor = '#00b5f0';
 
     return (
         <View style={styles.container}>

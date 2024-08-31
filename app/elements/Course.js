@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Platform } from 'react
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { usePerson } from '../PersonInformationContext';
 
-export default function Course({ navigation, course }) {
+export default function Course({ navigation, course, isRecommendation }) {
     const { user, addFavorites, removeFavorites, lightTheme, textLightBackground, textDarkBackground } = usePerson();
     const [heartIcon, setHeartIcon] = React.useState('heart-outline');
 
@@ -33,7 +33,8 @@ export default function Course({ navigation, course }) {
             style={[
                 styles.courseWrapper,
                 { backgroundColor: lightTheme ? '#f5f5f5' : '#333' },
-                !lightTheme ? { borderWidth: 2, borderColor: '#444' } : null
+                !lightTheme ? { borderWidth: 2, borderColor: '#444' } : null,
+                // isRecommendation && {minWidth: 300},
             ]}
             onPress={() => navigation.navigate('CourseDetails', { course })}
         >
@@ -52,12 +53,18 @@ export default function Course({ navigation, course }) {
                     </View>
                 )}
             </View>
-            <View style={styles.imageWrapper}>
+            {!isRecommendation && <View style={styles.imageWrapper}>
                 <Image
                     style={styles.image}
                     source={course.image}
                 />
-            </View>
+            </View> }
+            {/*<View style={styles.imageWrapper}>*/}
+            {/*    <Image*/}
+            {/*        style={styles.image}*/}
+            {/*        source={course.image}*/}
+            {/*    />*/}
+            {/*</View>*/}
         </TouchableOpacity>
     );
 }
@@ -73,7 +80,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         marginHorizontal: 5,
         marginBottom: 15,
-        maxWidth: '100%',
         shadowColor: 'black',
         shadowOffset: { width: -2, height: 2 },
         shadowOpacity: 0.3,
