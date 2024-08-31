@@ -26,8 +26,6 @@ export default function Course({ navigation, course, isRecommendation }) {
         }
     };
 
-    console.log('Image: ', course.image);
-
     return (
         <TouchableOpacity
             style={[
@@ -47,7 +45,7 @@ export default function Course({ navigation, course, isRecommendation }) {
                 {!isBought && (
                     <View style={styles.priceFavorite}>
                         <Text style={[styles.price, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.price}$</Text>
-                        <TouchableOpacity onPress={handleFavoritePress}>
+                        <TouchableOpacity onPress={handleFavoritePress} >
                             <Ionicons name={heartIcon} color={lightTheme ? '#00b5f0' : '#00b5f0'} size={Platform.OS === 'android' ? 25 : 28} />
                         </TouchableOpacity>
                     </View>
@@ -96,6 +94,7 @@ const styles = StyleSheet.create({
     contentWrapper: {
         flex: 1,
         alignItems: 'flex-start',
+        // maxWidth: '65%', //this is if the recommended course has an image
         gap: 5,
 
         ...Platform.select({

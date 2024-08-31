@@ -8,6 +8,17 @@ export default function Courses({title, allCourses, navigation, skillFiltering, 
 
     return (
         <View style={styles.container}>
+            {isRecommendation && recommendedCourses.length > 0 && (
+                <View style={styles.recommended}>
+                    <CoursesRecommended
+                        title="Check These Out"
+                        allCourses={recommendedCourses}
+                        navigation={navigation}
+                        isRecommendation={isRecommendation}
+                    />
+                </View>
+            )}
+
             <Text style={[
                 styles.heading,
                 {color: lightTheme ? textLightBackground : textDarkBackground},
@@ -21,7 +32,7 @@ export default function Courses({title, allCourses, navigation, skillFiltering, 
                 {allCourses.length===0 && <Text style={[
                     styles.errorText,
                     {color: lightTheme ? textLightBackground : textDarkBackground},
-                ]}>No courses to show {skillFiltering && `with this skill: ${skillFiltering}`}</Text>}
+                    ]}>No courses to show {skillFiltering && `with this skill: ${skillFiltering}`}</Text>}
 
                 <View style={styles.coursesWrapper}>
                     {allCourses.map((course, index) => {
@@ -34,16 +45,6 @@ export default function Courses({title, allCourses, navigation, skillFiltering, 
                     })}
                 </View>
 
-                {isRecommendation && recommendedCourses.length > 0 && (
-                    <View style={styles.recommended}>
-                        <CoursesRecommended
-                            title="Check These Out"
-                            allCourses={recommendedCourses}
-                            navigation={navigation}
-                            isRecommendation={isRecommendation}
-                        />
-                    </View>
-                )}
             </ScrollView>
         </View>
     )
@@ -81,6 +82,6 @@ const styles=StyleSheet.create({
         alignSelf: 'center',
     },
     recommended: {
-        marginTop: 20,
+        flexGrow: 0,
     },
 })

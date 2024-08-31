@@ -20,7 +20,7 @@ export default function CoursesRecommended({title, allCourses, navigation, skill
             ]}>{title}</Text>
             <ScrollView
                 horizontal
-                // showsHorizontalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
                 style={styles.scrollView}>
 
                 {allCourses.length===0 && <Text style={[

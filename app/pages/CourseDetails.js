@@ -12,11 +12,13 @@ import {auth, storage} from "../../firebaseConfig";
 import {deleteUser} from "firebase/auth";
 import {ref, getDownloadURL} from "firebase/storage";
 import LoadingScreen from "./LoadingScreen";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 export default function CourseDetails({ route, navigation }) {
     const { course } = route.params;
-    const { user, loading, setLoading, addCourse, setHasAccount, lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground } = usePerson();
+    const { user, addFavorites, removeFavorites, loading, setLoading, addCourse, setHasAccount, lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground } = usePerson();
     const isBought = user.coursesBought.some(courseBought => courseBought.title === course.title);
+    const [heartIcon, setHeartIcon] = React.useState('heart-outline');
     const [downloadedUri, setDownloadedUri] = useState(null);
     const isAnonymous = auth.currentUser?.isAnonymous;
 
@@ -81,6 +83,19 @@ export default function CourseDetails({ route, navigation }) {
         setLoading(false);
     }
 
+    React.useEffect(() => {
+        const isFavorite = user.coursesFavorite.some(favoriteCourse => favoriteCourse.title === course.title);
+        setHeartIcon(isFavorite ? 'heart' : 'heart-outline');
+    }, [user.coursesFavorite, course.title]);
+
+    const handleFavoritePress = () => {
+        if (heartIcon === 'heart-outline') {
+            addFavorites(course);
+        } else {
+            removeFavorites(course);
+        }
+    };
+
     const handleScroll = Animated.event(
         [{ nativeEvent: { contentOffset: { y: scrollY } } }],
         {
@@ -110,10 +125,15 @@ export default function CourseDetails({ route, navigation }) {
                         <Image source={course.image} style={styles.image}/>
                     </View>
                     <View style={styles.content}>
-                        <Text style={[
-                            styles.title,
-                            {color: lightTheme ? textLightBackground : textDarkBackground}
-                        ]}>{course.title}</Text>
+                        <View style={styles.titleWrapper} >
+                            <Text style={[
+                                styles.title,
+                                {color: lightTheme ? textLightBackground : textDarkBackground}
+                            ]}>{course.title}</Text>
+                            <TouchableOpacity onPress={handleFavoritePress} style={{padding: 5, paddingRight: 0}}>
+                                <Ionicons name={heartIcon} color={lightTheme ? '#00b5f0' : '#00b5f0'} size={Platform.OS === 'android' ? 28 : 32} />
+                            </TouchableOpacity>
+                        </View>
                         <CourseDescription course={course} />
                         <CourseOutcomes course={course} />
                         <CourseSkills course={course} />
@@ -174,7 +194,6 @@ const styles = StyleSheet.create({
         fontFamily: 'GothicA1-800',
         fontSize: 24,
         textTransform: 'capitalize',
-        marginBottom: 15,
 
         ...Platform.select({
             android: {
@@ -182,6 +201,12 @@ const styles = StyleSheet.create({
                 marginBottom: 10,
             }
         })
+    },
+    titleWrapper: {
+        marginBottom: 15,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     buttonWrapper: {
         position: 'absolute',

@@ -8,12 +8,13 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
     Platform,
-    Alert
+    Alert, ActivityIndicator
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ShifterLogo from "../../assets/ShifterLogo";
 import { usePerson } from "../PersonInformationContext";
 import { doc, setDoc, deleteDoc } from 'firebase/firestore';
+import {sendEmailVerification} from "firebase/auth";
 import { auth, db } from '../../firebaseConfig';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
@@ -21,6 +22,7 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
     const [name, setName] = useState('');
     const [jobTitle, setJobTitle] = useState('');
     const [company, setCompany] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [isVerified, setIsVerified] = useState(auth.currentUser.emailVerified);
     const coursesBought = [];
     const coursesFavorite = [];
@@ -38,6 +40,7 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
     const handleSubmit = async () => {
         if (name && jobTitle && company) {
             try {
+                setIsLoading(true);
                 const userId = auth.currentUser?.uid;
                 if (userId) {
                     await setDoc(doc(db, 'users', userId), {
@@ -57,6 +60,9 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
             } catch (error) {
                 console.error('Error saving user info: ', error);
             }
+            finally {
+                setIsLoading(false);
+            }
         } else {
             alert('Please fill in all fields');
         }
@@ -64,6 +70,7 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
 
     const handleCheckEmailVerification = async () => {
         try {
+            setIsLoading(true);
             const user = auth.currentUser;
             if (user) {
                 await user.reload(); // Refresh user data
@@ -79,6 +86,9 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
         } catch (error) {
             console.error('Error checking email verification: ', error);
             Alert.alert('Error', 'Failed to check email verification status.');
+        }
+        finally {
+            setIsLoading(false);
         }
     };
 
@@ -103,6 +113,26 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
         })
     }, [navigation]);
 
+    const handleResendVerificationEmail = async () => {
+        try {
+            setIsLoading(true);
+            const user = auth.currentUser;
+            if (user) {
+                await sendEmailVerification(user);
+                Alert.alert('Verification Email Sent', 'A new verification email has been sent to your inbox.');
+            } else {
+                Alert.alert('Error', 'No user is currently logged in.');
+            }
+        } catch (error) {
+            console.error('Error resending verification email: ', error);
+            Alert.alert('Error', 'Failed to resend verification email.');
+        }
+        finally {
+            setIsLoading(false);
+        }
+    };
+
+
     if (!isVerified) return (
         <SafeAreaView style={[
             styles.safeView,
@@ -113,7 +143,7 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
             <View style={styles.logo}>
                 <ShifterLogo width='250' height='125' color={!lightTheme ? lightBackground : darkBackground}/>
             </View>
-            <View style={{flex: 1, justifyContent: 'center', width: '100%', alignItems: 'center'}} >
+            <View style={{flex: 1, justifyContent: 'center', width: '100%', alignItems: 'center', gap: 10}} >
                 <TouchableOpacity style={[
                     {
                         backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)',
@@ -131,7 +161,27 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
                         Check Email Verification
                     </Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={[
+                    {
+                        backgroundColor: lightTheme ? '#aaa' : '#666',
+                        paddingVertical: 10,
+                        width: '70%',
+                        borderRadius: 5,
+                    }
+                ]} onPress={handleResendVerificationEmail}>
+                    <Text style={{
+                        fontFamily: 'GothicA1-500',
+                        fontSize: 16,
+                        color: 'white',
+                        alignSelf: 'center',
+                    }} >
+                        Resend Email
+                    </Text>
+                </TouchableOpacity>
             </View>
+            {isLoading &&
+                <ActivityIndicator color={!lightTheme ? lightBackground : darkBackground} size='large' />
+            }
         </SafeAreaView>
     )
 
@@ -225,6 +275,9 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
                     </View>
                 </KeyboardAwareScrollView>
             </KeyboardAvoidingView>
+            {isLoading &&
+                <ActivityIndicator color={!lightTheme ? lightBackground : darkBackground} size='large' />
+            }
         </SafeAreaView>
     );
 }
