@@ -2,26 +2,27 @@ import {View, Text, StyleSheet, ScrollView, Platform} from 'react-native';
 import Course from "./Course";
 import {usePerson} from "../PersonInformationContext";
 import CoursesRecommended from "./CoursesRecommended";
-import allCoursesDetails from "../AllCoursesDetails";
 
-export default function Courses({title, allCourses, navigation, skillFiltering, isRecommendation}) {
-    const { user, lightTheme, textLightBackground, textDarkBackground } = usePerson();
+export default function Courses({title, courses, navigation, skillFiltering, isRecommendation}) {
+    const { allCourses, user, lightTheme, textLightBackground, textDarkBackground } = usePerson();
 
     const boughtCourses = user.coursesBought;
     const skillsBought = boughtCourses.slice().reverse().reduce((resultSkills, course) => {
         return resultSkills.concat(course.skills);
     }, []);
-    const recommendedCourses = allCoursesDetails.
+    const recommendedCourses = allCourses.
     filter(course =>
                 skillsBought.some(skill => course.skills.includes(skill)) &&
                 !boughtCourses.some(boughtCourse => boughtCourse.title === course.title)
             // && !user.coursesFavorite.some(favoriteCourse => favoriteCourse.title === course.title);
         )
         .sort((a, b) => {
-            // Prioritize courses that match the most recent skills
-            const aRelevance = skillsBought.filter(skill => a.skills.includes(skill)).length;
-            const bRelevance = skillsBought.filter(skill => b.skills.includes(skill)).length;
-            return bRelevance - aRelevance; // Sort descending by relevance
+            // Sort by the index of the first matching skill in the reversed skillsBought array
+            const aFirstMatchIndex = skillsBought.findIndex(skill => a.skills.includes(skill));
+            const bFirstMatchIndex = skillsBought.findIndex(skill => b.skills.includes(skill));
+
+            // If a course matches skills from more recent purchases, prioritize it
+            return aFirstMatchIndex - bFirstMatchIndex;
         });
 
     return (
@@ -46,13 +47,13 @@ export default function Courses({title, allCourses, navigation, skillFiltering, 
                 contentContainerStyle={styles.scrollViewContent}
             >
 
-                {allCourses.length===0 && <Text style={[
+                {courses.length===0 && <Text style={[
                     styles.errorText,
                     {color: lightTheme ? textLightBackground : textDarkBackground},
                     ]}>No courses to show {skillFiltering && `with this skill: ${skillFiltering}`}</Text>}
 
                 <View style={styles.coursesWrapper}>
-                    {allCourses.map((course, index) => {
+                    {courses.map((course, index) => {
                         return <Course
                             key={index}
                             navigation={navigation}

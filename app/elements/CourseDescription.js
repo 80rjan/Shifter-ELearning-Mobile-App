@@ -9,7 +9,6 @@ export default function CourseDescription({ course }) {
     const { lightTheme, textLightBackground, textDarkBackground} = usePerson();
 
 
-    console.log(course.languages, course.level, course.timeDuration);
     return (
         <View style={styles.container}>
             <Text style={[
@@ -28,11 +27,11 @@ export default function CourseDescription({ course }) {
                         <Text style={[
                             styles.textTitle,
                             {color: lightTheme ? textLightBackground : textDarkBackground}
-                        ]}>Languages:</Text>
+                        ]}>Online Course</Text>
                         <Text style={[
                             styles.text,
                             {color: lightTheme ? textLightBackground : textDarkBackground}
-                        ]}>{course.languages}</Text>
+                        ]}>Learn at home</Text>
                     </View>
                 </View>
                 <View style={styles.content}>
@@ -46,11 +45,11 @@ export default function CourseDescription({ course }) {
                         <Text style={[
                             styles.textTitle,
                             {color: lightTheme ? textLightBackground : textDarkBackground}
-                        ]}>Level:</Text>
+                        ]}>{course.level}</Text>
                         <Text style={[
                             styles.text,
                             {color: lightTheme ? textLightBackground : textDarkBackground}
-                        ]}>{course.level}</Text>
+                        ]}>No prior experience needed</Text>
                     </View>
                 </View>
                 <View style={styles.content}>
@@ -64,11 +63,11 @@ export default function CourseDescription({ course }) {
                         <Text style={[
                             styles.textTitle,
                             {color: lightTheme ? textLightBackground : textDarkBackground}
-                            ]}>Duration:</Text>
+                            ]}>{course.durationTime + ' hours'}</Text>
                         <Text style={[
                             styles.text,
                             {color: lightTheme ? textLightBackground : textDarkBackground}
-                            ]}>{course.timeDuration}</Text>
+                            ]}>Fast & effective learning</Text>
                     </View>
                 </View>
             </View>
@@ -136,7 +135,7 @@ const styles=StyleSheet.create({
         })
     },
     text: {
-        fontFamily: 'GothicA1-400',
+        fontFamily: 'GothicA1-300',
         fontSize: 16,
 
         ...Platform.select({

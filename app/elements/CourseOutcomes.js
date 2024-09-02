@@ -7,7 +7,6 @@ import {usePerson} from "../PersonInformationContext";
 export default function CourseOutcomes({course}) {
     const {lightTheme, lightBackground, darkBackground, textLightBackground, textDarkBackground} = usePerson();
 
-    console.log('Course: ', course);
     return (
         <View style={styles.container}>
             <Text style={[

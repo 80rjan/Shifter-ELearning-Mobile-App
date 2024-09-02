@@ -7,11 +7,10 @@ import {usePerson} from "../PersonInformationContext";
 import allCoursesDetails from "../AllCoursesDetails";
 
 
-
 export default function Home({navigation}) {
-    const { user, lightTheme, lightBackground, darkBackground } = usePerson();
+    const { allCourses, user, lightTheme, lightBackground, darkBackground } = usePerson();
 
-    const courses = allCoursesDetails.filter(course =>
+    const courses = allCourses.filter(course =>
         !user.coursesBought.some(boughtCourse => boughtCourse.title === course.title)
     );
 
@@ -44,7 +43,7 @@ export default function Home({navigation}) {
             <Header headerName='Courses' />
             <View style={styles.content}>
                 <Topics courses={courses} handleFilter={handleFilter} selectedSkill={selectedSkill} />
-                <Courses title={'Discover'} allCourses={filteredCourses} navigation={navigation} skillFiltering={selectedSkill}/>
+                <Courses title={'Discover'} courses={filteredCourses} navigation={navigation} skillFiltering={selectedSkill}/>
             </View>
         </SafeAreaView>
     );

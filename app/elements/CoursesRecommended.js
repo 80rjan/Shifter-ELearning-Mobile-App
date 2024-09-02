@@ -6,7 +6,6 @@ import {createStackNavigator} from "@react-navigation/stack";
 import CourseDetails from "../pages/CourseDetails";
 import {usePerson} from "../PersonInformationContext";
 import {auth} from "../../firebaseConfig";
-import allCoursesDetails from "../AllCoursesDetails";
 
 const Stack = createStackNavigator();
 

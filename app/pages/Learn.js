@@ -85,7 +85,7 @@ export default function Learn({ navigation }) {
             <Header headerName='Learn' />
             <View style={styles.content}>
                 {/*<Topics courses={user.coursesBought} handleFilter={handleFilter} selectedSkill={selectedSkill} />*/}
-                <Courses title={'Learning Dashboard'} allCourses={filteredCourses} navigation={navigation} skillFiltering={selectedSkill} />
+                <Courses title={'Learning Dashboard'} courses={filteredCourses} navigation={navigation} skillFiltering={selectedSkill} />
             </View>
         </SafeAreaView>
     );

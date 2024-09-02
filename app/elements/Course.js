@@ -26,6 +26,8 @@ export default function Course({ navigation, course, isRecommendation }) {
         }
     };
 
+    // console.log('course details:', course);
+
     return (
         <TouchableOpacity
             style={[
@@ -33,15 +35,14 @@ export default function Course({ navigation, course, isRecommendation }) {
                 { backgroundColor: lightTheme ? '#f5f5f5' : '#333' },
                 !lightTheme ? { borderWidth: 2, borderColor: '#444' } : null,
                 isBought && Platform.OS === 'android' && {paddingVertical: 16}
-                // isRecommendation && {minWidth: 300},
             ]}
             onPress={() => navigation.navigate('CourseDetails', { course })}
         >
             <View style={styles.contentWrapper}>
                 <Text style={[styles.title, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{capitalize(course.title)}</Text>
                 <View>
-                    <Text style={[styles.topicDuration, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.topic}</Text>
-                    <Text style={[styles.topicDuration, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.duration}</Text>
+                    <Text style={[styles.topicDuration, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.level}</Text>
+                    <Text style={[styles.topicDuration, { color: lightTheme ? textLightBackground : textDarkBackground }]}>{course.durationMicroCourses + ' micro-courses, ' + course.durationTime + ' hours'}</Text>
                 </View>
                 {!isBought && (
                     <View style={styles.priceFavorite}>
@@ -55,7 +56,7 @@ export default function Course({ navigation, course, isRecommendation }) {
             {!isRecommendation && <View style={styles.imageWrapper}>
                 <Image
                     style={styles.image}
-                    source={course.image}
+                    source={course.imageFile}
                 />
             </View> }
             {/*<View style={styles.imageWrapper}>*/}

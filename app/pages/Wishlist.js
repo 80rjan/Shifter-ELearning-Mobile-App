@@ -3,7 +3,6 @@ import Courses from "../elements/Courses";
 import CoursesRecommended from "../elements/CoursesRecommended";
 import { usePerson } from "../PersonInformationContext";
 import Header from "../elements/Header";
-import allCoursesDetails from "../AllCoursesDetails";
 
 export default function Wishlist({ navigation }) {
     const { user, lightTheme, lightBackground, darkBackground } = usePerson();
@@ -32,7 +31,7 @@ export default function Wishlist({ navigation }) {
             <View style={styles.content}>
                 <Courses
                     title="Your Favorites"
-                    allCourses={favoriteCourses}
+                    courses={favoriteCourses}
                     navigation={navigation}
                     isRecommendation={true}
                 />

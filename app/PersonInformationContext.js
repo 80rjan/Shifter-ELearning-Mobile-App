@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { doc, getDoc, setDoc, updateDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, collection, getDocs, onSnapshot } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import {auth, db} from '../firebaseConfig';
 import {Alert, useColorScheme} from "react-native";
@@ -8,6 +8,13 @@ const PersonInformationContext = createContext();
 const isAnonymous = auth.currentUser?.isAnonymous;
 
 export function PersonProvider({ children }) {
+    const imageMap = {
+        'personalized onboarding process': require('../assets/personalized onboarding process.webp'),
+        'leadership & management': require('../assets/leadership & management.webp'),
+        'marketing as a flywheel': require('../assets/marketing as a flywheel.webp'),
+        'negotiation skills for more sales': require('../assets/negotiation skills for more sales.webp'),
+        'the go-to marketing strategy': require('../assets/the go-to marketing strategy.webp'),
+    }
     const defaultUserState = {
         name: 'Guest',
         jobTitle: '',
@@ -20,6 +27,7 @@ export function PersonProvider({ children }) {
         skills: []
     };
     const deviceTheme = useColorScheme();
+    const [allCourses, setAllCourses] = useState([]);
     const [user, setUser] = useState(defaultUserState);
     const [hasAccount, setHasAccount] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -34,7 +42,27 @@ export function PersonProvider({ children }) {
         setLightTheme(deviceTheme === 'light');
     }, [deviceTheme]);
 
-    // const fetchCourses = async () => {
+    useEffect(() => {
+        // Real-time listener for the 'courses' collection
+        const coursesCollection = collection(db, 'courses');
+        const unsubscribe = onSnapshot(coursesCollection, (snapshot) => {
+            const coursesList = snapshot.docs.map(doc => ({
+                id: doc.id,  // Include document ID if needed
+                imageFile: imageMap[doc.data().title],
+                ...doc.data()  // Spread the document data
+            }));
+            setAllCourses(coursesList);
+            console.log('All courses: ', allCourses);
+        }, (error) => {
+            console.error('Error fetching courses:', error);
+        });
+
+        // Cleanup the listener on component unmount
+        return () => unsubscribe();
+    }, []);
+
+
+    // async function fetchCourses () {
     //     try {
     //         // Reference to your 'courses' collection
     //         const coursesCollection = collection(db, 'courses');
@@ -191,6 +219,7 @@ export function PersonProvider({ children }) {
     return (
         <PersonInformationContext.Provider
             value={{
+                allCourses,
                 user,
                 loading,
                 setLoading,

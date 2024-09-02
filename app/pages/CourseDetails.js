@@ -122,7 +122,7 @@ export default function CourseDetails({ route, navigation }) {
                     scrollEventThrottle={16}
                 >
                     <View style={styles.imageWrapper}>
-                        <Image source={course.image} style={styles.image}/>
+                        <Image source={course.imageFile} style={styles.image}/>
                     </View>
                     <View style={styles.content}>
                         <View style={styles.titleWrapper} >
