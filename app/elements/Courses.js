@@ -2,19 +2,36 @@ import {View, Text, StyleSheet, ScrollView, Platform} from 'react-native';
 import Course from "./Course";
 import {usePerson} from "../PersonInformationContext";
 import CoursesRecommended from "./CoursesRecommended";
+import allCoursesDetails from "../AllCoursesDetails";
 
-export default function Courses({title, allCourses, navigation, skillFiltering, isRecommendation, recommendedCourses}) {
-    const { lightTheme, textLightBackground, textDarkBackground } = usePerson();
+export default function Courses({title, allCourses, navigation, skillFiltering, isRecommendation}) {
+    const { user, lightTheme, textLightBackground, textDarkBackground } = usePerson();
+
+    const boughtCourses = user.coursesBought;
+    const skillsBought = boughtCourses.slice().reverse().reduce((resultSkills, course) => {
+        return resultSkills.concat(course.skills);
+    }, []);
+    const recommendedCourses = allCoursesDetails.
+    filter(course =>
+                skillsBought.some(skill => course.skills.includes(skill)) &&
+                !boughtCourses.some(boughtCourse => boughtCourse.title === course.title)
+            // && !user.coursesFavorite.some(favoriteCourse => favoriteCourse.title === course.title);
+        )
+        .sort((a, b) => {
+            // Prioritize courses that match the most recent skills
+            const aRelevance = skillsBought.filter(skill => a.skills.includes(skill)).length;
+            const bRelevance = skillsBought.filter(skill => b.skills.includes(skill)).length;
+            return bRelevance - aRelevance; // Sort descending by relevance
+        });
 
     return (
         <View style={styles.container}>
             {isRecommendation && recommendedCourses.length > 0 && (
                 <View style={styles.recommended}>
                     <CoursesRecommended
-                        title="Check These Out"
-                        allCourses={recommendedCourses}
+                        title="Top Picks For You"
                         navigation={navigation}
-                        isRecommendation={isRecommendation}
+                        courses={recommendedCourses}
                     />
                 </View>
             )}

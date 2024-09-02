@@ -143,38 +143,20 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
             <View style={styles.logo}>
                 <ShifterLogo width='250' height='125' color={!lightTheme ? lightBackground : darkBackground}/>
             </View>
-            <View style={{flex: 1, justifyContent: 'center', width: '100%', alignItems: 'center', gap: 10}} >
+            <View style={styles.verificationWrapper} >
                 <TouchableOpacity style={[
-                    {
-                        backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)',
-                        paddingVertical: 15,
-                        width: '70%',
-                        borderRadius: 5,
-                    }
+                    styles.checkEmailVerification,
+                    {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
                 ]} onPress={handleCheckEmailVerification}>
-                    <Text style={{
-                        fontFamily: 'GothicA1-600',
-                        fontSize: 18,
-                        color: 'white',
-                        alignSelf: 'center',
-                    }} >
+                    <Text style={styles.checkEmailVerificationText} >
                         Check Email Verification
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[
-                    {
-                        backgroundColor: lightTheme ? '#aaa' : '#666',
-                        paddingVertical: 10,
-                        width: '70%',
-                        borderRadius: 5,
-                    }
+                    styles.resendEmailVerification,
+                    {backgroundColor: lightTheme ? '#aaa' : '#666'}
                 ]} onPress={handleResendVerificationEmail}>
-                    <Text style={{
-                        fontFamily: 'GothicA1-500',
-                        fontSize: 16,
-                        color: 'white',
-                        alignSelf: 'center',
-                    }} >
+                    <Text style={styles.resendEmailVerificationText} >
                         Resend Email
                     </Text>
                 </TouchableOpacity>
@@ -212,6 +194,7 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
                         ]}>Name</Text>
                         <TextInput
                             placeholder="Enter your name"
+                            placeholderTextColor={lightTheme ? '#aaa' : '#555'}
                             value={name}
                             onChangeText={setName}
                             style={[
@@ -232,6 +215,7 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
                         ]}>Job Title</Text>
                         <TextInput
                             placeholder="Enter your job title"
+                            placeholderTextColor={lightTheme ? '#aaa' : '#555'}
                             value={jobTitle}
                             onChangeText={setJobTitle}
                             style={[
@@ -252,6 +236,7 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
                         ]}>Company</Text>
                         <TextInput
                             placeholder="Enter your company"
+                            placeholderTextColor={lightTheme ? '#aaa' : '#555'}
                             value={company}
                             onChangeText={setCompany}
                             style={[
@@ -288,6 +273,53 @@ const styles = StyleSheet.create({
     },
     logo: {
         alignItems: 'center',
+
+        ...Platform.select({
+            android: {
+                marginTop: '10%',
+            }
+        })
+    },
+    verificationWrapper: {
+        flex: 1,
+        justifyContent: 'center',
+        width: '100%',
+        alignItems: 'center',
+        gap: 10
+    },
+    checkEmailVerification: {
+        paddingVertical: 15,
+        width: '70%',
+        borderRadius: 5,
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 10,
+            }
+        })
+    },
+    resendEmailVerification: {
+        paddingVertical: 10,
+        width: '70%',
+        borderRadius: 5,
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 8
+            }
+        })
+    },
+    resendEmailVerificationText: {
+        fontFamily: 'GothicA1-600',
+        fontSize: 16,
+        color: 'white',
+        alignSelf: 'center',
+    },
+    checkEmailVerificationText: {
+        fontFamily: 'GothicA1-600',
+        fontSize: 18,
+        color: 'white',
+        alignSelf: 'center',
     },
     container: {
         paddingTop: '5%',
@@ -296,17 +328,6 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         paddingHorizontal: 20,
-    },
-    verifyEmail: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    verifyEmailText: {
-        alignSelf: 'center',
-        marginBottom: 20,
-        fontFamily: 'GothicA1-500',
-        fontSize: 22,
-        color: 'red',
     },
     scrollViewContent: {
         flexGrow: 1,
@@ -317,10 +338,23 @@ const styles = StyleSheet.create({
         paddingBottom: 1,
         alignSelf: 'center',
         marginBottom: 20,
+
+        ...Platform.select({
+            android: {
+                marginBottom: 16,
+            }
+        })
     },
     inputWrapper: {
         gap: 10,
         marginBottom: 30,
+
+        ...Platform.select({
+            android: {
+                gap: 8,
+                marginBottom: 20,
+            }
+        })
     },
     input: {
         borderColor: '#00b5f0',
@@ -330,6 +364,12 @@ const styles = StyleSheet.create({
         paddingVertical: 13,
         fontFamily: 'GothicA1-400',
         fontSize: 16,
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 8,
+            }
+        })
     },
     inputFocus: {
         borderWidth: 3,
@@ -349,6 +389,12 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         width: '70%',
         alignSelf: 'center',
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 4,
+            }
+        })
     },
     buttonText: {
         fontFamily: 'GothicA1-700',

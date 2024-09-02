@@ -6,10 +6,11 @@ import {createStackNavigator} from "@react-navigation/stack";
 import CourseDetails from "../pages/CourseDetails";
 import {usePerson} from "../PersonInformationContext";
 import {auth} from "../../firebaseConfig";
+import allCoursesDetails from "../AllCoursesDetails";
 
 const Stack = createStackNavigator();
 
-export default function CoursesRecommended({title, allCourses, navigation, skillFiltering, isRecommendation}) {
+export default function CoursesRecommended({title, navigation, courses}) {
     const { lightTheme, textLightBackground, textDarkBackground } = usePerson();
 
     return (
@@ -23,17 +24,12 @@ export default function CoursesRecommended({title, allCourses, navigation, skill
                 showsHorizontalScrollIndicator={false}
                 style={styles.scrollView}>
 
-                {allCourses.length===0 && <Text style={[
-                    styles.errorText,
-                    {color: lightTheme ? textLightBackground : textDarkBackground},
-                ]}>No courses to show {skillFiltering && `with this skill: ${skillFiltering}`}</Text>}
-
-                {allCourses.map((course, index) => {
+                {courses.map((course, index) => {
                     return <Course
                         key={index}
                         navigation={navigation}
                         course={course}
-                        isRecommendation={isRecommendation}
+                        isRecommendation={true}
                     />
                 })}
             </ScrollView>
@@ -55,8 +51,8 @@ const styles=StyleSheet.create({
 
     },
     heading: {
-        fontFamily: 'GothicA1-600',
-        fontSize: 22,
+        fontFamily: 'GothicA1-700',
+        fontSize: 24,
 
         ...Platform.select({
             android: {

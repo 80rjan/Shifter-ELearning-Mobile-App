@@ -15,10 +15,11 @@ export default function Header({ headerName }) {
         <View style={[
             styles.headerWrapper,
             {backgroundColor: lightTheme ?  lightBackground : darkBackground},
+            Platform.OS === 'android' && {borderBottomColor: lightTheme ? '#ddd' : '#333', borderBottomWidth: 1},
         ]}>
             {Platform.OS === 'ios' ?
                 <ShifterLogo width='150' height='50' color={!lightTheme ?  lightBackground : darkBackground} /> :
-                <ShifterLogo width='130' height='40' color={!lightTheme ?  lightBackground : darkBackground} />}
+                <ShifterLogo width='140' height='45' color={!lightTheme ?  lightBackground : darkBackground} />}
             <TouchableOpacity
                 onPress={toggleTheme}
                 style={{
@@ -31,24 +32,6 @@ export default function Header({ headerName }) {
                     color={lightTheme ? 'black' : 'white'}
                 />
             </TouchableOpacity>
-            {/*<TouchableOpacity onPress={toggleTheme}>*/}
-            {/*    <View style={[*/}
-            {/*        styles.switchTrack,*/}
-            {/*        { backgroundColor: lightTheme ? '#bbb' : 'rgba(0,181,240,0.7)' },*/}
-            {/*        {flexDirection: lightTheme ? 'row' : 'row-reverse'}*/}
-            {/*    ]}>*/}
-            {/*        <View style={[*/}
-            {/*            styles.switchThumb,*/}
-            {/*            { alignItems: lightTheme ? 'flex-start' : 'flex-end' }*/}
-            {/*        ]}>*/}
-            {/*            <Ionicons*/}
-            {/*                name={lightTheme ? 'sunny' : 'moon'}*/}
-            {/*                size={25}*/}
-            {/*                color={lightTheme ? 'black' : 'black'}*/}
-            {/*            />*/}
-            {/*        </View>*/}
-            {/*    </View>*/}
-            {/*</TouchableOpacity>*/}
         </View>
     );
 }
@@ -68,26 +51,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 30,
+
         ...Platform.select({
             android: {
+                elevation: 3,
                 paddingTop: 30,
                 marginBottom: 10,
             }
         })
-    },
-    switchTrack: {
-        width: 60,
-        height: 20,
-        borderRadius: 15,
-        alignItems: 'center',
-        paddingHorizontal: 5,
-        position: 'relative',
-    },
-    switchThumb: {
-        borderRadius: 100,
-        padding: 2,
-        backgroundColor: '#fff',
-        position: 'absolute',
-        // top: 2.5,
     },
 });

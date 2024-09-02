@@ -53,8 +53,12 @@ function TabNavigator() {
                     shadowColor: 'black',
                     shadowRadius: 1,
                     shadowOpacity: 0.3,
+
                     ...Platform.select({
                         android: {
+                            borderTopColor: lightTheme ? '#ddd' : '#333',
+                            borderTopWidth: 1,
+                            elevation: 3,
                             height: 60,
                             paddingBottom: 5,
                         },

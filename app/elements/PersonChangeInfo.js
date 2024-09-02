@@ -201,6 +201,12 @@ const styles = StyleSheet.create({
         width: '100%',
         gap: 10,
         marginBottom: 15,
+
+        ...Platform.select({
+            android: {
+                gap: 4,
+            }
+        })
     },
     input: {
         borderWidth: 2,
@@ -209,6 +215,12 @@ const styles = StyleSheet.create({
         paddingVertical: 13,
         fontFamily: 'GothicA1-400',
         fontSize: 16,
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 8,
+            }
+        })
     },
     inputText: {
         fontFamily: 'GothicA1-400',
@@ -227,10 +239,16 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignItems: 'center',
         paddingVertical: 10,
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 8,
+            }
+        })
     },
     buttonText: {
         fontFamily: 'GothicA1-800',
         fontSize: 16,
-        paddingBottom: 1,
+        // paddingBottom: 1,
     },
 })

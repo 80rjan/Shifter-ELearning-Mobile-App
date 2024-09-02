@@ -59,6 +59,7 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
         }
     };
 
+
     const handleLogin = async () => {
         setLoading(true);
         try {
@@ -124,163 +125,165 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
 
 
     return (
-        loading ?
-                <LoadingScreen isLightTheme={lightTheme}/> :
-                <SafeAreaView style={[
-                    styles.safeView,
-                    {backgroundColor: lightTheme ? lightBackground : darkBackground}
-                ]}>
-                    <KeyboardAvoidingView
-                        style={styles.container}
-                        // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                    >
-                        <View style={styles.logo}>
-                            <ShifterLogo width='250' height='125' color={!lightTheme ?  lightBackground : darkBackground} />
-                        </View>
-                        <KeyboardAwareScrollView
-                            style={styles.content}
-                            keyboardShouldPersistTaps="handled"
-                            contentContainerStyle={styles.scrollViewContent}
-                        >
-                            <Text style={[
-                                styles.title,
-                                {color: lightTheme ? textLightBackground : textDarkBackground}
-                            ]}>{signup ? 'Sign Up' : 'Log In'}</Text>
-                            <View style={styles.inputWrapper}>
-                                <Text style={[
-                                    styles.inputText,
-                                    {color: lightTheme ? textLightBackground : textDarkBackground}
-                                ]}>Email</Text>
+        <SafeAreaView style={[
+            styles.safeView,
+            {backgroundColor: lightTheme ? lightBackground : darkBackground}
+        ]}>
+            <KeyboardAvoidingView
+                style={styles.container}
+                // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+                <View style={styles.logo}>
+                    <ShifterLogo width='250' height='125' color={!lightTheme ?  lightBackground : darkBackground} />
+                </View>
+                <KeyboardAwareScrollView
+                    style={styles.content}
+                    keyboardShouldPersistTaps="handled"
+                    contentContainerStyle={styles.scrollViewContent}
+                >
+                    <Text style={[
+                        styles.title,
+                        {color: lightTheme ? textLightBackground : textDarkBackground}
+                    ]}>{signup ? 'Sign Up' : 'Log In'}</Text>
+                    <View style={styles.inputWrapper}>
+                        <Text style={[
+                            styles.inputText,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                        ]}>Email</Text>
+                        <TextInput
+                            placeholder="Enter your email"
+                            placeholderTextColor={lightTheme ? '#aaa' : '#555'}
+                            value={email}
+                            onChangeText={setEmail}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            style={[
+                                styles.input,
+                                {color: lightTheme ? textLightBackground : textDarkBackground},
+                                {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                                emailFocus && styles.inputFocus
+                            ]}
+                            onFocus={() => setEmailFocus(true) }
+                            onBlur={() => setEmailFocus(false)}
+                        />
+                    </View>
+                    <View style={styles.inputWrapper}>
+                        <Text style={[
+                            styles.inputText,
+                            {color: lightTheme ? textLightBackground : textDarkBackground}
+                        ]}>Password</Text>
+                        {signup ?
+                            <TextInput
+                                placeholder="Enter your password"
+                                placeholderTextColor={lightTheme ? '#aaa' : '#555'}
+                                value={password}
+                                onChangeText={setPassword}
+                                secureTextEntry
+                                autoCapitalize="none"
+                                style={[
+                                    styles.input,
+                                    {color: lightTheme ? textLightBackground : textDarkBackground},
+                                    {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                                    passwordFocus && styles.inputFocus
+                                ]}
+                                onFocus={() => setPasswordFocus(true) }
+                                onBlur={() => setPasswordFocus(false)}
+                            /> :
+                            <View style={styles.resetPassButtonWrapper} >
                                 <TextInput
-                                    placeholder="Enter your email"
-                                    value={email}
-                                    onChangeText={setEmail}
-                                    keyboardType="email-address"
+                                    placeholder="Enter your password"
+                                    placeholderTextColor={lightTheme ? '#aaa' : '#555'}
+                                    value={password}
+                                    onChangeText={setPassword}
+                                    secureTextEntry
                                     autoCapitalize="none"
                                     style={[
                                         styles.input,
                                         {color: lightTheme ? textLightBackground : textDarkBackground},
                                         {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                                        emailFocus && styles.inputFocus
+                                        passwordFocus && styles.inputFocus
                                     ]}
-                                    onFocus={() => setEmailFocus(true) }
-                                    onBlur={() => setEmailFocus(false)}
+                                    onFocus={() => setPasswordFocus(true) }
+                                    onBlur={() => setPasswordFocus(false)}
                                 />
-                            </View>
-                            <View style={styles.inputWrapper}>
-                                <Text style={[
-                                    styles.inputText,
-                                    {color: lightTheme ? textLightBackground : textDarkBackground}
-                                ]}>Password</Text>
-                                {signup ?
-                                    <TextInput
-                                        placeholder="Enter your password"
-                                        value={password}
-                                        onChangeText={setPassword}
-                                        secureTextEntry
-                                        autoCapitalize="none"
-                                        style={[
-                                            styles.input,
-                                            {color: lightTheme ? textLightBackground : textDarkBackground},
-                                            {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                                            passwordFocus && styles.inputFocus
-                                        ]}
-                                        onFocus={() => setPasswordFocus(true) }
-                                        onBlur={() => setPasswordFocus(false)}
-                                    /> :
-                                    <View style={styles.resetPassButtonWrapper} >
-                                        <TextInput
-                                            placeholder="Enter your password"
-                                            value={password}
-                                            onChangeText={setPassword}
-                                            secureTextEntry
-                                            autoCapitalize="none"
-                                            style={[
-                                                styles.input,
-                                                {color: lightTheme ? textLightBackground : textDarkBackground},
-                                                {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                                                passwordFocus && styles.inputFocus
-                                            ]}
-                                            onFocus={() => setPasswordFocus(true) }
-                                            onBlur={() => setPasswordFocus(false)}
-                                        />
-                                        <TouchableOpacity style={styles.resetPassButton} onPress={handleResetPassword}>
-                                            <Text style={[
-                                                styles.resetPassButtonText,
-                                                {color: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                                            ]}>Forgot password?</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                }
-                            </View>
-                            {signup &&
-                                <View style={styles.inputWrapper}>
+                                <TouchableOpacity style={styles.resetPassButton} onPress={handleResetPassword}>
                                     <Text style={[
-                                        styles.inputText,
-                                        {color: lightTheme ? textLightBackground : textDarkBackground}
-                                    ]}>Confirm Password</Text>
-                                    <TextInput
-                                        placeholder="Confirm password"
-                                        value={passwordConfirm}
-                                        onChangeText={setPasswordConfirm}
-                                        secureTextEntry
-                                        autoCapitalize="none"
-                                        style={[
-                                            styles.input,
-                                            {color: lightTheme ? textLightBackground : textDarkBackground},
-                                            {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                                            confirmPasswordFocus && passwordConfirm!==password && {borderColor: '#aa0000'},
-                                            confirmPasswordFocus && styles.inputFocus
-                                        ]}
-                                        onFocus={() => setConfirmPasswordFocus(true) }
-                                        onBlur={() => setConfirmPasswordFocus(false)}
-                                    />
-                                </View>
-                            }
-                            <View style={styles.buttonWrapper}>
-                                {error ? <Text style={styles.error}>{error}</Text> : null}
-                                <TouchableOpacity style={[
-                                    styles.button,
-                                    {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
-                                ]} onPress={signup ? handleSignup : handleLogin} disabled={loading}>
-                                    <Text style={styles.buttonText}>
-                                        {loading ?
-                                            (signup ? 'Signing Up...' : 'Logging in') :
-                                            (signup ? 'Sign Up' : 'Log In')}
-                                    </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={styles.navButton}
-                                    onPress={() => {
-                                        setSignup(!signup);
-                                        setEmail('');
-                                        setPassword('');
-                                        setPasswordConfirm('');
-                                        setError('');
-                                    }}
-                                >
-                                    <Text style={[
-                                        styles.navButtonText,
+                                        styles.resetPassButtonText,
                                         {color: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                                    ]}>
-                                        {signup ?
-                                            'Already have an account? Log in' :
-                                            'Don\'t have an account? Sign Up'}
-                                    </Text>
+                                    ]}>Forgot password?</Text>
                                 </TouchableOpacity>
                             </View>
-                        </KeyboardAwareScrollView>
+                        }
+                    </View>
+                    {signup &&
+                        <View style={styles.inputWrapper}>
+                            <Text style={[
+                                styles.inputText,
+                                {color: lightTheme ? textLightBackground : textDarkBackground}
+                            ]}>Confirm Password</Text>
+                            <TextInput
+                                placeholder="Confirm password"
+                                placeholderTextColor={lightTheme ? '#aaa' : '#555'}
+                                value={passwordConfirm}
+                                onChangeText={setPasswordConfirm}
+                                secureTextEntry
+                                autoCapitalize="none"
+                                style={[
+                                    styles.input,
+                                    {color: lightTheme ? textLightBackground : textDarkBackground},
+                                    {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                                    confirmPasswordFocus && passwordConfirm!==password && {borderColor: '#aa0000'},
+                                    confirmPasswordFocus && styles.inputFocus
+                                ]}
+                                onFocus={() => setConfirmPasswordFocus(true) }
+                                onBlur={() => setConfirmPasswordFocus(false)}
+                            />
+                        </View>
+                    }
+                    <View style={styles.buttonWrapper}>
+                        {error ? <Text style={styles.error}>{error}</Text> : null}
+                        <TouchableOpacity style={[
+                            styles.button,
+                            {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
+                        ]} onPress={signup ? handleSignup : handleLogin} disabled={loading}>
+                            <Text style={styles.buttonText}>
+                                {loading ?
+                                    (signup ? 'Signing Up...' : 'Logging in') :
+                                    (signup ? 'Sign Up' : 'Log In')}
+                            </Text>
+                        </TouchableOpacity>
                         <TouchableOpacity
-                            style={styles.enterGuest}
-                            onPress={handleGuestEntry}
+                            style={styles.navButton}
+                            onPress={() => {
+                                setSignup(!signup);
+                                setEmail('');
+                                setPassword('');
+                                setPasswordConfirm('');
+                                setError('');
+                            }}
                         >
                             <Text style={[
-                                styles.enterGuestText,
-                                {color: lightTheme ? '#555' : '#aaa'},
-                            ]}>Skip? Enter as guest</Text>
+                                styles.navButtonText,
+                                {color: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                            ]}>
+                                {signup ?
+                                    'Already have an account? Log in' :
+                                    'Don\'t have an account? Sign Up'}
+                            </Text>
                         </TouchableOpacity>
-                    </KeyboardAvoidingView>
-                </SafeAreaView>
+                    </View>
+                </KeyboardAwareScrollView>
+            </KeyboardAvoidingView>
+            <TouchableOpacity
+                style={styles.enterGuest}
+                onPress={handleGuestEntry}
+            >
+                <Text style={[
+                    styles.enterGuestText,
+                    {color: lightTheme ? '#555' : '#aaa'},
+                ]}>Skip? Enter as guest</Text>
+            </TouchableOpacity>
+        </SafeAreaView>
     );
 }
 
@@ -289,12 +292,12 @@ const styles = StyleSheet.create({
     safeView: {
         flex: 1,
     },
+    container: {
+        paddingTop: '10%',
+        flex: 1,
+    },
     logo: {
         alignItems: 'center',
-    },
-    container: {
-        paddingTop: '5%',
-        flex: 1,
     },
     content: {
         paddingTop: '20%',
@@ -313,8 +316,15 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     inputWrapper: {
-        gap: 15,
+        gap: 16,
         marginBottom: 30,
+
+        ...Platform.select({
+            android: {
+                gap: 8,
+                marginBottom: 20,
+            }
+        })
     },
     input: {
         borderWidth: 1,
@@ -323,6 +333,12 @@ const styles = StyleSheet.create({
         paddingVertical: 13,
         fontFamily: 'GothicA1-400',
         fontSize: 16,
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 8,
+            }
+        })
     },
     inputFocus: {
         borderWidth: 3,
@@ -333,6 +349,11 @@ const styles = StyleSheet.create({
     },
     resetPassButtonWrapper: {
         gap: 10,
+        ...Platform.select({
+            android: {
+                gap: 4,
+            }
+        })
     },
     resetPassButton: {
 
@@ -344,6 +365,12 @@ const styles = StyleSheet.create({
     buttonWrapper: {
         gap: 10,
         flex: 1,
+
+        ...Platform.select({
+            android: {
+                gap: 4,
+            }
+        })
     },
     button: {
         borderRadius: 5,
@@ -351,11 +378,23 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         width: '70%',
         alignSelf: 'center',
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 4,
+            }
+        })
     },
     buttonText: {
         fontFamily: 'GothicA1-700',
         color: '#fff',
         fontSize: 20,
+
+        ...Platform.select({
+            android: {
+                fontSize: 18,
+            }
+        })
     },
     navButton: {
         alignItems: 'center',
@@ -365,9 +404,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     enterGuest: {
-        marginTop: 15,
+        marginBottom: 30,
         alignItems: 'center',
-        borderRadius: 5,
         alignSelf: 'center',
         position: 'absolute',
         bottom: 10,

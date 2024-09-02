@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Alert} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Alert, Platform} from 'react-native';
 import { usePerson } from '../PersonInformationContext'; // Import the context hook
 import Header from "../elements/Header";
 import Topics from "../elements/Topics";
@@ -67,24 +67,11 @@ export default function Learn({ navigation }) {
                 { backgroundColor: lightTheme ? lightBackground : darkBackground },
             ]} >
                 <Header headerName='Learn' />
-                <TouchableOpacity style={{
-                    backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)',
-                    alignSelf: 'center',
-                    borderRadius: 5,
-                    paddingVertical: 15,
-                    paddingHorizontal: 20,
-                    shadowOffset: {width: 0, height: 4},
-                    shadowOpacity: 0.4,
-                    shadowColor: 'black',
-                    shadowRadius: 2,
-                }} onPress={showAlert}>
-                    <Text style={{
-                        fontFamily: 'GothicA1-600',
-                        fontSize: 22,
-                        color: '#fff',
-                        alignSelf: 'center',
-                        textAlign: 'center',
-                    }} >Sign Up or Log In to purchase courses</Text>
+                <TouchableOpacity style={[
+                    styles.guestButtonRegister,
+                    {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
+                ]} onPress={showAlert}>
+                    <Text style={styles.guestButtonRegisterText} >Sign Up or Log In to purchase courses</Text>
                 </TouchableOpacity>
             </SafeAreaView>
         )
@@ -107,6 +94,36 @@ export default function Learn({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    guestButtonRegister: {
+        alignSelf: 'center',
+        borderRadius: 5,
+        paddingVertical: 16,
+        paddingHorizontal: 8,
+        shadowOffset: {width: 0, height: 4},
+        shadowOpacity: 0.4,
+        shadowColor: 'black',
+        shadowRadius: 2,
+        width: '80%',
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 8,
+            }
+        })
+    },
+    guestButtonRegisterText: {
+        fontFamily: 'GothicA1-600',
+        fontSize: 22,
+        color: '#fff',
+        alignSelf: 'center',
+        textAlign: 'center',
+
+        ...Platform.select({
+            android: {
+                fontSize: 20,
+            }
+        })
     },
     content: {
         flex: 1,

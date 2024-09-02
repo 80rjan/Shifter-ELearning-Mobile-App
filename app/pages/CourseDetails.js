@@ -26,11 +26,11 @@ export default function CourseDetails({ route, navigation }) {
 
     const handlePress = () => {
         addCourse(course);
-        alert('Congratulations! You can now successfully download the course!');
         navigation.reset({
             index: 0,
             routes: [{ name: 'Education' }],
         });
+        Alert.alert('Congratulations!', 'You can now successfully download the course!');
     };
 
     const handleDownload = async () => {
@@ -128,11 +128,14 @@ export default function CourseDetails({ route, navigation }) {
                         <View style={styles.titleWrapper} >
                             <Text style={[
                                 styles.title,
-                                {color: lightTheme ? textLightBackground : textDarkBackground}
+                                {color: lightTheme ? textLightBackground : textDarkBackground},
+                                !isBought && {maxWidth: '90%',}
                             ]}>{course.title}</Text>
-                            <TouchableOpacity onPress={handleFavoritePress} style={{padding: 5, paddingRight: 0}}>
-                                <Ionicons name={heartIcon} color={lightTheme ? '#00b5f0' : '#00b5f0'} size={Platform.OS === 'android' ? 28 : 32} />
-                            </TouchableOpacity>
+                            {!isBought &&
+                                <TouchableOpacity onPress={handleFavoritePress} style={{padding: 5, paddingRight: 0}}>
+                                    <Ionicons name={heartIcon} color={lightTheme ? '#00b5f0' : '#00b5f0'} size={Platform.OS === 'android' ? 28 : 32} />
+                                </TouchableOpacity>
+                            }
                         </View>
                         <CourseDescription course={course} />
                         <CourseOutcomes course={course} />
@@ -172,13 +175,14 @@ const styles = StyleSheet.create({
         height: 200,
         marginBottom: 15,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 3 },
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.5,
         shadowRadius: 3,
 
         ...Platform.select({
             android: {
-                height: 150,
+                elevation: 4,
+                height: 160,
                 marginBottom: 5,
             }
         })
@@ -190,6 +194,18 @@ const styles = StyleSheet.create({
     content: {
         paddingHorizontal: 20,
     },
+    titleWrapper: {
+        marginBottom: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+
+        ...Platform.select({
+            android: {
+                marginBottom: 8,
+            }
+        })
+    },
     title: {
         fontFamily: 'GothicA1-800',
         fontSize: 24,
@@ -198,15 +214,8 @@ const styles = StyleSheet.create({
         ...Platform.select({
             android: {
                 fontSize: 22,
-                marginBottom: 10,
             }
         })
-    },
-    titleWrapper: {
-        marginBottom: 15,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
     },
     buttonWrapper: {
         position: 'absolute',

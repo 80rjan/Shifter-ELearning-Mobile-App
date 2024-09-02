@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView, Platform} from 'react-native';
 import {useEffect, useState} from "react";
 import Header from "../elements/Header";
 import Topics from "../elements/Topics";
@@ -56,6 +56,12 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        gap: 30,
+        gap: 32,
+
+        ...Platform.select({
+            android: {
+                gap: 16,
+            }
+        })
     },
 });

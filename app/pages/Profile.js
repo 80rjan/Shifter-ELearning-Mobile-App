@@ -106,6 +106,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 10,
         marginTop: 20,
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 4,
+            }
+        })
     },
     logoutText: {
         fontFamily: 'GothicA1-800',

@@ -32,6 +32,7 @@ export default function Course({ navigation, course, isRecommendation }) {
                 styles.courseWrapper,
                 { backgroundColor: lightTheme ? '#f5f5f5' : '#333' },
                 !lightTheme ? { borderWidth: 2, borderColor: '#444' } : null,
+                isBought && Platform.OS === 'android' && {paddingVertical: 16}
                 // isRecommendation && {minWidth: 300},
             ]}
             onPress={() => navigation.navigate('CourseDetails', { course })}
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
         gap: 20,
         justifyContent: 'space-between',
         borderRadius: 8,
-        paddingVertical: 15,
+        paddingVertical: 16,
         paddingHorizontal: 20,
         marginHorizontal: 5,
         marginBottom: 15,
@@ -86,8 +87,9 @@ const styles = StyleSheet.create({
         ...Platform.select({
             android: {
                 gap: 10,
-                paddingVertical: 10,
-                elevation: 2,
+                paddingVertical: 8,
+                paddingHorizontal: 16,
+                elevation: 3,
             }
         })
     },
@@ -99,7 +101,7 @@ const styles = StyleSheet.create({
 
         ...Platform.select({
             android: {
-                gap: 5,
+                gap: 3,
             }
         })
     },

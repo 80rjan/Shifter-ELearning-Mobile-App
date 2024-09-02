@@ -65,7 +65,7 @@ const styles=StyleSheet.create({
 
         ...Platform.select({
             android: {
-                fontSize: 14,
+                fontSize: 16,
                 paddingVertical: 5,
             }
         })
