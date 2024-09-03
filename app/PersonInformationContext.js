@@ -52,7 +52,6 @@ export function PersonProvider({ children }) {
                 ...doc.data()  // Spread the document data
             }));
             setAllCourses(coursesList);
-            console.log('All courses: ', allCourses);
         }, (error) => {
             console.error('Error fetching courses:', error);
         });

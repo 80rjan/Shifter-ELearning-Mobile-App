@@ -7,11 +7,13 @@ import Courses from "../elements/Courses";
 import LoadingScreen from "./LoadingScreen";
 import {auth} from "../../firebaseConfig";
 import {deleteUser} from "firebase/auth";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function Learn({ navigation }) {
     const { user, setHasAccount, loading, setLoading, error, lightTheme, lightBackground, darkBackground } = usePerson(); // Use the context hook to get person data
     const [filteredCourses, setFilteredCourses] = useState(user.coursesBought);
     const [selectedSkill, setSelectedSkill] = useState(null);
+    const insets = useSafeAreaInsets();
     const isAnonymous = auth.currentUser?.isAnonymous;
 
     useEffect(() => {
@@ -62,9 +64,12 @@ export default function Learn({ navigation }) {
 
     if (isAnonymous) {
         return (
-            <SafeAreaView style={[
+            <View style={[
                 styles.container,
                 { backgroundColor: lightTheme ? lightBackground : darkBackground },
+                {
+                    paddingTop: insets.top,
+                }
             ]} >
                 <Header headerName='Learn' />
                 <TouchableOpacity style={[
@@ -73,21 +78,24 @@ export default function Learn({ navigation }) {
                 ]} onPress={showAlert}>
                     <Text style={styles.guestButtonRegisterText} >Sign Up or Log In to purchase courses</Text>
                 </TouchableOpacity>
-            </SafeAreaView>
+            </View>
         )
     }
 
     return (
-        <SafeAreaView style={[
+        <View style={[
             styles.container,
             { backgroundColor: lightTheme ? lightBackground : darkBackground },
+            {
+                paddingTop: insets.top,
+            }
         ]} >
             <Header headerName='Learn' />
             <View style={styles.content}>
                 {/*<Topics courses={user.coursesBought} handleFilter={handleFilter} selectedSkill={selectedSkill} />*/}
                 <Courses title={'Learning Dashboard'} courses={filteredCourses} navigation={navigation} skillFiltering={selectedSkill} />
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 

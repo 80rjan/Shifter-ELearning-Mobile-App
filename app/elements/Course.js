@@ -130,6 +130,13 @@ const styles = StyleSheet.create({
     topicDuration: {
         fontFamily: 'Roboto-300',
         fontSize: 14,
+
+
+        ...Platform.select({
+            android: {
+                fontSize: 12,
+            }
+        })
     },
     price: {
         fontFamily: 'Roboto-400',

@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     secondRow: {
-        paddingLeft: 50,
+        paddingLeft: 100,
     },
     skillWrapper: {
         paddingVertical: 8,

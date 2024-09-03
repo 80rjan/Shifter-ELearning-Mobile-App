@@ -3,29 +3,20 @@ import Courses from "../elements/Courses";
 import CoursesRecommended from "../elements/CoursesRecommended";
 import { usePerson } from "../PersonInformationContext";
 import Header from "../elements/Header";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function Wishlist({ navigation }) {
     const { user, lightTheme, lightBackground, darkBackground } = usePerson();
-    const favoriteCourses = user.coursesFavorite || []; // Ensure it's an array
-    // const filteredFavoriteCourses = favoriteCourses.filter(favoriteCourse =>
-    //     !user.coursesBought.some(boughtCourse => boughtCourse.title === favoriteCourse.title)
-    // );
-    //
-    // const skillsFavorites = favoriteCourses.reduce((resultSkills, course) => {
-    //     return resultSkills.concat(course.skills);
-    // }, []);
-    //
-    // // Courses with the same skill as the ones in favorites and that are not favorite
-    // const recommendedCourses = allCoursesDetails.filter((course) => {
-    //     return skillsFavorites.some(skill => course.skills.includes(skill)) &&
-    //         !favoriteCourses.some(favoriteCourse => favoriteCourse.title === course.title) &&
-    //         !user.coursesBought.some(boughtCourse => boughtCourse.title === course.title);
-    // });
+    const insets = useSafeAreaInsets();
+    const favoriteCourses = user.coursesFavorite || [];
 
     return (
-        <SafeAreaView style={[
+        <View style={[
             styles.container,
             { backgroundColor: lightTheme ? lightBackground : darkBackground },
+            {
+                paddingTop: insets.top,
+            }
         ]}>
             <Header headerName="Wishlist" />
             <View style={styles.content}>
@@ -36,7 +27,7 @@ export default function Wishlist({ navigation }) {
                     isRecommendation={true}
                 />
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 

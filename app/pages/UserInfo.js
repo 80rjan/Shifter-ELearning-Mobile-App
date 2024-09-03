@@ -144,6 +144,10 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
                 <ShifterLogo width='250' height='125' color={!lightTheme ? lightBackground : darkBackground}/>
             </View>
             <View style={styles.verificationWrapper} >
+                <Text style={[
+                    styles.verifyEmailTitle,
+                    {color: lightTheme ? textLightBackground : textDarkBackground},
+                ]} >Verification email sent. Please check your inbox!</Text>
                 <TouchableOpacity style={[
                     styles.checkEmailVerification,
                     {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
@@ -285,7 +289,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
         alignItems: 'center',
-        gap: 10
+        gap: 10,
+        paddingHorizontal: 20,
     },
     checkEmailVerification: {
         paddingVertical: 15,
@@ -297,6 +302,12 @@ const styles = StyleSheet.create({
                 paddingVertical: 10,
             }
         })
+    },
+    verifyEmailTitle: {
+        fontFamily: 'GothicA1-600',
+        fontSize: 20,
+        textAlign: 'center',
+        marginBottom: 10,
     },
     resendEmailVerification: {
         paddingVertical: 10,
@@ -333,7 +344,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
     },
     title: {
-        fontFamily: 'GothicA1-400',
+        fontFamily: 'GothicA1-600',
         fontSize: 24,
         paddingBottom: 1,
         alignSelf: 'center',

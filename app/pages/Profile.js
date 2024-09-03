@@ -10,11 +10,13 @@ import { auth } from '../../firebaseConfig';
 import PersonChangeInfo from "../elements/PersonChangeInfo";
 import LoadingScreen from "./LoadingScreen";
 import {useIsFocused} from "@react-navigation/native";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function Profile({ onLogout }) {
     const { user, loading, setLoading, lightTheme, lightBackground, darkBackground } = usePerson();
     const isAnonymous = auth.currentUser?.isAnonymous;
     const [isChangingInfo, setIsChangingInfo] = useState(false);
+    const insets = useSafeAreaInsets();
     const isActiveTab = useIsFocused();
 
     useEffect(() => {
@@ -48,12 +50,13 @@ export default function Profile({ onLogout }) {
         }
     };
 
-    // if (loading) return <LoadingScreen isLightTheme={lightTheme} />
-
     return (
-        <SafeAreaView style={[
+        <View style={[
             styles.container,
-            {backgroundColor: lightTheme ? lightBackground : darkBackground}
+            {backgroundColor: lightTheme ? lightBackground : darkBackground},
+            {
+                paddingTop: insets.top,
+            }
         ]}>
             <Header headerName='Profile' />
             {isChangingInfo ?
@@ -78,7 +81,7 @@ export default function Profile({ onLogout }) {
                     </TouchableOpacity>
                 </>
             }
-        </SafeAreaView>
+        </View>
     );
 }
 

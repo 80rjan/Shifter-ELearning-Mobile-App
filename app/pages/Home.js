@@ -5,19 +5,16 @@ import Topics from "../elements/Topics";
 import Courses from "../elements/Courses";
 import {usePerson} from "../PersonInformationContext";
 import allCoursesDetails from "../AllCoursesDetails";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 
 export default function Home({navigation}) {
     const { allCourses, user, lightTheme, lightBackground, darkBackground } = usePerson();
+    const insets = useSafeAreaInsets();
 
     const courses = allCourses.filter(course =>
         !user.coursesBought.some(boughtCourse => boughtCourse.title === course.title)
     );
-
-    // useEffect(() => {
-    //     console.log('User data in Home component:', user);
-    // }, [user]);
-
 
     const [filteredCourses, setFilteredCourses] = useState(courses);
     const [selectedSkill, setSelectedSkill] = useState(null);
@@ -36,16 +33,21 @@ export default function Home({navigation}) {
     };
 
     return (
-        <SafeAreaView style={[
+        <View style={[
             styles.container,
             { backgroundColor: lightTheme ? lightBackground : darkBackground },
+            {
+                paddingTop: insets.top,
+            }
         ]}>
             <Header headerName='Courses' />
             <View style={styles.content}>
-                <Topics courses={courses} handleFilter={handleFilter} selectedSkill={selectedSkill} />
+                {courses.length>0 &&
+                    <Topics courses={courses} handleFilter={handleFilter} selectedSkill={selectedSkill} />
+                }
                 <Courses title={'Discover'} courses={filteredCourses} navigation={navigation} skillFiltering={selectedSkill}/>
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 

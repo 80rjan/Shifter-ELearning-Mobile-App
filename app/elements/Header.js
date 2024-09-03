@@ -39,13 +39,13 @@ export default function Header({ headerName }) {
 const styles = StyleSheet.create({
     headerWrapper: {
 
+        paddingTop: 5,
         paddingBottom: 5,
         shadowOffset: { width: 0, height: 3 },
         shadowColor: 'black',
         shadowRadius: 1,
         shadowOpacity: 0.2,
 
-        paddingTop: 10,
         paddingHorizontal: 20,
         flexDirection: 'row',
         alignItems: 'center',
@@ -54,8 +54,7 @@ const styles = StyleSheet.create({
 
         ...Platform.select({
             android: {
-                elevation: 3,
-                paddingTop: 30,
+                elevation: 0,
                 marginBottom: 10,
             }
         })

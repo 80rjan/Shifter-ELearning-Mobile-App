@@ -5,7 +5,7 @@
     "owner": "80rjan",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/HomeIcon.png",
+    "icon": "./assets/Shifter Mini.svg",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/Shifter.png",

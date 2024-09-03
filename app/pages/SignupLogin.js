@@ -20,6 +20,8 @@ import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {usePerson} from "../PersonInformationContext";
 import {doc, getDoc, setDoc} from "firebase/firestore";
 import LoadingScreen from "./LoadingScreen";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
     const [signup, setSignup] = useState(false);
@@ -28,6 +30,8 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [passVisible, setPassVisible] = useState(false);
+    const insets = useSafeAreaInsets();
 
     const [emailFocus, setEmailFocus] = useState(false);
     const [passwordFocus, setPasswordFocus] = useState(false);
@@ -45,7 +49,6 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
                 // changeUserDetails({ email: user.email });
 
                 await sendEmailVerification(user);
-                alert('Verification email sent. Please check your inbox!');
 
                 navigation.navigate('UserInfo');
             } catch (err) {
@@ -125,9 +128,12 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
 
 
     return (
-        <SafeAreaView style={[
+        <View style={[
             styles.safeView,
-            {backgroundColor: lightTheme ? lightBackground : darkBackground}
+            {backgroundColor: lightTheme ? lightBackground : darkBackground},
+            {
+                paddingTop: insets.top,
+            }
         ]}>
             <KeyboardAvoidingView
                 style={styles.container}
@@ -159,6 +165,7 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
                             autoCapitalize="none"
                             style={[
                                 styles.input,
+                                styles.textInput,
                                 {color: lightTheme ? textLightBackground : textDarkBackground},
                                 {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
                                 emailFocus && styles.inputFocus
@@ -173,39 +180,69 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
                             {color: lightTheme ? textLightBackground : textDarkBackground}
                         ]}>Password</Text>
                         {signup ?
-                            <TextInput
-                                placeholder="Enter your password"
-                                placeholderTextColor={lightTheme ? '#aaa' : '#555'}
-                                value={password}
-                                onChangeText={setPassword}
-                                secureTextEntry
-                                autoCapitalize="none"
+                            <View
                                 style={[
                                     styles.input,
-                                    {color: lightTheme ? textLightBackground : textDarkBackground},
                                     {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
                                     passwordFocus && styles.inputFocus
                                 ]}
-                                onFocus={() => setPasswordFocus(true) }
-                                onBlur={() => setPasswordFocus(false)}
-                            /> :
-                            <View style={styles.resetPassButtonWrapper} >
+                            >
                                 <TextInput
                                     placeholder="Enter your password"
                                     placeholderTextColor={lightTheme ? '#aaa' : '#555'}
                                     value={password}
                                     onChangeText={setPassword}
-                                    secureTextEntry
+                                    secureTextEntry={!passVisible}
                                     autoCapitalize="none"
                                     style={[
-                                        styles.input,
-                                        {color: lightTheme ? textLightBackground : textDarkBackground},
-                                        {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                                        passwordFocus && styles.inputFocus
+                                        styles.textInput,
+                                        {color: lightTheme ? textLightBackground : textDarkBackground}
                                     ]}
                                     onFocus={() => setPasswordFocus(true) }
                                     onBlur={() => setPasswordFocus(false)}
                                 />
+                                <TouchableOpacity
+                                    onPress={() => setPassVisible(!passVisible)}
+                                >
+                                    <Ionicons
+                                        name={passVisible ? 'eye-outline' : 'eye-off-outline'}
+                                        size={24}
+                                        color={lightTheme ? '#aaa' : '#555'}
+                                    />
+                                </TouchableOpacity>
+                            </View> :
+                            <View style={styles.resetPassButtonWrapper} >
+                                <View
+                                    style={[
+                                        styles.input,
+                                        {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
+                                        passwordFocus && styles.inputFocus
+                                    ]}
+                                >
+                                    <TextInput
+                                        placeholder="Enter your password"
+                                        placeholderTextColor={lightTheme ? '#aaa' : '#555'}
+                                        value={password}
+                                        onChangeText={setPassword}
+                                        secureTextEntry={!passVisible}
+                                        autoCapitalize="none"
+                                        style={[
+                                            styles.textInput,
+                                            {color: lightTheme ? textLightBackground : textDarkBackground},
+                                        ]}
+                                        onFocus={() => setPasswordFocus(true) }
+                                        onBlur={() => setPasswordFocus(false)}
+                                    />
+                                    <TouchableOpacity
+                                        onPress={() => setPassVisible(!passVisible)}
+                                    >
+                                        <Ionicons
+                                            name={passVisible ? 'eye-outline' : 'eye-off-outline'}
+                                            size={24}
+                                            color={lightTheme ? '#aaa' : '#555'}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
                                 <TouchableOpacity style={styles.resetPassButton} onPress={handleResetPassword}>
                                     <Text style={[
                                         styles.resetPassButtonText,
@@ -226,13 +263,14 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
                                 placeholderTextColor={lightTheme ? '#aaa' : '#555'}
                                 value={passwordConfirm}
                                 onChangeText={setPasswordConfirm}
-                                secureTextEntry
+                                secureTextEntry={!passVisible}
                                 autoCapitalize="none"
                                 style={[
                                     styles.input,
+                                    styles.textInput,
                                     {color: lightTheme ? textLightBackground : textDarkBackground},
                                     {borderColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'},
-                                    confirmPasswordFocus && passwordConfirm!==password && {borderColor: '#aa0000'},
+                                    passwordConfirm!==password && {borderColor: '#aa0000'},
                                     confirmPasswordFocus && styles.inputFocus
                                 ]}
                                 onFocus={() => setConfirmPasswordFocus(true) }
@@ -260,6 +298,7 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
                                 setPassword('');
                                 setPasswordConfirm('');
                                 setError('');
+                                setPassVisible(false);
                             }}
                         >
                             <Text style={[
@@ -274,16 +313,21 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
                     </View>
                 </KeyboardAwareScrollView>
             </KeyboardAvoidingView>
-            <TouchableOpacity
-                style={styles.enterGuest}
-                onPress={handleGuestEntry}
-            >
-                <Text style={[
-                    styles.enterGuestText,
-                    {color: lightTheme ? '#555' : '#aaa'},
-                ]}>Skip? Enter as guest</Text>
-            </TouchableOpacity>
-        </SafeAreaView>
+            {!emailFocus && !passwordFocus && !confirmPasswordFocus &&
+                <TouchableOpacity
+                    style={[
+                        styles.enterGuest,
+                        {bottom: insets.bottom}
+                    ]}
+                   onPress={handleGuestEntry}
+                >
+                    <Text style={[
+                        styles.enterGuestText,
+                        {color: lightTheme ? '#555' : '#aaa'},
+                    ]}>Skip? Enter as guest</Text>
+                </TouchableOpacity>
+            }
+        </View>
     );
 }
 
@@ -309,7 +353,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     title: {
-        fontFamily: 'GothicA1-400',
+        fontFamily: 'GothicA1-600',
         fontSize: 24,
         paddingBottom: 1,
         alignSelf: 'center',
@@ -327,18 +371,23 @@ const styles = StyleSheet.create({
         })
     },
     input: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
         paddingVertical: 13,
-        fontFamily: 'GothicA1-400',
-        fontSize: 16,
 
         ...Platform.select({
             android: {
                 paddingVertical: 8,
             }
         })
+    },
+    textInput: {
+        flex: 1,
+        fontFamily: 'GothicA1-400',
+        fontSize: 16,
     },
     inputFocus: {
         borderWidth: 3,
@@ -404,11 +453,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     enterGuest: {
-        marginBottom: 30,
+        marginBottom: 10,
         alignItems: 'center',
         alignSelf: 'center',
         position: 'absolute',
-        bottom: 10,
     },
     enterGuestText: {
         fontFamily: 'GothicA1-500',

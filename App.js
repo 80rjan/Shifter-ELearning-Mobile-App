@@ -3,11 +3,11 @@ import {Platform, StyleSheet, Text, useColorScheme, View} from 'react-native';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {SafeAreaProvider} from "react-native-safe-area-context";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import useFonts from "./app/elements/UseFonts";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from './firebaseConfig';
-
 import StackCourseDetails from "./app/pages/StackCourseDetails";
 import Home from "./app/pages/Home";
 import Wishlist from "./app/pages/Wishlist";
@@ -22,8 +22,13 @@ import UserInfo from "./app/pages/UserInfo";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import expoSystemUI from "expo-system-ui/src/ExpoSystemUI";
+
 function TabNavigator() {
-    const { user, setHasAccount, lightTheme, lightBackground, textLightBackground, darkBackground, textDarkBackground }= usePerson();
+    const insets = useSafeAreaInsets();
+    const { user, setHasAccount, lightTheme, lightBackground, darkBackground }= usePerson();
+
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -41,26 +46,27 @@ function TabNavigator() {
                         iconName = focused ? 'person' : 'person-outline';
                     }
 
-                    return <Ionicons name={iconName} size={24} color={color} />;
+                    return <Ionicons name={iconName} size={Platform.OS === 'ios' ? 26 : 22} color={color} />;
                 },
                 tabBarActiveTintColor: !lightTheme ? lightBackground : darkBackground,
                 tabBarInactiveTintColor: lightTheme ? '#888' : '#777',
                 tabBarStyle: {
-                    height: 85,
                     backgroundColor: lightTheme ? lightBackground : darkBackground,
                     borderTopWidth: 0,
-                    shadowOffset: {width: 0, height: -1},
+                    shadowOffset: { width: 0, height: -1 },
                     shadowColor: 'black',
                     shadowRadius: 1,
                     shadowOpacity: 0.3,
+                    paddingBottom: insets.bottom,
+
 
                     ...Platform.select({
                         android: {
                             borderTopColor: lightTheme ? '#ddd' : '#333',
                             borderTopWidth: 1,
                             elevation: 3,
-                            height: 60,
-                            paddingBottom: 5,
+                            // height: 65,
+                            paddingBottom: insets.bottom,
                         },
                     }),
                 },
@@ -69,9 +75,10 @@ function TabNavigator() {
                     color: 'white',
                 },
                 tabBarLabel: ({ focused, color }) => (
+                    !focused ? null :
                     <Text style={{
                         fontSize: 12,
-                        fontFamily: focused ? 'GothicA1-800' : 'GothicA1-600',
+                        fontFamily: 'GothicA1-600',
                         color: color,
                     }}>
                         {route.name}
@@ -82,7 +89,7 @@ function TabNavigator() {
             <Tab.Screen name="Home">
                 {() => <StackCourseDetails Component={Home} />}
             </Tab.Screen>
-            <Tab.Screen name="Favorites" options={{tabBarBadge: user.coursesFavorite.length>0 ? user.coursesFavorite.length : null}}>
+            <Tab.Screen name="Favorites" options={{tabBarBadge: user.coursesFavorite.length > 0 ? user.coursesFavorite.length : null}}>
                 {() => <StackCourseDetails Component={Wishlist} />}
             </Tab.Screen>
             <Tab.Screen name="Education">
@@ -94,7 +101,6 @@ function TabNavigator() {
         </Tab.Navigator>
     );
 }
-
 
 function AuthStack() {
     const { setHasAccount }= usePerson();
@@ -152,7 +158,6 @@ export default function App() {
     const [isLoading, setIsLoading] = useState(true);
     const fontsLoaded = useFonts();
     const isLightTheme = useColorScheme();
-
     useEffect(() => {
         if (fontsLoaded) {
             setTimeout(() => {
@@ -164,10 +169,12 @@ export default function App() {
     if (isLoading) return <LoadingScreen isLightTheme={isLightTheme==='light'} />;
 
     return (
-        <PersonProvider>
-            <NavigationContainer>
-                <AppNavigator />
-            </NavigationContainer>
-        </PersonProvider>
+        <SafeAreaProvider>
+            <PersonProvider>
+                <NavigationContainer>
+                    <AppNavigator style={{backgroundColor: 'red'}}/>
+                </NavigationContainer>
+            </PersonProvider>
+        </SafeAreaProvider>
     );
 }
