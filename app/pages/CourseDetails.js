@@ -25,6 +25,8 @@ import { deleteUser } from "firebase/auth";
 import { ref, getDownloadURL } from "firebase/storage";
 import LoadingScreen from "./LoadingScreen";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import StackMentorDetails from "./StackMentorDetails";
+import MentorBriefDetails from "../elements/MentorBriefDetails";
 
 export default function CourseDetails({ route, navigation }) {
     const { course } = route.params;
@@ -113,7 +115,7 @@ export default function CourseDetails({ route, navigation }) {
         {
             useNativeDriver: false,
             listener: (event) => {
-                if (event.nativeEvent.contentOffset.y <= -50) {
+                if (event.nativeEvent.contentOffset.y <= -150) {
                     navigation.popToTop();
                 }
             }
@@ -163,6 +165,7 @@ export default function CourseDetails({ route, navigation }) {
                         <CourseDescription course={course} />
                         <CourseOutcomes course={course} />
                         <CourseSkills course={course} />
+                        <MentorBriefDetails navigateToDetails={() => navigation.navigate('MentorDetails', { course: course })} />
                         <CourseModules course={course} />
                     </View>
                 </ScrollView>

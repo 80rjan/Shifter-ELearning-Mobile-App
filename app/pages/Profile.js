@@ -46,9 +46,12 @@ export default function Profile({ onLogout }) {
             console.error('Error signing out: ', error);
         }
         finally {
-            setLoading(true);
+            setLoading(false);
         }
     };
+
+
+    if (loading) return <LoadingScreen isLightTheme={lightTheme} />
 
     return (
         <View style={[

@@ -8,6 +8,7 @@ import Learn from "./Learn";
 import ShifterMiniLogo from "../../assets/Shifter Mini Logo";
 import {Easing} from "react-native";
 import {usePerson} from "../PersonInformationContext";
+import MentorDetails from "./MentorDetails";
 
 const Stack = createStackNavigator();
 
@@ -61,6 +62,18 @@ export default function StackCourseDetails({ Component }) {
                                 <ShifterMiniLogo width='70' height='34.6' /> }
                         </TouchableOpacity>
                     )
+                })}
+            />
+            <Stack.Screen
+                name='MentorDetails'
+                component={MentorDetails}
+                options={({ route }) => ({
+                    headerTitle: '',
+
+                    headerStyle: {
+                        backgroundColor: lightTheme ? lightBackground : darkBackground,
+                        borderBottomWidth: 0,
+                    }
                 })}
             />
         </Stack.Navigator>

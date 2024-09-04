@@ -60,27 +60,6 @@ export function PersonProvider({ children }) {
         return () => unsubscribe();
     }, []);
 
-
-    // async function fetchCourses () {
-    //     try {
-    //         // Reference to your 'courses' collection
-    //         const coursesCollection = collection(db, 'courses');
-    //         // Get all documents from the collection
-    //         const courseSnapshot = await getDocs(coursesCollection);
-    //         // Map through the documents and extract the data
-    //         const coursesList = courseSnapshot.docs.map(doc => ({
-    //             id: doc.id,  // Include document ID if needed
-    //             ...doc.data()  // Spread the document data
-    //         }));
-    //         // Update the state with the fetched courses
-    //         setAllCourses(coursesList);
-    //         console.log('All courses: ',allCourses);
-    //     } catch (error) {
-    //         console.error('Error fetching courses:', error);
-    //     }
-    // };
-    // fetchCourses();
-
     async function fetchUserData(userId) {
         try {
             const userDoc = await getDoc(doc(db, 'users', userId));

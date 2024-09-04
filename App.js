@@ -128,7 +128,6 @@ function AuthStack() {
     );
 }
 
-
 function AppNavigator() {
     const { user, hasAccount, setHasAccount } = usePerson();
 
