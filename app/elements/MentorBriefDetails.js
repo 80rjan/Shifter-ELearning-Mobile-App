@@ -6,15 +6,15 @@ export default function MentorBriefDetails({navigateToDetails}) {
     const {lightTheme, textLightBackground, textDarkBackground} = usePerson();
 
     return (
-        <TouchableOpacity
-            style={styles.container}
-            onPress={navigateToDetails}
-        >
+        <View style={styles.container} >
             <Text style={[
                 styles.title,
                 {color: lightTheme ? textLightBackground : textDarkBackground}
             ]}>Mentor</Text>
-            <View style={styles.contentWrapper}>
+            <TouchableOpacity
+                style={styles.contentWrapper}
+                onPress={navigateToDetails}
+            >
                 <View style={styles.imageWrapper} >
                     <Ionicons name='person-outline' color='#333' size={40} />
                 </View>
@@ -33,8 +33,8 @@ export default function MentorBriefDetails({navigateToDetails}) {
                     </View>
                     <Ionicons name='chevron-forward-outline' color={lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'} size={25} />
                 </View>
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+        </View>
     )
 }
 
@@ -43,11 +43,24 @@ const styles = StyleSheet.create({
         flex: 1,
         marginBottom: 40,
         gap: 20,
+
+        ...Platform.select({
+            android: {
+                marginBottom: 30,
+                gap: 10,
+            }
+        })
     },
     contentWrapper: {
         flexDirection: 'row',
         gap: 16,
         alignItems: 'center',
+
+        ...Platform.select({
+            android: {
+
+            }
+        })
     },
     imageWrapper: {
         justifyContent: 'center',
@@ -60,6 +73,12 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: 'GothicA1-600',
         fontSize: 24,
+
+        ...Platform.select({
+            android: {
+                fontSize: 22,
+            }
+        })
     },
     content: {
         flexDirection: 'row',
@@ -70,6 +89,12 @@ const styles = StyleSheet.create({
     textWrapper: {
         maxWidth: '80%',
         gap: 8,
+
+        ...Platform.select({
+            android: {
+                gap: 0,
+            }
+        })
     },
     name: {
         fontFamily: 'GothicA1-600',

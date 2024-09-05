@@ -9,6 +9,8 @@ import ShifterMiniLogo from "../../assets/Shifter Mini Logo";
 import {Easing} from "react-native";
 import {usePerson} from "../PersonInformationContext";
 import MentorDetails from "./MentorDetails";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import {colorsLight, colorsDark} from "../../assets/Colors";
 
 const Stack = createStackNavigator();
 
@@ -67,9 +69,17 @@ export default function StackCourseDetails({ Component }) {
             <Stack.Screen
                 name='MentorDetails'
                 component={MentorDetails}
-                options={({ route }) => ({
+                options={({ navigation }) => ({
                     headerTitle: '',
-
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={{paddingLeft: 8}}>
+                            <Ionicons
+                                name='chevron-back-outline'
+                                color={lightTheme ? colorsLight[0] : colorsDark[0]}
+                                size={40}
+                            />
+                        </TouchableOpacity>
+                    ),
                     headerStyle: {
                         backgroundColor: lightTheme ? lightBackground : darkBackground,
                         borderBottomWidth: 0,

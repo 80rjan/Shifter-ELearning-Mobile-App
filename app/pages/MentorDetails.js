@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, ScrollView} from "react-native";
+import {View, Text, StyleSheet, ScrollView, Platform} from "react-native";
 import { usePerson } from "../PersonInformationContext";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from "react";
@@ -52,12 +52,9 @@ export default function MentorDetails() {
             <ScrollView
                 style={[
                     styles.content,
-                    { marginTop: viewHeight / 2 + 20 },
+                    { marginTop: viewHeight / 2 + (Platform.OS==='ios' ? 20 : 10)},
                 ]}
-                contentContainerStyle={{
-                    paddingBottom: 40,
-                    paddingTop: 10,
-                }}
+                contentContainerStyle={styles.scrollViewContent}
                 showsVerticalScrollIndicator={false}
             >
                 <View style={styles.titleWrapper}>
@@ -127,9 +124,19 @@ const styles = StyleSheet.create({
     content: {
         paddingHorizontal: 10,
     },
+    scrollViewContent: {
+        paddingBottom: 40,
+        paddingTop: 10,
+    },
     titleWrapper: {
         alignItems: 'center',
         gap: 16,
+
+        ...Platform.select({
+            android: {
+                gap: 8,
+            }
+        })
     },
     lineContainer: {
         flexDirection: 'row',
@@ -144,12 +151,24 @@ const styles = StyleSheet.create({
         fontSize: 24,
         textAlign: 'center',
         paddingHorizontal: 10,
+
+        ...Platform.select({
+            android: {
+                fontSize: 22,
+            }
+        })
     },
     details: {
         paddingHorizontal: 20,
         textAlign: 'center',
         fontFamily: 'GothicA1-500',
         fontSize: 16,
+
+        ...Platform.select({
+            android: {
+                fontSize: 14,
+            }
+        })
     },
     text: {
         marginTop: 20,
@@ -157,5 +176,12 @@ const styles = StyleSheet.create({
         fontFamily: 'GothicA1-400',
         fontSize: 16,
         lineHeight: 24,
+
+        ...Platform.select({
+            android: {
+                fontSize: 14,
+                lineHeight: 22,
+            }
+        })
     }
 });
