@@ -1,9 +1,7 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";  // Import Firebase Authentication
-import {doc, getDoc, getFirestore, setDoc, updateDoc, deleteDoc} from "firebase/firestore";  // Import Firestore if needed
-import { getDownloadURL, getStorage, ref } from "firebase/storage";
-// You can import other Firebase products as needed, like Firestore, Storage, etc.
+import {doc, getDoc, getFirestore, setDoc, updateDoc, deleteDoc, } from "firebase/firestore";  // Import Firestore if needed
+import { getDownloadURL, getStorage, ref, listAll, list } from "firebase/storage";
 
 // Your web app's Firebase configuration (from your project settings)
 const firebaseConfig = {
@@ -39,6 +37,32 @@ async function getDownloadUrl(filePath) {
         return null;
     }
 }
+
+export async function fetchImagesFromStorage() {
+    const imagesRef = ref(storage, 'images/'); // Reference to the images folder
+    try {
+        // List all items in the images folder
+        const result = await listAll(imagesRef);
+        const imageUrls = {};
+
+        // Get the download URL for each file
+        for (const item of result.items) {
+            try {
+                const url = await getDownloadURL(item);
+                const imageName = item.name.split('.')[0]; // Use a different approach if filenames can have multiple periods
+                imageUrls[imageName] = url;
+            } catch (error) {
+                console.error(`Error getting download URL for ${item.name}:`, error);
+            }
+        }
+        return imageUrls; // Return the image URLs as an object
+    } catch (error) {
+        console.error("Error fetching images from Firebase Storage:", error);
+        return null;
+    }
+}
+
+
 
 //get image from
 async function updateCourseWithImage(imageFilePath) {
@@ -97,8 +121,8 @@ async function changeDocumentId(oldId, newId, collectionName) {
 
 
 // Call the function with the path to your image
-updateCourseWithImage('images/personalized onboarding process.jpg');
-updateCourseWithImage('images/leadership & management.jpg');
-updateCourseWithImage('images/marketing as a flywheel.jpg');
-updateCourseWithImage('images/negotiation skills for more sales.jpg');
-updateCourseWithImage('images/the go-to marketing strategy.jpg');
+// updateCourseWithImage('images/personalized onboarding process.jpg');
+// updateCourseWithImage('images/leadership & management.jpg');
+// updateCourseWithImage('images/marketing as a flywheel.jpg');
+// updateCourseWithImage('images/negotiation skills for more sales.jpg');
+// updateCourseWithImage('images/the go-to marketing strategy.jpg');

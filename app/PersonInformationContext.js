@@ -3,18 +3,19 @@ import { doc, getDoc, setDoc, updateDoc, collection, getDocs, onSnapshot } from 
 import { getAuth } from 'firebase/auth';
 import {auth, db} from '../firebaseConfig';
 import {Alert, useColorScheme} from "react-native";
+import {fetchImagesFromStorage} from "../firebaseConfig";
 
 const PersonInformationContext = createContext();
 const isAnonymous = auth.currentUser?.isAnonymous;
 
 export function PersonProvider({ children }) {
-    const imageMap = {
-        'personalized onboarding process': require('../assets/personalized onboarding process.webp'),
-        'leadership & management': require('../assets/leadership & management.webp'),
-        'marketing as a flywheel': require('../assets/marketing as a flywheel.webp'),
-        'negotiation skills for more sales': require('../assets/negotiation skills for more sales.webp'),
-        'the go-to marketing strategy': require('../assets/the go-to marketing strategy.webp'),
-    }
+    // const imageMap = {
+    //     'personalized onboarding process': require('../assets/personalized onboarding process.webp'),
+    //     'leadership & management': require('../assets/leadership & management.webp'),
+    //     'marketing as a flywheel': require('../assets/marketing as a flywheel.webp'),
+    //     'negotiation skills for more sales': require('../assets/negotiation skills for more sales.webp'),
+    //     'the go-to marketing strategy': require('../assets/the go-to marketing strategy.webp'),
+    // }
     const defaultUserState = {
         name: 'Guest',
         jobTitle: '',
@@ -38,9 +39,20 @@ export function PersonProvider({ children }) {
     const darkBackground = '#222';
     const textDarkBackground = '#f8f8f8';
 
+    const [imageMap, setImageMap] = useState({});
+
     useEffect(() => {
         setLightTheme(deviceTheme === 'light');
     }, [deviceTheme]);
+
+    useEffect(() => {
+        // Fetch images from Firebase Storage
+        const loadImages = async () => {
+            const images = await fetchImagesFromStorage();
+            setImageMap(images);
+        };
+        loadImages();
+    }, []);
 
     useEffect(() => {
         // Real-time listener for the 'courses' collection
@@ -58,7 +70,7 @@ export function PersonProvider({ children }) {
 
         // Cleanup the listener on component unmount
         return () => unsubscribe();
-    }, []);
+    }, [imageMap]);
 
     async function fetchUserData(userId) {
         try {
@@ -74,7 +86,7 @@ export function PersonProvider({ children }) {
             console.error('Error fetching user data from Firestore: ', err);
             setError('Failed to load user data.');
             //Remove alert when publishing
-            Alert.alert('Error', `Error fetching user data from Firestore: ${err.message}`);
+            Alert.alert('Error', 'Error fetching user data from Firestore: ${err.message}');
             setUser(defaultUserState);
         } finally {
             setLoading(false);
@@ -111,7 +123,7 @@ export function PersonProvider({ children }) {
         } catch (error) {
             console.error('Error saving user data to Firestore: ', error);
             //Remove alert when publishing
-            Alert.alert('Error', `Error saving user data from Firestore: ${error}`);
+            Alert.alert('Error', 'Error saving user data from Firestore: ${error}');
         }
     }
 

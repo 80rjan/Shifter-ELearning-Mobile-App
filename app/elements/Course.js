@@ -1,11 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Platform, ActivityIndicator } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { usePerson } from '../PersonInformationContext';
 
 export default function Course({ navigation, course, isRecommendation }) {
     const { user, addFavorites, removeFavorites, lightTheme, textLightBackground, textDarkBackground } = usePerson();
-    const [heartIcon, setHeartIcon] = React.useState('heart-outline');
+    const [heartIcon, setHeartIcon] = useState('heart-outline');
+    const [loadingImage, setLoadingImage] = useState(true); // State to track image loading
 
     const isBought = user.coursesBought.some(boughtCourses => boughtCourses.title === course.title);
 
@@ -26,7 +27,13 @@ export default function Course({ navigation, course, isRecommendation }) {
         }
     };
 
-    // console.log('course details:', course);
+    const handleImageLoad = () => {
+        setLoadingImage(false); // Image loaded successfully
+    };
+
+    const handleImageError = () => {
+        setLoadingImage(false); // Image failed to load
+    };
 
     return (
         <TouchableOpacity
@@ -53,18 +60,19 @@ export default function Course({ navigation, course, isRecommendation }) {
                     </View>
                 )}
             </View>
-            {!isRecommendation && <View style={styles.imageWrapper}>
-                <Image
-                    style={styles.image}
-                    source={course.imageFile}
-                />
-            </View> }
-            {/*<View style={styles.imageWrapper}>*/}
-            {/*    <Image*/}
-            {/*        style={styles.image}*/}
-            {/*        source={course.image}*/}
-            {/*    />*/}
-            {/*</View>*/}
+            {!isRecommendation && (
+                <View style={styles.imageWrapper}>
+                    {loadingImage && (
+                        <ActivityIndicator style={styles.loadingIndicator} size="small" color={lightTheme ? '#000' : '#fff'} />
+                    )}
+                    <Image
+                        style={styles.image}
+                        source={{ uri: course.imageFile }}
+                        onLoad={handleImageLoad}
+                        onError={handleImageError}
+                    />
+                </View>
+            )}
         </TouchableOpacity>
     );
 }
@@ -97,7 +105,6 @@ const styles = StyleSheet.create({
     contentWrapper: {
         flex: 1,
         alignItems: 'flex-start',
-        // maxWidth: '65%', //this is if the recommended course has an image
         gap: 5,
 
         ...Platform.select({
@@ -131,7 +138,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto-300',
         fontSize: 14,
 
-
         ...Platform.select({
             android: {
                 fontSize: 12,
@@ -157,10 +163,17 @@ const styles = StyleSheet.create({
         elevation: 5, // For Android
         width: '30%', // Adjust width and height as needed
         aspectRatio: 1,
+        position: 'relative', // To position the loading indicator
     },
     image: {
         width: '100%', // Adjust width and height as needed
         height: '100%',
         borderRadius: 3,
+    },
+    loadingIndicator: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: [{ translateX: -20 }, { translateY: -20 }],
     }
 });
