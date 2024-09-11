@@ -164,6 +164,8 @@ const styles = StyleSheet.create({
         width: '30%', // Adjust width and height as needed
         aspectRatio: 1,
         position: 'relative', // To position the loading indicator
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     image: {
         width: '100%', // Adjust width and height as needed
@@ -174,6 +176,5 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: '50%',
         left: '50%',
-        transform: [{ translateX: -20 }, { translateY: -20 }],
     }
 });

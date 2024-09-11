@@ -29,6 +29,7 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [loading, setLoading] = useState(false);
+    const [loadingScreen, setLoadingScreen] = useState(false);
     const [error, setError] = useState('');
     const [passVisible, setPassVisible] = useState(false);
     const insets = useSafeAreaInsets();
@@ -91,7 +92,7 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
 
 
     const handleResetPassword = async () => {
-        setLoading(true);
+        setLoadingScreen(true);
         if (email) {
             try {
                 await sendPasswordResetEmail(auth, email);
@@ -103,13 +104,13 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
             }
         } else {
             setError('Please enter you email address in the field so we can send you an email for resetting your password');
-            setLoading(false);
+            setLoadingScreen(false);
         }
     }
 
 
     const handleGuestEntry = async () => {
-        setLoading(true);
+        setLoadingScreen(true);
         try {
             const userCredential = await signInAnonymously(auth);
             const user = userCredential.user;
@@ -122,9 +123,11 @@ export default function SignupLogin({ navigation, onLogIn, onGuestEntry }) {
             setError('Failed to enter as guest.');
         }
         finally {
-            setLoading(false);
+            setLoadingScreen(false);
         }
     };
+
+    if (loadingScreen) return <LoadingScreen isLightTheme={lightTheme} />
 
 
     return (
