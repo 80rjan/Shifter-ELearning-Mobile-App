@@ -14,6 +14,7 @@ import Wishlist from "./app/pages/Wishlist";
 import Learn from "./app/pages/Learn";
 import Profile from "./app/pages/Profile";
 import LoadingScreen from "./app/pages/LoadingScreen";
+import UserPreferences from "./app/pages/UserPreferences";
 import ShifterLogo from "./assets/ShifterLogo";
 import {PersonProvider, usePerson} from "./app/PersonInformationContext";
 import SignupLogin from "./app/pages/SignupLogin";
@@ -130,6 +131,7 @@ function AuthStack() {
 
 function AppNavigator() {
     const { user, hasAccount, setHasAccount } = usePerson();
+    const [enteredPreferences, setEnteredPreferences] = useState(false);
 
     useEffect(() => {
         const checkUserStatus = () => {
@@ -143,11 +145,21 @@ function AppNavigator() {
 
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {!hasAccount ? (
-                <Stack.Screen name="Auth" component={AuthStack} />
-            ) : (
-                <Stack.Screen name="Main" component={TabNavigator}/>
-            )}
+            {!hasAccount ?
+                ( <Stack.Screen name="Auth" component={AuthStack} /> ) :
+                    user.preferredSkills.length === 0 ?
+                        (
+                            <Stack.Screen name='Preferences'>
+                                {(props) => (
+                                    <UserPreferences
+                                        {...props}
+                                        handleSubmit={() => setEnteredPreferences(true)}
+                                    />
+                                )}
+                            </Stack.Screen>
+                        ) :
+                        ( <Stack.Screen name="Main" component={TabNavigator}/> )
+            }
         </Stack.Navigator>
     );
 }

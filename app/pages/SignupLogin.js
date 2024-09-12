@@ -350,6 +350,12 @@ const styles = StyleSheet.create({
         paddingTop: '20%',
         flex: 1,
         paddingHorizontal: 20,
+
+        ...Platform.select({
+            android: {
+                paddingTop: '10%',
+            }
+        })
     },
     scrollViewContent: {
         flexGrow: 1,
@@ -361,6 +367,12 @@ const styles = StyleSheet.create({
         paddingBottom: 1,
         alignSelf: 'center',
         marginBottom: 20,
+
+        ...Platform.select({
+            android: {
+                marginBottom: 16,
+            }
+        })
     },
     inputWrapper: {
         gap: 16,
@@ -369,7 +381,7 @@ const styles = StyleSheet.create({
         ...Platform.select({
             android: {
                 gap: 8,
-                marginBottom: 20,
+                marginBottom: 24,
             }
         })
     },

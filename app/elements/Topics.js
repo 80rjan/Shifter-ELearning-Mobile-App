@@ -8,8 +8,6 @@ export default function Topics({ courses, handleFilter, selectedSkill }) {
         return allSkills.concat(course.skills);
     }, []);
 
-
-    // const topics = ['Sales', 'Marketing', 'Management', 'Onboarding', 'Leadership', 'Strategy'];
     const topics = [...new Set(allSkills)];
     const colors = lightTheme ? colorsLight : colorsDark;
 

@@ -43,18 +43,8 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
                 setIsLoading(true);
                 const userId = auth.currentUser?.uid;
                 if (userId) {
-                    await setDoc(doc(db, 'users', userId), {
-                        name,
-                        email,
-                        jobTitle,
-                        company,
-                        coursesBought,
-                        coursesFavorite,
-                        skills,
-                        points,
-                        profilePicture,
-                    }, { merge: true }); // Merge to update only specific fields
-                    changeUserDetails({ name, email, jobTitle, company, coursesBought, coursesFavorite, skills, points, profilePicture });
+                    //deleted setdoc from previous commits because i have setdoc in changeUserDetails function
+                    changeUserDetails({ name, email, jobTitle, company, coursesBought, coursesFavorite, skills, points, profilePicture, preferredSkills: [] });
                     onUserInfoComplete();
                 }
             } catch (error) {
@@ -260,13 +250,13 @@ export default function UserInfo({ navigation, onUserInfoComplete }) {
                             {backgroundColor: lightTheme ? '#00b5f0' : 'rgba(0,181,240,0.7)'}
                         ]} onPress={handleSubmit}>
                             <Text style={styles.buttonText}>Continue</Text>
+                            {isLoading &&
+                                <ActivityIndicator color={!lightTheme ? lightBackground : darkBackground} size='large' />
+                            }
                         </TouchableOpacity>
                     </View>
                 </KeyboardAwareScrollView>
             </KeyboardAvoidingView>
-            {isLoading &&
-                <ActivityIndicator color={!lightTheme ? lightBackground : darkBackground} size='large' />
-            }
         </SafeAreaView>
     );
 }
@@ -292,31 +282,27 @@ const styles = StyleSheet.create({
         gap: 10,
         paddingHorizontal: 20,
     },
-    checkEmailVerification: {
-        paddingVertical: 15,
-        width: '70%',
-        borderRadius: 5,
-
-        ...Platform.select({
-            android: {
-                paddingVertical: 10,
-            }
-        })
-    },
     verifyEmailTitle: {
         fontFamily: 'GothicA1-600',
         fontSize: 20,
         textAlign: 'center',
         marginBottom: 10,
+
+        ...Platform.select({
+            android: {
+                fontSize: 16,
+            }
+        })
     },
     resendEmailVerification: {
         paddingVertical: 10,
+        paddingHorizontal: 8,
         width: '70%',
         borderRadius: 5,
 
         ...Platform.select({
             android: {
-                paddingVertical: 8
+                paddingVertical: 8,
             }
         })
     },
@@ -326,11 +312,29 @@ const styles = StyleSheet.create({
         color: 'white',
         alignSelf: 'center',
     },
+    checkEmailVerification: {
+        paddingVertical: 15,
+        paddingHorizontal: 8,
+        width: '70%',
+        borderRadius: 5,
+
+        ...Platform.select({
+            android: {
+                paddingVertical: 8,
+            }
+        })
+    },
     checkEmailVerificationText: {
         fontFamily: 'GothicA1-600',
         fontSize: 18,
         color: 'white',
         alignSelf: 'center',
+
+        ...Platform.select({
+            android: {
+                fontSize: 16,
+            }
+        })
     },
     container: {
         paddingTop: '5%',
@@ -339,6 +343,7 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         paddingHorizontal: 20,
+        paddingTop: '20%',
     },
     scrollViewContent: {
         flexGrow: 1,
@@ -396,7 +401,8 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: '#00b5f0',
         borderRadius: 5,
-        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
         paddingVertical: 10,
         width: '70%',
         alignSelf: 'center',
@@ -411,5 +417,6 @@ const styles = StyleSheet.create({
         fontFamily: 'GothicA1-700',
         color: '#fff',
         fontSize: 20,
+        marginRight: 8,
     },
 });

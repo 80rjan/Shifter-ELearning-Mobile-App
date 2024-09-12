@@ -25,7 +25,8 @@ export function PersonProvider({ children }) {
         coursesFavorite: [],
         profilePicture: null,
         points: 0,
-        skills: []
+        skills: [],
+        preferredSkills: []
     };
     const deviceTheme = useColorScheme();
     const [allCourses, setAllCourses] = useState([]);
@@ -106,11 +107,12 @@ export function PersonProvider({ children }) {
     }, []);
 
     function changeUserDetails(newDetails) {
+        const isAnonymous = auth.currentUser?.isAnonymous;
         setUser(prevUser => ({
             ...prevUser,
             ...newDetails
         }));
-        saveUserToFirestore(newDetails); // Save changes immediately
+        if (!isAnonymous) saveUserToFirestore(newDetails); // Save changes immediately
     }
 
     async function saveUserToFirestore(updatedData) {
